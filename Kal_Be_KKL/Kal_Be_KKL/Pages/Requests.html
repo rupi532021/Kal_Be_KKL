@@ -3,22 +3,99 @@
 <head>
     <meta charset="utf-8" />
     <title></title>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <link href="../Scripts/main.css" rel="stylesheet" />
     <script src="../Scripts/main.js"></script>
+    <style>
+        body{
+            direction:rtl
+        }
+        #calendar .fc-cantBtn-button {
+            background-color: red;
+        }
+        #calendar .fc-canBtn-button {
+            background-color: blue;
+        }
+        #calendar .fc-wantBtn-button {
+            background-color: green;
+        }
+    </style>
     <script>
-
+        color="white"
+        function changeColor() {
+            console.log($(this).attr('name'))
+            color = $(this).attr('name')
+        }
         document.addEventListener('DOMContentLoaded', function () {
             var calendarEl = document.getElementById('calendar');
             var calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'dayGridMonth'
+                initialView: 'dayGridMonth',
+                headerToolbar: {
+                    left: 'wantBtn canBtn cantBtn',
+                    center: 'title',
+                    right: 'prev,next'
+                },
+                customButtons: {
+                    wantBtn: {
+                        text: 'רוצה',
+                        click: function () {
+                            color="green";
+                        }
+                    },
+                    canBtn: {
+                        text: 'יכול',
+                        click: function () {
+                            color = "blue";
+                        }
+                    },
+                    cantBtn: {
+                        text: 'לא יכול',
+                        click: function () {
+                            color = "red";
+                        }
+                    }
+                },
+                selectable: false,
+                showNonCurrentDates: false,
+                selectAllow: function (selectionInfo) {
+                    let startDate = selectionInfo.start;
+                    let endDate = selectionInfo.end;
+                    endDate.setSeconds(endDate.getSeconds() - 1);  // allow full day selection
+                    if (startDate.getDate() === endDate.getDate()) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                },
+                dateClick: function (el) {
+                    console.log(el)
+                    el.dayEl.style.backgroundColor = color;
+                },
+                dayCellContent: function (dayRenderInfo) {
+
+                }
             });
+            calendar.next();
             calendar.setOption('locale', 'he');
             calendar.render();
         });
-
+        function saveRequests() {
+            
+            $("td").each(function () {
+                if ($(this).data("date") != null) {
+                    var bg = $(this).css('background-color');
+                    switch (bg) {
+                        case "rgb(255, 0, 0)": console.log("red-" + $(this).data("date")); break; //red
+                        case "rgb(0, 0, 255)": console.log("blue-" + $(this).data("date")); break; //blue
+                        case "rgb(0, 255, 0)": console.log("green-" + $(this).data("date"));
+                    }
+                }
+            });
+        }
     </script>
 </head>
 <body>
     <div id='calendar'></div>
+    <button onclick="saveRequests()">Save</button>
 </body>
 </html>
