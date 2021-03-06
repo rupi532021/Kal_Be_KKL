@@ -26,7 +26,7 @@ namespace Kal_Be_KKL.Controllers
         public void Post(List<Request> reqs)
         {
             Request r = new Request();
-            r.delete_requests(reqs[0].Id);
+            r.delete_requests(reqs[0].Id, reqs[0].Request_Date.Month);
             foreach (Request req in reqs)
             {
                 req.Insert();

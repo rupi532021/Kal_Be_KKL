@@ -30,9 +30,9 @@ namespace Kal_Be_KKL.Models
             DBServices dbs = new DBServices();
             dbs.Insert_Requests(this);
         }
-        public void delete_requests(string id) {
+        public void delete_requests(string id, int month) {
             DBServices dbs = new DBServices();
-            dbs.Delete_Request(id);
+            dbs.Delete_Request(id, month);
         }
     }
 }

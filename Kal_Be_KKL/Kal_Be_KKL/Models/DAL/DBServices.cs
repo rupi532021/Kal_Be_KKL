@@ -98,7 +98,7 @@ namespace Kal_Be_KKL.Models.DAL
             return command;
         }
 
-        public int Delete_Request(string id)
+        public int Delete_Request(string id, int month)
         {
 
             SqlConnection con;
@@ -114,7 +114,7 @@ namespace Kal_Be_KKL.Models.DAL
                 throw (ex);
             }
 
-            String cStr = "Delete from kkl_Request where Id = '" + id + "'";
+            String cStr = "Delete from kkl_Request where Id = '" + id + "' AND MONTH(Request_Date) = "+month;
 
             cmd = CreateCommand(cStr, con);             // create the command
 
