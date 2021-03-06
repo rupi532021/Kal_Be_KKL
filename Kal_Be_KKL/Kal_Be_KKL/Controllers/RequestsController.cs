@@ -8,7 +8,7 @@ using System.Web.Http;
 
 namespace Kal_Be_KKL.Controllers
 {
-    public class RequestController : ApiController
+    public class RequestsController : ApiController
     {
         // GET api/<controller>
         public IEnumerable<string> Get()
@@ -25,9 +25,8 @@ namespace Kal_Be_KKL.Controllers
         // POST api/<controller>
         public void Post(List<Request> reqs)
         {
-            Request r = new Request);
+            Request r = new Request();
             r.delete_requests(reqs[0].Id);
-
             foreach (Request req in reqs)
             {
                 req.Insert();

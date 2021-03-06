@@ -4,18 +4,22 @@
     <meta charset="utf-8" />
     <title></title>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="../Scripts/ajaxCallsWithKey.js"></script>
     <link href="../Scripts/main.css" rel="stylesheet" />
     <script src="../Scripts/main.js"></script>
     <style>
-        body{
-            direction:rtl
+        body {
+            direction: rtl
         }
+
         #calendar .fc-cantBtn-button {
             background-color: red;
         }
+
         #calendar .fc-canBtn-button {
             background-color: blue;
         }
+
         #calendar .fc-wantBtn-button {
             background-color: green;
         }
@@ -39,7 +43,7 @@
                     wantBtn: {
                         text: 'רוצה',
                         click: function () {
-                            color="green";
+                            color = "green";
                         }
                     },
                     canBtn: {
@@ -86,11 +90,20 @@
                         });
                     }
                 });
-                console.log(allRequests)
+                ajaxCall("POST", "../api/Requests", JSON.stringify(allRequests), postSuccess, postError)
             }
             else
                 alert("לא מילאת את כל התאריכים")
-            
+
+        }
+        function postSuccess() {
+            allRequests = []
+            alert("הנתונים הוכנסו בהצלחה")
+        }
+        function postError(err) {
+            console.log(err)
+            allRequests = []
+            alert("השמירה נכשלה")
         }
         function isAllMarked() {
             let ans = true;

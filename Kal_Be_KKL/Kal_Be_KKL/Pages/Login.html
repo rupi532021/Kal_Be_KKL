@@ -18,9 +18,7 @@
             return false
         }
         function getSuccess(e) {
-            alert("hey "+e.First_Name)
             localStorage["Employee"] = JSON.stringify(e);
-            alert("hey " + e.First_Name);
             window.location.replace("Requests.html")
         }
         function getError(err) {

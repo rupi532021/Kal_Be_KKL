@@ -91,8 +91,8 @@ namespace Kal_Be_KKL.Models.DAL
             StringBuilder sb = new StringBuilder();
             // use a string builder to create the dynamic string
             sb.AppendFormat("Values('{0}', '{1}', '{2}')",
-                 req.Id, req.Request_Date, req.Request_Status);
-            String prefix = "INSERT INTO kkl_Request " + "([Id], [Request_Date], [Request_Status)";
+                 req.Id, req.Request_Date.ToString("yyyy-MM-dd"), req.Request_Status);
+            String prefix = "INSERT INTO kkl_Request " + "([Id], [Request_Date], [Request_Status])";
             command = prefix + sb.ToString();
 
             return command;
@@ -114,7 +114,7 @@ namespace Kal_Be_KKL.Models.DAL
                 throw (ex);
             }
 
-            String cStr = "Delete from kkl_Request where [Id] = '" + id + "'";
+            String cStr = "Delete from kkl_Request where Id = '" + id + "'";
 
             cmd = CreateCommand(cStr, con);             // create the command
 
