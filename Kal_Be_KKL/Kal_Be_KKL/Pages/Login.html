@@ -11,7 +11,6 @@
         });
 
         function f1() {
-            alert("Hi")
             let id = $("#InputId").val();
             let password = $("#InputPassword").val();
             let api = "../api/Employees?id=" + id + "&password=" + password;
@@ -20,10 +19,9 @@
         }
         function getSuccess(e) {
             alert("hey "+e.First_Name)
-            //localStorage["Customer"] = JSON.stringify(c);
-            ////delete - localStorage["preferences"] = JSON.stringify(cProps);
-            //alert("hey " + c.FirstName);
-            //window.location.replace("Main_Page.html")
+            localStorage["Employee"] = JSON.stringify(e);
+            alert("hey " + e.First_Name);
+            window.location.replace("Requests.html")
         }
         function getError(err) {
             alert(err.responseJSON.Message)

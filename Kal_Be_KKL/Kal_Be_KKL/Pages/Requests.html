@@ -21,9 +21,9 @@
         }
     </style>
     <script>
-        color="white"
+        color = null;
+        allRequests = [];
         function changeColor() {
-            console.log($(this).attr('name'))
             color = $(this).attr('name')
         }
         document.addEventListener('DOMContentLoaded', function () {
@@ -57,22 +57,9 @@
                 },
                 selectable: false,
                 showNonCurrentDates: false,
-                selectAllow: function (selectionInfo) {
-                    let startDate = selectionInfo.start;
-                    let endDate = selectionInfo.end;
-                    endDate.setSeconds(endDate.getSeconds() - 1);  // allow full day selection
-                    if (startDate.getDate() === endDate.getDate()) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                },
                 dateClick: function (el) {
-                    console.log(el)
-                    el.dayEl.style.backgroundColor = color;
-                },
-                dayCellContent: function (dayRenderInfo) {
-
+                    if (color != null)
+                        el.dayEl.style.backgroundColor = color;
                 }
             });
             calendar.next();
@@ -80,17 +67,44 @@
             calendar.render();
         });
         function saveRequests() {
+            if (isAllMarked()) {
+                id = JSON.parse(localStorage["Employee"]).Id;
+                let status = "";
+                $("td").each(function () {
+                    let date = $(this).data("date");
+                    if (date != null) {
+                        let bg = $(this).css('background-color');
+                        switch (bg) {
+                            case "rgb(255, 0, 0)": status = "cant"; break; //red
+                            case "rgb(0, 0, 255)": status = "can"; break; //blue
+                            case "rgb(0, 128, 0)": status = "want";
+                        }
+                        allRequests.push({
+                            Id: id,
+                            Request_Date: date,
+                            Request_Status: status
+                        });
+                    }
+                });
+                console.log(allRequests)
+            }
+            else
+                alert("לא מילאת את כל התאריכים")
             
+        }
+        function isAllMarked() {
+            let ans = true;
             $("td").each(function () {
-                if ($(this).data("date") != null) {
-                    var bg = $(this).css('background-color');
-                    switch (bg) {
-                        case "rgb(255, 0, 0)": console.log("red-" + $(this).data("date")); break; //red
-                        case "rgb(0, 0, 255)": console.log("blue-" + $(this).data("date")); break; //blue
-                        case "rgb(0, 128, 0)": console.log("green-" + $(this).data("date")); break;
+                let date = $(this).data("date");
+                if (date != null) {
+                    let bg = $(this).css('background-color');
+                    if (bg == "rgba(0, 0, 0, 0)") {
+                        ans = false;
+                        return false; // stop the each loop
                     }
                 }
-            });
+            })
+            return ans;
         }
     </script>
 </head>
