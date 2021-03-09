@@ -32,8 +32,9 @@ namespace Kal_Be_KKL.Controllers
         }
 
         // POST api/<controller>
-        public void Post([FromBody] string value)
+        public void Post(Employee emp)
         {
+            emp.Insert_Employee();
         }
 
         // PUT api/<controller>/5

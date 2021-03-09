@@ -176,6 +176,7 @@
     <Content Include="Global.asax" />
     <Content Include="Pages\Login.html" />
     <Content Include="Pages\Requests.html" />
+    <Content Include="Pages\SignUp Page.html" />
     <Content Include="Scripts\ajaxCallsWithKey.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />

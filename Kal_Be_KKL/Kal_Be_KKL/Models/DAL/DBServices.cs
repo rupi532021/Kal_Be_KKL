@@ -187,5 +187,64 @@ namespace Kal_Be_KKL.Models.DAL
             }
 
         }
+
+        public int Insert_Employee(Employee emp)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            String cStr = BuildInsertCommand(emp);      // helper method to build the insert string
+
+            cmd = CreateCommand(cStr, con);             // create the command
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+
+        }
+
+        //--------------------------------------------------------------------
+        // Build the Insert command String
+        //--------------------------------------------------------------------
+        private String BuildInsertCommand(Employee emp)
+        {
+            String command;
+
+            StringBuilder sb = new StringBuilder();
+            // use a string builder to create the dynamic string
+            sb.AppendFormat("Values('{0}', '{1}', '{2}', '{3}', '{4}','{5}','{6}','{7}','{8}')",
+                emp.Id, emp.First_Name, emp.Last_Name, emp.Gender, emp.Birth_Date.ToString("yyyy-MM-dd"), emp.Phone_Number, emp.Mail, emp.Password, emp.Level);
+            String prefix = "INSERT INTO kkl_Employee " + "([Id],[First_Name], [Last_Name], [Gender], [Birth_Date], [Phone_Number], [Mail], [Password],[Level])";
+            command = prefix + sb.ToString();
+
+            return command;
+        }
     }
 }

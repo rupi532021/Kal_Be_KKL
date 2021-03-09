@@ -56,5 +56,10 @@ namespace Kal_Be_KKL.Models
             Employee e = dbs.LogIn(id, password);
             return e;
         }
+        public void Insert_Employee() 
+        {
+            DBServices dbl = new DBServices();
+            dbl.Insert_Employee(this);
+        }
     }
 }
