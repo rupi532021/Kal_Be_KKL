@@ -17,7 +17,6 @@ namespace Kal_Be_KKL.Models
         string phone_Number;
         string mail;
         string password;
-        int level;
         bool deleted;
 
         public Employee()
@@ -25,7 +24,7 @@ namespace Kal_Be_KKL.Models
 
         }
 
-        public Employee(string id, string first_Name, string last_Name, string gender, DateTime birth_Date, string phone_Number, string mail, string password, int level, bool deleted)
+        public Employee(string id, string first_Name, string last_Name, string gender, DateTime birth_Date, string phone_Number, string mail, string password, bool deleted)
         {
             Id = id;
             First_Name = first_Name;
@@ -35,7 +34,6 @@ namespace Kal_Be_KKL.Models
             Phone_Number = phone_Number;
             Mail = mail;
             Password = password;
-            Level = level;
             Deleted = deleted;
         }
 
@@ -47,7 +45,6 @@ namespace Kal_Be_KKL.Models
         public string Phone_Number { get => phone_Number; set => phone_Number = value; }
         public string Mail { get => mail; set => mail = value; }
         public string Password { get => password; set => password = value; }
-        public int Level { get => level; set => level = value; }
         public bool Deleted { get => deleted; set => deleted = value; }
 
         public Employee LogIn(string id, string password)
@@ -60,6 +57,12 @@ namespace Kal_Be_KKL.Models
         {
             DBServices dbl = new DBServices();
             dbl.Insert_Employee(this);
+        }
+
+        public void insert_course_of_duty(DateTime Receipt_Course_Date, int Course_Id, string Id) 
+        {
+            DBServices dbl = new DBServices();
+            dbl.insert_course_of_duty(Receipt_Course_Date, Course_Id, Id);
         }
     }
 }

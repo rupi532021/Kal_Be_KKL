@@ -31,6 +31,13 @@ namespace Kal_Be_KKL.Controllers
             }
         }
 
+        [Route("api/Employees/insert_course_of_duty/{Receipt_Course_Date}/{Course_Id}/{Id}")]
+        [HttpPost]
+        public void insert_course_of_duty(DateTime Receipt_Course_Date, int Course_Id, string Id )
+        {
+            Employee emp = new Employee();
+                emp.insert_course_of_duty(Receipt_Course_Date, Course_Id, Id);
+        }
         // POST api/<controller>
         public void Post(Employee emp)
         {
