@@ -33,14 +33,19 @@
             margin:5px;
             margin-right:120px;
         }
-        p
-        {
-            font-size:20px;
-            margin-top:5px;
+        .choose_cousre {
+            border: 3px double black;
+            background-color: lightgreen;
+            text-align: center;
+            width:300px;
+            float:right
+        }
+        p {
+            font-size: 20px;
+            margin-top: 5px;
         }
     </style>
     <script>
-        arr = [];
         courses_arr = [];
         chosen_courses=[]
         function Add_Course_To_DB()
@@ -86,31 +91,51 @@
 
         $(document).ready(function () {
             loadcourses()
+            str="הקורסים של "+localStorage.Full_Name+" הם:"
+            $("h2").html(str)
         });
+        function deletecourse(course_id)
+        {
+            console.log("arr before")
+            console.log(chosen_courses)
+            $("#" + course_id).remove()
+            let i = chosen_courses.findIndex(c => c.Course_Id == course_id)
+            chosen_courses.splice(i, 1);
+            console.log("arr after")
+            console.log(chosen_courses)
+
+        }
         function addcourse()
         {
-            console.log($("#DateTB").val())
+            
             date_of_start_course = $("#DateTB").val()
             course_id = $("#Course").val()
             if (course_id != "0" && $("#DateTB").val() != "")
             {
                 courses_arr.forEach(c => {
-                    if (c.Course_Id == parseInt(course_id) && (arr.includes(c)==false))
+                    if (c.Course_Id == parseInt(course_id))
                     {
-                        arr.push(c)
-                        str = "<div><p>" + c.Course_Name + "</p></div>";
-                        mycourses = {
-                            "Name": c.Course_Name,
-                            "Course_Id": c.Course_Id,
-                            "Receipt_Course_Date": date_of_start_course,
-                            "Id":localStorage.Id
+                        if (chosen_courses.some(c=>c.Course_Id==course_id) == false)
+                        {
+                            str = "<div class='choose_cousre' id='" + c.Course_Id + "'> <p>שם הקורס:  " + c.Course_Name + "</p><p> תאריך ביצוע הקורס: " + date_of_start_course + "</p><input type='button' value='מחק'  onclick='deletecourse(" + c.Course_Id +")'/></div>";
+                            mycourses = {
+                                "Name": c.Course_Name,
+                                "Course_Id": c.Course_Id,
+                                "Receipt_Course_Date": date_of_start_course,
+                                "Id": localStorage.Id
+                            }
+                            chosen_courses.push(mycourses)
+                            $("#courses").append(str)
+                            
                         }
-                        chosen_courses.push(mycourses)
-                        $("#courses").append(str)
-                        console.log(chosen_courses)
+                        else
+                         alert("הקורס כבר נבחר, אם תרצה לשנות תאריך יש למחוק ולהוסיף")
                     }
+                    
                 }) 
             }
+            else
+                alert("אחד מהפרטים שהוכנסו שגויים")
         }
     </script>
 </head>
