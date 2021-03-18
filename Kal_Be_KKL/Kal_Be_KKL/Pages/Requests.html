@@ -39,6 +39,17 @@
                     center: 'title',
                     right: 'prev,next'
                 },
+                visibleRange: function (currentDate) {
+                    // Generate a new date for manipulating in the next step
+                    var startDate = new Date(currentDate.valueOf());
+                    var endDate = new Date(currentDate.valueOf());
+
+                    // Adjust the start & end dates, respectively
+                    startDate.setDate(startDate.getDate() - 1); // One day in the past
+                    endDate.setDate(endDate.getDate() + 2); // Two days into the future
+
+                    return { start: startDate, end: endDate };
+                },
                 customButtons: {
                     wantBtn: {
                         text: 'רוצה',
