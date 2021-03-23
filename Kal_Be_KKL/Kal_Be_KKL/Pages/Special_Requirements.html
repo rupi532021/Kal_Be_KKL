@@ -1,0 +1,203 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="../Scripts/ajaxCallsWithKey.js"></script>
+    <script src="../Scripts/jquery-3.4.1.js"></script>
+    <style type="text/css">
+        .form-control {
+            width: 310px
+        }
+
+        * {
+            direction: rtl
+        }
+
+        #ph {
+            float: left;
+        }
+    </style>
+
+    <script>
+        $(document).ready(function () {
+            $("#pForm").submit(addSpecialRequirement)
+            getRequirements();
+            getBlocks();
+        });
+
+        function getBlocks() {
+            let api = "../api/Blocks";
+            ajaxCall("GET", api, "", getBlocksSuccess, getBlockstError)
+        }
+
+        function getRequirements() {
+            let api = "../api/ShiftRequirements";
+            ajaxCall("GET", api, "", getRequirementsSuccess, getRequirementstError)
+        }
+
+        function getRequirementsSuccess(requirements) {
+            console.log(requirements)
+            requirements.forEach(r => {
+                $("#requirementTB").append('<option value="' + r.Requirement_Id + '">' + r.Requirement_Name + '</option>')
+            })
+        }
+
+        function getBlocksSuccess(blocks) {
+            console.log(blocks)
+            blocks.forEach(b => {
+                $("#blockTB").append('<option value="' + b.Block_Id + '">' + b.Block_Name + '</option>')
+            })
+        }
+
+        function getRequirementstError(err) {
+            console.log(err)
+        }
+
+        function getBlockstError(err) {
+            console.log(err)
+        }
+
+        //function addSpecialRequirement()
+        //{
+        //    requirement_Date = $("#dateTB").val()
+        //    course_id = $("#Course").val()
+        //    if (course_id != "0" && $("#DateTB").val() != "") {
+        //        courses_arr.forEach(c => {
+        //            if (c.Course_Id == parseInt(course_id)) {
+        //                if (chosen_courses.some(c => c.Course_Id == course_id) == false) {
+        //                    str = "<div class='choose_cousre' id='" + c.Course_Id + "'> <p>שם הקורס:  " + c.Course_Name + "</p><p> תאריך ביצוע הקורס: " + date_of_start_course + "</p><input type='button' value='מחק'  onclick='deletecourse(" + c.Course_Id + ")'/></div>";
+        //                    mycourses = {
+        //                        "Name": c.Course_Name,
+        //                        "Course_Id": c.Course_Id,
+        //                        "Receipt_Course_Date": date_of_start_course,
+        //                        "Id": localStorage.Id
+        //                    }
+        //                    chosen_courses.push(mycourses)
+        //                    $("#courses").append(str)
+
+        //                }
+        //                else
+        //                    alert("הקורס כבר נבחר, אם תרצה לשנות תאריך יש למחוק ולהוסיף")
+        //            }
+
+        //        })
+        //    }
+        //    else
+        //        alert("אחד מהפרטים שהוכנסו שגויים")
+        //}
+        function blockchoose() {
+            $("#dateTB").prop('disabled', false);
+        }
+
+        function Show_Requirements() {
+            blockId = $("#blockTB").val();
+            shiftDate = $("#dateTB").val();
+            getPermanentRequirements(blockId)
+            getSpecialRequirements(blockId, shiftDate)
+            
+        }
+
+        function getPermanentRequirements(blockId)
+        {
+            let apiPr = "../api/PermanentRequirements/" + blockId;
+            ajaxCall("GET", apiPr, "", getPermanentRequirementsSuccess, getPermanentRequirementstError)
+        }
+
+        function getSpecialRequirements(blockId, shiftDate)
+        {
+            let apiSr = "../api/SpecialRequirements/" + blockId + "/" + shiftDate;
+            ajaxCall("GET", apiSr, "", getSpecialRequirementsSuccess, getSpecialRequirementsError)
+        }
+
+        function getSpecialRequirementsSuccess(data)
+        {
+            $("#special_Requirements").html("<h1>דרישות מיוחדות לגוש:</h1>");
+            data.forEach(sr => {
+                $("#special_Requirements").append("<p>שם :" + sr.Requirement_Name + " כמות: " + sr.Quantity + " הערות: " + (sr.Comments == null ? 'אין הערות' : sr.Comments) + " </p>")
+            })
+        }
+
+        function getSpecialRequirementsError(err)
+        {
+            console.log(err)
+        }
+
+        function getPermanentRequirementsSuccess(data) {
+            $("#permanent_Requirements").html("<h1>דרישות קבועות לגוש:</h1>");
+            data.forEach(pr => {
+                $("#permanent_Requirements").append("<p>שם :" + pr.Requirement_Name + " כמות: " + pr.Quantity + " הערות: " + (pr.Comments == null ? 'אין הערות' : pr.Comments) + " </p>")
+            })
+        }
+
+        function getPermanentRequirementstError(err) {
+            console.log(err)
+        }
+
+        function addSpecialRequirement() {
+            sr = {
+                "Block_Id": $("#blockTB").val(),
+                "Shift_Date": $("#dateTB").val(),
+                "Requirement_Id": $("#requirementTB").val(),
+                "Quantity": $("#amountTB").val(),
+                "Comments": $("#commentTB").val(),
+            }
+            console.log(sr)
+            ajaxCall("POST", "../api/SpecialRequirements", JSON.stringify(sr), postSrSuccess, postSrError);
+            return false;
+        }
+        function postSrSuccess()
+        {
+            console.log("success")
+            getSpecialRequirements(blockId, shiftDate)
+        }
+
+        function postSrError(err)
+        {
+            console.log(err)
+        }
+
+    </script>
+</head>
+<body>
+    <div class="container">
+        <form id="pForm" method="post" enctype="multipart/form-data">
+        <div id="ph"> <img src="https://pbs.twimg.com/profile_images/1290558521457737728/OS4hqwDH_400x400.jpg" alt="קק'ל"> </div>
+        <div class="form-group" id="Courses1">
+            <label for="blockTB">בחר גוש</label>
+            <select class="form-control" id="blockTB" data-component="dropdown" onchange="blockchoose()">
+                <option value="0">בחר גוש</option>
+            </select>
+            <br />
+            <label for="dateTB">תאריך</label>
+            <input type="date" class="form-control" id="dateTB" disabled onchange="Show_Requirements()" >
+            <br />
+            <div id="permanent_Requirements">
+                
+            </div> 
+            <div id="special_Requirements">
+            </div>
+            <br />
+            <label for="requirementTB">בחר דרישה</label>
+            <select class="form-control" id="requirementTB" data-component="dropdown">
+                <option value="0">בחר דרישה</option>
+            </select>
+            <br />
+            <label for="amountTB">כמות</label>
+            <input type="number" class="form-control" id="amountTB" min="0">
+            <br />
+            <label for="commentTB">הערות</label>
+            <input type="text" class="form-control" id="commentTB">
+            <br />
+            <input type="submit" value="submit" />
+        </div>
+    </form>
+
+    </div>
+</body>
+</html>
