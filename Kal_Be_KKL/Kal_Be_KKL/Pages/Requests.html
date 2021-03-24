@@ -3,30 +3,73 @@
 <head>
     <meta charset="utf-8" />
     <title></title>
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <!--<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>-->
+    <script src="../Scripts/ajaxCallsWithKey.js"></script>
+    <script src="../Scripts/main.js"></script>
+    <link href="../Scripts/StyleSheetNavBar.css" rel="stylesheet" />
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
+    <!--<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">-->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <link href="../Scripts/StyleSheetNavBar.css" rel="stylesheet" />
     <script src="../Scripts/ajaxCallsWithKey.js"></script>
     <link href="../Scripts/main.css" rel="stylesheet" />
-    <script src="../Scripts/main.js"></script>
+
+    <!--<script src="../Scripts/jquery-3.4.1.js"></script>-->
     <style>
-        body {
+        html, body {
+            background-size: 100%;
+            /*width: 100%;
+            height: 100%;*/
+            background-repeat: no-repeat;
+            background-image: linear-gradient(rgb(192, 250, 197), rgb(42, 105, 81));
+            font-family: Calibri,'Segoe UI', sans-serif;
+            font-size: 20px;
+            font-weight: 300;
             direction: rtl
         }
 
+
         #calendar .fc-cantBtn-button {
-            background-color: red;
+            background-color: rgba(255, 61, 44, 0.8);
+            /*RED*/
         }
 
         #calendar .fc-canBtn-button {
-            background-color: blue;
+            background-color: rgba(39, 93, 255, 0.8);
+            /*BLUE*/
         }
 
         #calendar .fc-wantBtn-button {
-            background-color: green;
+            background-color: rgba(66, 211, 155, 0.8);
+            /*GREEN*/
         }
     </style>
     <script>
         color = null;
         allRequests = [];
+
+                $(document).ready(function () {
+          var wWidth = $(window).width();
+  if(wWidth > 768){
+  $("ul.bts-nav li").hover(function(){
+     $(this).children("ul").slideToggle(400);
+  });
+}
+else{
+  $("ul.bts-nav li a").click(function(){
+     $(this).next("ul").slideToggle(400);
+  });
+        }
+                        str1= "<h4>שלום "+ localStorage.first_Name+" "+localStorage.last_Name+"</h4>";
+          $("#phHello").append(str1);
+        });
+
         function changeColor() {
             color = $(this).attr('name')
         }
@@ -54,19 +97,22 @@
                     wantBtn: {
                         text: 'רוצה',
                         click: function () {
-                            color = "green";
+                            color = "rgba(66, 211, 155, 0.7)";
+                            //green
                         }
                     },
                     canBtn: {
                         text: 'יכול',
                         click: function () {
-                            color = "blue";
+                            color = "rgba(39, 93, 255, 0.7)";
+                            //blue
                         }
                     },
                     cantBtn: {
                         text: 'לא יכול',
                         click: function () {
-                            color = "red";
+                            color = "rgba(255, 61, 44, 0.7)";
+                            //red
                         }
                     }
                 },
@@ -90,9 +136,9 @@
                     if (date != null) {
                         let bg = $(this).css('background-color');
                         switch (bg) {
-                            case "rgb(255, 0, 0)": status = "cant"; break; //red
-                            case "rgb(0, 0, 255)": status = "can"; break; //blue
-                            case "rgb(0, 128, 0)": status = "want";
+                            case "rgba(255, 61, 44, 0.7)": status = "cant"; break; //red
+                            case "rgba(39, 93, 255, 0.7)": status = "can"; break; //blue
+                            case "rgba(66, 211, 155, 0.7)": status = "want";//green
                         }
                         allRequests.push({
                             Id: id,
@@ -133,7 +179,77 @@
     </script>
 </head>
 <body>
-    <div id='calendar'></div>
-    <button onclick="saveRequests()">Save</button>
+    <div class="container">
+        <!-- NavBar -->
+
+        <img id="imgKKL" src='https://upload.wikimedia.org/wikipedia/he/thumb/2/27/KakalLogo.svg/1200px-KakalLogo.svg.png' />
+        <div id="phHello"></div>
+
+        <div class="body-wrap">
+            <nav class="navbar navbar-inverse">
+                <div class="container1">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarMenu" aria-expanded="false">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <!--<a class="navbar-brand" href="#">Brand</a>-->
+                    </div>
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="navbarMenu">
+                        <ul class="nav navbar-nav navbar-right  bts-nav">
+                            <li class="active"><a href="#">ראשי<span class="sr-only">(current)</span></a></li>
+                            <li class="dropdown">
+                                <a href="#">סידור עבודה<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="Requests.html">הגשת סידור</a></li>
+                                    <li><a href="#">הסידור שלי</a></li>
+
+                                    <!--<li class="dropdown">
+                                    <a href="#">Another Dropdown <span class="caret dropdown-caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#">Action</a></li>
+                                        <li><a href="#">Action</a></li>
+                                    </ul>
+                                </li>-->
+                                    <!--<li><a href="#">Action</a></li>-->
+                                </ul>
+                            </li>
+                            <li><a href="#">נוכחות</a></li>
+                            <li><a href="#">אנשי קשר</a></li>
+                            <li class="dropdown">
+                                <a href="#">ניהול תורנות<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">דוח סוף תורנות</a></li>
+                                    <li><a href="#">טופס עליה לתורנות</a></li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#">הכשרות ואישורים<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">ההכשרות שלי</a></li>
+                                    <li><a href="#">בקשה להכשרה</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#">פרטים אישיים</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <!--NavBar-->
+
+        <h2>הגשת סידור</h2><br>
+        <div id='calendar'></div>
+
+        <!--<button onclick="saveRequests()">Save</button>-->
+        <button type="submit" class="btn btn-primary" onclick="saveRequests()">שמירה</button>
+    </div>   
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
 </body>
 </html>

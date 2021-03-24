@@ -5,30 +5,63 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!--<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">-->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <link href="../Scripts/StyleSheetNavBar.css" rel="stylesheet" />
     <script src="../Scripts/ajaxCallsWithKey.js"></script>
     <script src="../Scripts/jquery-3.4.1.js"></script>
     <style type="text/css">
+        html, body {
+            background-size: 100%;
+            /*width: 100%;
+            height: 100%;*/
+            background-repeat: no-repeat;
+            background-image: linear-gradient(rgb(192, 250, 197), rgb(42, 105, 81));
+            font-family: Calibri,'Segoe UI', sans-serif;
+            font-size: 20px;
+            font-weight: 300;
+        }
+
+        #imgKKLCenter {
+            height: 50px;
+            width: 30px;
+            float: unset
+        }
+
         .form-control {
-            width:310px
+            width: 310px
         }
+
         .red-star {
-            color: red;
+            color: blue;
         }
-        *
-        {
-            direction:rtl
+
+        * {
+            direction: rtl
         }
-        #ph{float:left;
-            
+
+        #ph {
+            float: left;
         }
-        
+
+
+        #pForm {
+            margin-right: 20px;
+        }
+
+        label {
+            font-size: 18px;
+        }
     </style>
 
 
     <script>
+        /* Toggle between adding and removing the "responsive" class to topnav when the user clicks on the icon */
+
+
         areas = "";
         full_name=""
         id=0
@@ -53,6 +86,19 @@
         $(document).ready(function () {
             $("#pForm").submit(Add_Employee); // bind the submit event to a function called f1
             create_Area_arr()
+          var wWidth = $(window).width();
+  if(wWidth > 768){
+  $("ul.bts-nav li").hover(function(){
+     $(this).children("ul").slideToggle(400);
+  });
+}
+else{
+  $("ul.bts-nav li a").click(function(){
+     $(this).next("ul").slideToggle(400);
+  });
+        }
+                str1= "<h4>שלום "+ localStorage.first_Name+" "+localStorage.last_Name+"</h4>";
+          $("#phHello").append(str1);
 
             // activate a custom validation function when the element looses focus.
         });
@@ -65,9 +111,9 @@
             swal("Added Successfuly!", "Great Job", "success");
             localStorage["Id"] = id
             localStorage["Full_Name"] = full_name
-            setTimeout("", 5000) 
+            setTimeout("", 5000)
             window.location.replace("Insert_Courses.html");
-        } 
+        }
 
         // This function is called in case of an error
         function postError(err)
@@ -118,18 +164,82 @@
                 str += '</select >';
             }
             $("#AreaOrReligion").append(str)
-             
+
         }
+
+
 
 
     </script>
 
 </head>
-<body >
+<body>
 
     <div class="container">
+        <!-- NavBar -->
+
+        <img id="imgKKL" src='https://upload.wikimedia.org/wikipedia/he/thumb/2/27/KakalLogo.svg/1200px-KakalLogo.svg.png' />
+        <div id="phHello"></div>
+
+        <div class="body-wrap">
+            <nav class="navbar navbar-inverse">
+                <div class="container1">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarMenu" aria-expanded="false">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <!--<a class="navbar-brand" href="#">Brand</a>-->
+                    </div>
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="navbarMenu">
+                        <ul class="nav navbar-nav navbar-right  bts-nav">
+                            <li class="active"><a href="#">ראשי<span class="sr-only">(current)</span></a></li>
+                            <li class="dropdown">
+                                <a href="#">סידור עבודה<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="Requests.html">הגשת סידור</a></li>
+                                    <li><a href="#">הסידור שלי</a></li>
+
+                                    <!--<li class="dropdown">
+                <a href="#">Another Dropdown <span class="caret dropdown-caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Action</a></li>
+                    <li><a href="#">Action</a></li>
+                </ul>
+            </li>-->
+                                    <!--<li><a href="#">Action</a></li>-->
+                                </ul>
+                            </li>
+                            <li><a href="#">נוכחות</a></li>
+                            <li><a href="#">אנשי קשר</a></li>
+                            <li class="dropdown">
+                                <a href="#">ניהול תורנות<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">דוח סוף תורנות</a></li>
+                                    <li><a href="#">טופס עליה לתורנות</a></li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#">הכשרות ואישורים<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">ההכשרות שלי</a></li>
+                                    <li><a href="#">בקשה להכשרה</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#">פרטים אישיים</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <!--NavBar-->
+
         <form id="pForm" method="post" enctype="multipart/form-data">
-            <div id="ph"> <img src="https://pbs.twimg.com/profile_images/1290558521457737728/OS4hqwDH_400x400.jpg" alt="קק'ל"> </div>
+            <div class="pict" id="ph"> <img src="https://www.kkl.org.il/files/forests_and_parks/big/jerusalem-forest/jerusalem_forest_flowers_big.jpg" alt="קק'ל"> </div>
             <h2>הכנסת עובד חדש</h2>
             <div class="form-group">
                 <label for="FirstNameTB"><span class="red-star">★ </span>שם פרטי</label>
@@ -175,13 +285,13 @@
             </div>
             <div class="form-group">
                 <label for="PhoneTB"><span class="red-star">★ </span>נייד</label>
-                <input type="tel" class="form-control" id="PhoneTB" placeholder="הכנס מספר נייד.(nnn-nn-nnnnnn)"
+                <input type="tel" class="form-control" id="PhoneTB" placeholder="הכנס מספר נייד (nnn-nn-nnnnnn)"
                        pattern="[0-9}{16}"
                        oninvalid="this.setCustomValidity('מספרים בלבד')"
                        oninput="this.setCustomValidity('')" required>
             </div>
             <div class="form-group">
-                <label for="PasswordTB"><span class="red-star">★ </span>Password</label>
+                <label for="PasswordTB"><span class="red-star">★ </span>סיסמא</label>
                 <input type="password" class="form-control" style="width:310px" placeholder="8 תווים עם אות אחת גדולה ומספר אחד" id="PasswordTB"
                        pattern="^(?=.*\d)(?=.*[A-Z]).{8,}$"
                        oninvalid="this.setCustomValidity('8 תווים אות אחת גדולה ומספר')"
@@ -200,18 +310,16 @@
             </div>
             <div class="form-group" id="AreaOrReligion">
                 <label for="Area"><span class="red-star">★ </span>בחר אזור</label>
-                <select class="form-control" id="Area" style="width:310px" data-component="dropdown">
-
-                </select>
+                <select class="form-control" id="Area" style="width:310px" data-component="dropdown"></select>
             </div>
 
-            <input type="submit" value="הוסף" />
+            <button type="submit" class="btn btn-primary" value="הוסף">הוסף</button>
 
         </form>
-        
-    </div>
-    
 
+    </div>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 </body>
 </html>

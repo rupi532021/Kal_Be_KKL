@@ -5,6 +5,9 @@
 .fc-not-allowed .fc-event { /* override events' custom cursors */
   cursor: not-allowed;
 }
+a {
+    color: #065e44;
+}
 
 .fc-unselectable {
   -webkit-user-select: none;
@@ -56,8 +59,8 @@
 }
 .fc-theme-standard td,
   .fc-theme-standard th {
-    border: 1px solid #ddd;
-    border: 1px solid var(--fc-border-color, #ddd);
+    border: 1px solid #fff;
+    border: 1px solid var(--fc-border-color, #fff);
   }
 /* for FF, which doesn't expand a 100% div within a table cell. use absolute positioning */
 /* inner-wrappers are responsible for being absolute */
@@ -1098,11 +1101,8 @@ A VERTICAL event
     padding: 0 4px;
   }
 .fc {
-
-
-  /* axis cells (top-left corner of view including the "all-day" text) */
-  /* vertical align is more complicated, uses flexbox */
-
+    /* axis cells (top-left corner of view including the "all-day" text) */
+    /* vertical align is more complicated, uses flexbox */
 }
 .fc .fc-timegrid-axis-frame-liquid {
     height: 100%; /* will need liquid-hack in FF */
