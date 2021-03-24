@@ -97,7 +97,8 @@ else{
      $(this).next("ul").slideToggle(400);
   });
         }
-                str1= "<h4>שלום "+ localStorage.first_Name+" "+localStorage.last_Name+"</h4>";
+                let employee = JSON.parse(localStorage["Employee"]);
+                str1= "<h4>שלום "+ employee.first_Name+" "+employee.last_Name+"</h4>";
           $("#phHello").append(str1);
 
             // activate a custom validation function when the element looses focus.
@@ -166,10 +167,6 @@ else{
             $("#AreaOrReligion").append(str)
 
         }
-
-
-
-
     </script>
 
 </head>

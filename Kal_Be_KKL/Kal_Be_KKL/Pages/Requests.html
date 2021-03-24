@@ -54,19 +54,21 @@
         color = null;
         allRequests = [];
 
-                $(document).ready(function () {
+        $(document).ready(function () {
           var wWidth = $(window).width();
-  if(wWidth > 768){
-  $("ul.bts-nav li").hover(function(){
-     $(this).children("ul").slideToggle(400);
-  });
-}
+            if(wWidth > 768){
+              $("ul.bts-nav li").hover(function(){
+                $(this).children("ul").slideToggle(400);
+             });
+             }
 else{
   $("ul.bts-nav li a").click(function(){
      $(this).next("ul").slideToggle(400);
   });
         }
-                        str1= "<h4>שלום "+ localStorage.first_Name+" "+localStorage.last_Name+"</h4>";
+        let employee = JSON.parse(localStorage["Employee"]);
+
+                        str1= "<h4>שלום "+ employee.First_Name+" "+ employee.Last_Name+"</h4>";
           $("#phHello").append(str1);
         });
 
