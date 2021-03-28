@@ -60,14 +60,19 @@
 
 
         // This function is called in case of a success
-        function postSuccess(data)
+        function postEmployeeSuccess(data)
         {
             swal("Added Successfuly!", "Great Job", "success");
             localStorage["Id"] = id
             localStorage["Full_Name"] = full_name
             setTimeout("", 5000) 
-            window.location.replace("Insert_Courses.html");
+            
         } 
+
+        function postEmployee_in_areaSuccess(data)
+        {
+           // window.location.replace("Insert_Courses.html");
+        }
 
         // This function is called in case of an error
         function postError(err)
@@ -90,8 +95,28 @@
                 Mail: $("#MailTB").val(),
                 Password: $("#PasswordTB").val()
             }
+            if (areas != "")
+            {
+                var today = new Date();
+                var dd = String(today.getDate()).padStart(2, '0');
+                var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+                var yyyy = today.getFullYear();
 
-            ajaxCall("POST", "../api/Employees", JSON.stringify(employee), postSuccess, postError)
+                today = mm + '/' + dd + '/' + yyyy;
+                console.log(today)
+                employee_in_area =
+                {
+                    Id:id,
+                    Area_Id:$("#Area").val(),
+                    Job_Id:$("#JOB").val(),
+                    Job_Start_Date:today
+                    
+                }
+                console.log(employee_in_area)
+            }
+
+            ajaxCall("POST", "../api/Employees", JSON.stringify(employee), postEmployeeSuccess, postError)
+            ajaxCall("POST", "../api/Workers_In_Area", JSON.stringify(employee_in_area), postEmployee_in_areaSuccess, postError)
 
             return false;
         }
@@ -101,7 +126,7 @@
             console.log(value)
             str = "";
             if (value == "5") {
-
+                areas = "";
                 str = '<label for="ReligionRB"><span class="red-star">★ </span>מרחב</label>';
                 str += '<select class="form-control" id="Region" style="width:310px" data-component="dropdown">';
                 str += '<option value="1"> מרכז </option>';
@@ -113,7 +138,7 @@
             else
             {
                 str = '<label for="ReligionRB"><span class="red-star">★ </span>אזור</label>';
-                str += '<select class="form-control" id="Region" style="width:310px" data-component="dropdown">';
+                str += '<select class="form-control" id="Areas" style="width:310px" data-component="dropdown">';
                 str += areas;
                 str += '</select >';
             }
