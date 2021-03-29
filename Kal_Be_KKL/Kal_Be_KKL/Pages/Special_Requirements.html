@@ -39,6 +39,7 @@
     <script>
         $(document).ready(function () {
             $("#pForm").submit(addSpecialRequirement)
+            
             getRequirements();
             getBlocks();
           var wWidth = $(window).width();
@@ -89,43 +90,38 @@ else{
             console.log(err)
         }
 
-        //function addSpecialRequirement()
-        //{
-        //    requirement_Date = $("#dateTB").val()
-        //    course_id = $("#Course").val()
-        //    if (course_id != "0" && $("#DateTB").val() != "") {
-        //        courses_arr.forEach(c => {
-        //            if (c.Course_Id == parseInt(course_id)) {
-        //                if (chosen_courses.some(c => c.Course_Id == course_id) == false) {
-        //                    str = "<div class='choose_cousre' id='" + c.Course_Id + "'> <p>שם הקורס:  " + c.Course_Name + "</p><p> תאריך ביצוע הקורס: " + date_of_start_course + "</p><input type='button' value='מחק'  onclick='deletecourse(" + c.Course_Id + ")'/></div>";
-        //                    mycourses = {
-        //                        "Name": c.Course_Name,
-        //                        "Course_Id": c.Course_Id,
-        //                        "Receipt_Course_Date": date_of_start_course,
-        //                        "Id": localStorage.Id
-        //                    }
-        //                    chosen_courses.push(mycourses)
-        //                    $("#courses").append(str)
-
-        //                }
-        //                else
-        //                    alert("הקורס כבר נבחר, אם תרצה לשנות תאריך יש למחוק ולהוסיף")
-        //            }
-
-        //        })
-        //    }
-        //    else
-        //        alert("אחד מהפרטים שהוכנסו שגויים")
-        //}
         function blockchoose() {
             $("#dateTB").prop('disabled', false);
         }
 
-        function Show_Requirements() {
-            blockId = $("#blockTB").val();
+        function isDateGreaterThanToday(b) {
+            var dS = b.split("-");
+            var d1 = new Date(dS[0], (+dS[1] - 1));
+            var today = new Date();
+            if (d1 > today) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        function Show_Requirements()
+        {
             shiftDate = $("#dateTB").val();
-            getPermanentRequirements(blockId)
-            getSpecialRequirements(blockId, shiftDate)
+
+            console.log(shiftDate)
+            if (isDateGreaterThanToday(shiftDate)) {
+                blockId = $("#blockTB").val();
+                getPermanentRequirements(blockId)
+                getSpecialRequirements(blockId, shiftDate)
+            }
+            else
+            {
+                alert("יש לבחור תאריך שחל מהחודש הבא")
+                $("#dateTB").val("");
+                $("#permanent_Requirements").html("")
+                $("#special_Requirements").html("")
+            }
 
         }
 
@@ -264,7 +260,7 @@ else{
                 </select>
                 <br />
                 <label for="dateTB">תאריך</label>
-                <input type="date" class="form-control" id="dateTB" disabled onchange="Show_Requirements()">
+                <input type="date" class="form-control" id="dateTB"  disabled onchange="Show_Requirements()">
                 <br />
                 <div id="permanent_Requirements">
 
