@@ -15,11 +15,13 @@
     <script src="../Scripts/jquery-3.4.1.js"></script>
     <style type="text/css">
         html, body {
-            background-size: 100%;
-            /*width: 100%;
-            height: 100%;*/
+            width: 100%;
+            height: 100%;
             background-repeat: no-repeat;
             background-image: linear-gradient(rgb(192, 250, 197), rgb(42, 105, 81));
+            background-position: center center;
+            background-attachment: fixed;
+            background-size: cover;
             font-family: Calibri,'Segoe UI', sans-serif;
             font-size: 20px;
             font-weight: 300;
@@ -325,9 +327,11 @@
             <div class="form-group" id="AreaOrReligion">
                 <label for="Area"><span class="red-star">★ </span>בחר אזור</label>
                 <select class="form-control" id="Area" style="width:310px" data-component="dropdown"></select>
-            </div>
 
-            <button type="submit" class="btn btn-primary" value="הוסף">הוסף</button>
+            </div>
+            
+                <button type="submit" class="btn btn-primary" value="הוסף">הוסף</button>
+          
 
         </form>
 
