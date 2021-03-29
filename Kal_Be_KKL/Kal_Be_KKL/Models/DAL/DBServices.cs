@@ -669,5 +669,107 @@ namespace Kal_Be_KKL.Models.DAL
             return command;
         }
 
+        public int InsertDayInShift(Day_In_Shift dayInShift)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            String cStr = BuildInsertCommand(dayInShift);      // helper method to build the insert string
+
+            cmd = CreateCommand(cStr, con);             // create the command
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+
+        }
+
+        //--------------------------------------------------------------------
+        // Build the Insert command String
+        //--------------------------------------------------------------------
+        private String BuildInsertCommand(Day_In_Shift dayInShift)
+        {
+            String command;
+
+            StringBuilder sb = new StringBuilder();
+            // use a string builder to create the dynamic string
+            sb.AppendFormat("Values('{0}', '{1}', '{2}','{3}')",
+                dayInShift.Id, dayInShift.Block_Id, dayInShift.Shift_Date.ToString("yyyy-MM-dd"), dayInShift.Requirement_Id);
+            String prefix = "INSERT INTO kkl_Day_In_Shift " + "([Id],[Block_Id], [Shift_Date],[Requirement_Id])";
+            command = prefix + sb.ToString();
+
+            return command;
+        }
+
+        public List<Day_In_Shift> ReadDayInShift()
+        {
+            SqlConnection con = null;
+            List<Day_In_Shift> DayInShiftList = new List<Day_In_Shift>();
+            try
+            {
+                con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
+
+                String selectSTR = "select * from kkl_Day_In_Shift";
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+                    Day_In_Shift dayInShift = new Day_In_Shift();
+                    dayInShift.Id = (string)dr["Id"];
+                    dayInShift.Block_Id = Convert.ToInt32(dr["Block_Id"]);
+                    dayInShift.Shift_Date = Convert.ToDateTime(dr["Shift_Date"]);
+                    dayInShift.Requirement_Id = Convert.ToInt32(dr["Requirement_Id"]);
+                    DayInShiftList.Add(dayInShift);
+                }
+                return DayInShiftList;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+
+        }
+
     }
+
+
 }
