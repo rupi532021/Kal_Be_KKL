@@ -155,7 +155,7 @@
                 }
                 console.log(employee_in_area)
             }
-
+            localStorage["Employee"] = JSON.stringify(employee);
             ajaxCall("POST", "../api/Employees", JSON.stringify(employee), postSuccess, postError)
             ajaxCall("POST", "../api/Workers_In_Area", JSON.stringify(employee_in_area), postEmployee_in_areaSuccess, postError)
 

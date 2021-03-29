@@ -127,6 +127,7 @@
 
         $(document).ready(function () {
             loadcourses()
+            fullName = JSON.parse(localStorage["Employee"]).First_Name + " " + JSON.parse(localStorage["Employee"]).Last_Name;;
             str="הקורסים של "+localStorage.Full_Name+" הם:"
             $("h2").html(str)
           var wWidth = $(window).width();
@@ -141,7 +142,7 @@ else{
   });
         }
                 let employee = JSON.parse(localStorage["Employee"]);
-                        str1= "<h4>שלום "+ employee.first_Name+" "+employee.last_Name+"</h4>";
+                        str1= "<h4>שלום "+ employee.First_Name+" "+employee.Last_Name+"</h4>";
           $("#phHello").append(str1);
         });
 
