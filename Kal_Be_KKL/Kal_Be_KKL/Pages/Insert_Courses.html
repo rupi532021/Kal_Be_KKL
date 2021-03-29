@@ -175,7 +175,7 @@ else{
                                 "Name": c.Course_Name,
                                 "Course_Id": c.Course_Id,
                                 "Receipt_Course_Date": date_of_start_course,
-                                "Id": localStorage.Id
+                                "Id": JSON.parse(localStorage["Employee"]).Id
                             }
                             chosen_courses.push(mycourses)
                             $("#courses").append(str)
