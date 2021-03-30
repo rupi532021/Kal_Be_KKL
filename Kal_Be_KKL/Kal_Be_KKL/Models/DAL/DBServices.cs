@@ -769,6 +769,209 @@ namespace Kal_Be_KKL.Models.DAL
 
         }
 
+        public List<RequirementForSpecificShift> ReadPermantReqListForBlock(int blockId)
+        {
+            SqlConnection con = null;
+            List<RequirementForSpecificShift> permantReqListForBlock = new List<RequirementForSpecificShift>();
+            try
+            {
+                con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
+
+                String selectSTR = @"select pr.Requirement_Id,pr.Quantity
+                                     from kkl_Permanent_Requirements_To_Block_In_a_shift pr
+                                     where pr.Block_Id="+blockId;
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+                    RequirementForSpecificShift req = new RequirementForSpecificShift();
+                    req.Requirement_Id = Convert.ToInt32(dr["Requirement_Id"]);
+                    req.Quantity = Convert.ToInt32(dr["Quantity"]);
+                    permantReqListForBlock.Add(req);
+                }
+                return permantReqListForBlock;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+
+        }
+
+        public List<RequirementForSpecificShift> ReadSpeciaelReqListForBlock(int blockId, DateTime Shift_Date)
+        {
+            SqlConnection con = null;
+            List<RequirementForSpecificShift> speciaelReqListForBlock = new List<RequirementForSpecificShift>();
+            try
+            {
+                con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
+
+                String selectSTR = @"select sr.Requirement_Id,sr.Quantity
+                                    from kkl_Special_requirements_for_a_day_in_a_shift_of_a_block sr
+                                    where sr.Block_Id="+ blockId+@" and
+                                    sr.Shift_Date='"+ Shift_Date.ToString("yyyy-MM-dd") + "'";
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+                    RequirementForSpecificShift req = new RequirementForSpecificShift();
+                    req.Requirement_Id = Convert.ToInt32(dr["Requirement_Id"]);
+                    req.Quantity = Convert.ToInt32(dr["Quantity"]);
+                    speciaelReqListForBlock.Add(req);
+                }
+                return speciaelReqListForBlock;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+
+        }
+
+        public Employee FindMatchEmployee(int Area_Id, string Request_Status, DateTime Request_Date, int Requirement_Id)
+        {
+
+            SqlConnection con = null;
+            SqlDataReader dr = null;
+            Employee emp = new Employee();
+            try
+            {
+                con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
+                try
+                {
+                    if (con.State != ConnectionState.Open)
+                        con.Open();
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = con;
+                cmd.CommandText = "sp_smartAssign";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Area_Id", Area_Id);
+                cmd.Parameters.AddWithValue("@Request_Status", Request_Status);
+                cmd.Parameters.AddWithValue("@Request_Date", Request_Date.ToString("yyyy-MM-dd"));
+                cmd.Parameters.AddWithValue("@Requirement_Id", Requirement_Id);
+
+                // get a reader
+                try
+                {
+                    dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+
+
+                while (dr.Read())
+                {
+                    // Read till the end of the data into a row
+                    emp.Id = (string)(dr["Id"]);
+                }
+                return emp;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+
+        }
+
+        public int InsertEmployeeToShift(string id, int blockId, DateTime shift_Date, int Requirement_Id)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            String cStr = BuildInsertCommand(id, blockId, shift_Date, Requirement_Id);      // helper method to build the insert string
+
+            cmd = CreateCommand(cStr, con);             // create the command
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+
+        }
+
+        private String BuildInsertCommand(string id, int blockId, DateTime shift_Date, int Requirement_Id)
+        {
+            String command;
+
+            StringBuilder sb = new StringBuilder();
+            // use a string builder to create the dynamic string
+            sb.AppendFormat("Values('{0}', '{1}', '{2}', '{3}')",
+                 id, blockId, shift_Date.ToString("yyyy-MM-dd"), Requirement_Id);
+            String prefix = "INSERT INTO kkl_Day_In_Shift " + "([Id], [Block_Id], [Shift_Date], [Requirement_Id])";
+            command = prefix + sb.ToString();
+
+            return command;
+        }
+
     }
 
 

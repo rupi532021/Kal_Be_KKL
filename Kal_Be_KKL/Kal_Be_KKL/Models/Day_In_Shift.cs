@@ -41,5 +41,34 @@ namespace Kal_Be_KKL.Models
             List<Day_In_Shift> DayInShiftList = dbs.ReadDayInShift();
             return DayInShiftList;
         }
+
+        public List<RequirementForSpecificShift> GetPermantReq(int blockId)
+        {
+            DBServices dbs = new DBServices();
+            List<RequirementForSpecificShift> permantReqListForBlock = dbs.ReadPermantReqListForBlock(blockId);
+            return permantReqListForBlock;
+        }  
+
+        public List<RequirementForSpecificShift> GetSpeciaelReq(int blockId,DateTime Shift_Date)
+        {
+            DBServices dbs = new DBServices();
+            List<RequirementForSpecificShift> speciaelReqListForBlock = dbs.ReadSpeciaelReqListForBlock(blockId, Shift_Date);
+            return speciaelReqListForBlock;
+        }
+
+        public Employee FindMatchEmployee(int areaId, DateTime Shift_Date,int Requirement_Id)
+        {
+            DBServices dbs = new DBServices();
+            Employee matchEmployee = dbs.FindMatchEmployee(areaId, "want", Shift_Date, Requirement_Id);
+            if (matchEmployee.Id==null)
+                matchEmployee = dbs.FindMatchEmployee(areaId, "can", Shift_Date, Requirement_Id);
+            return matchEmployee;
+        }
+
+        public void InsertEmployeeToShift (string id,int blockId,DateTime shift_Date,int Requirement_Id)
+        {
+            DBServices dbs = new DBServices();
+            dbs.InsertEmployeeToShift(id, blockId, shift_Date, Requirement_Id);
+        }
     }
 }
