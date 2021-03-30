@@ -130,7 +130,7 @@
         $(document).ready(function () {
             loadcourses()
             fullName = JSON.parse(localStorage["Employee"]).First_Name + " " + JSON.parse(localStorage["Employee"]).Last_Name;;
-            str="הקורסים של "+localStorage.Full_Name+" הם:"
+            str = "הקורסים של " + fullName+" הם:"
             $("h2").html(str)
           var wWidth = $(window).width();
   if(wWidth > 768){

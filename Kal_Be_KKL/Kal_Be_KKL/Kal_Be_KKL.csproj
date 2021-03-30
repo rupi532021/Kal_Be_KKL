@@ -178,6 +178,7 @@
     <Compile Include="Models\Employee.cs" />
     <Compile Include="Models\BlockShiftRequirementWithName.cs" />
     <Compile Include="Models\Request.cs" />
+    <Compile Include="Models\RequirementForSpecificShift.cs" />
     <Compile Include="Models\ShiftRequirement.cs" />
     <Compile Include="Models\SpecialRequirement.cs" />
     <Compile Include="Models\Worker_In_Area.cs" />

@@ -30,6 +30,38 @@ namespace Kal_Be_KKL.Controllers
             dayinshift.InsertDayInShift();
         }
 
+        public void SmartPost(int areaId)
+        {
+            ////צריך לעבור על כל הגושים בינתיים נעבור על אחד
+            ////צריך לעבור על כל התאריכים בחודש הבא בינתיים רק על אחד
+            //Day_In_Shift shift = new Day_In_Shift();
+            //shift.Shift_Date = Convert.ToDateTime("2021-05-01");
+            //int blockId = 1;
+            ////List<Employee> wantArray = shift.getWant(shiftDate);
+            ////List<Employee> canArray = shift.getcan(shiftDate);
+            //List<RequirementForSpecificShift> permantReqs = shift.GetPermantReq(blockId);
+            //List<RequirementForSpecificShift> speciaelReqs = shift.GetSpeciaelReq(blockId);
+            //AssignToShift(permantReqs,shift);
+            //AssignToShift(speciaelReqs,shift);
+        }
+
+        private void AssignToShift(List<RequirementForSpecificShift> reqs, Day_In_Shift shift)
+        {
+            foreach (var req in reqs)
+            {
+                for (int i = 0; i < req.Quantity; i++)
+                {
+                    // לא שובץ באותו היום, רוצה, יש לו הכשרות מתאימות לתפקיד והם בתוקף, מתוכם הכמות משמרות הכי נמוכה באותו החודש 
+
+                    //Employee EmpforReq = shift.getWantMatchEmployeeForReq(req.Requirement_Id,shift.Shift_Date); //להשלים את הקלאס RequirementForSpecificShift // פעולה שמחזירה את מי שיש לו את הדרישות לתפקיד ולא מבצע כבר משמרת באותו יום ורוצה ומסודר לפי מי שיש לו הכי קצת משמרות להביא טופ 1
+                    //if (EmpforReq == null)
+                    //    EmpforReq = shift.getCanMatchEmployeeForReq(req.Requirement_Id,shift.Shift_Date); // פעולה שמחזירה את מי שיש לו את הדרישות לתפקיד ולא מבצע כבר משמרת באותו יום ויכול ומסודר לפי מי שיש לו הכי קצת משמרות להביא טופ 1
+                    //if (EmpforReq != null)
+                    //    shift.InsertDutyToShift(EmpforReq);
+                }
+            }
+        }
+
         // PUT api/<controller>/5
         public void Put(int id, [FromBody]string value)
         {
