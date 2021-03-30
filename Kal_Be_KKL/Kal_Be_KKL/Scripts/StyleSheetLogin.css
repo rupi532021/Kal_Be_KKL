@@ -9,19 +9,33 @@ body, html {
 .card-container.card {
     max-width: 450px;
     padding: 80px 80px;
-
 }
+
 /*.form-control {
     background-color: #ebfcf6;
     border: 1px solid #9bc9b8;
     color: #38403d;
     font-size: 17px;
+}*/
+
+label {
+    display: inline-block;
+    margin-bottom: .5rem;
+    float: right;
+}
+
+.form-signin #InputId, .form-signin #InputPassword {
+    direction: ltr;
+    height: 44px;
+    font-size: 16px;
+    padding-top: 3%;
 }
 
 ::placeholder {
     color: #38403d;
     font-size: 17px;
-}*/
+    float:right;
+}
 
 @media screen and (max-width: 768px) {
     .card-container.card {
@@ -43,7 +57,7 @@ body{
     }
 
     .container {
-        padding-top: 10%;
+        padding-top: 5%;
     }
 
     /*
@@ -65,8 +79,8 @@ body{
     }
 
     .profile-img-card {
-        width: 96px;
-        height: 96px;
+        width: 120px;
+        height: 120px;
         margin: 0 auto 10px;
         display: block;
         -moz-border-radius: 50%;
