@@ -76,9 +76,13 @@
         chosen_courses=[]
         function Add_Course_To_DB()
         {
-            for (var i = 0; i < chosen_courses.length; i++) {
-                api = "../api/Employees/insert_course_of_duty/" + chosen_courses[i].Receipt_Course_Date + "/" + chosen_courses[i].Course_Id + "/" + chosen_courses[i].Id + "/"
-                ajaxCall("POST", api , "", postSuccess, postError)
+            if (chosen_courses.length == 0)
+                alert("לא נבחרו הכשרות")
+            else {
+                for (var i = 0; i < chosen_courses.length; i++) {
+                    api = "../api/Employees/insert_course_of_duty/" + chosen_courses[i].Receipt_Course_Date + "/" + chosen_courses[i].Course_Id + "/" + chosen_courses[i].Id + "/"
+                    ajaxCall("POST", api, "", postSuccess, postError)
+                }
             }
         }
         function postSuccess(data)
