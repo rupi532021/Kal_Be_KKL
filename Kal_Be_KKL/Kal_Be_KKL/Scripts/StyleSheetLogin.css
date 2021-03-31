@@ -5,6 +5,9 @@ body, html {
     background-image: linear-gradient(rgb(192, 250, 197), rgb(42, 105, 81));
     font-family: Calibri,'Segoe UI', sans-serif;
 }
+h4{
+    text-align:center;
+}
 
 .card-container.card {
     max-width: 450px;
@@ -83,9 +86,9 @@ body{
         height: 120px;
         margin: 0 auto 10px;
         display: block;
-        -moz-border-radius: 50%;
-        -webkit-border-radius: 50%;
-        border-radius: 50%;
+        /*-moz-border-radius: 50%;*/
+        /*-webkit-border-radius: 50%;*/
+        /*border-radius: 50%;*/
     }
 
     /*
