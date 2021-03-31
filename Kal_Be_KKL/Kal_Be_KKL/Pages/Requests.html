@@ -22,6 +22,9 @@
 
     <!--<script src="../Scripts/jquery-3.4.1.js"></script>-->
     <style>
+        h3{
+            text-align:right
+        }
         #calendar .fc-cantBtn-button {
             background-color: rgba(255, 61, 44, 0.8);
             /*RED*/
@@ -69,7 +72,7 @@
                 headerToolbar: {
                     left: 'wantBtn canBtn cantBtn',
                     center: 'title',
-                    right: 'prev,next'
+                    right: ''
                 },
                 visibleRange: function (currentDate) {
                     // Generate a new date for manipulating in the next step
@@ -110,7 +113,8 @@
                 dateClick: function (el) {
                     if (color != null)
                         el.dayEl.style.backgroundColor = color;
-                }
+                },
+        height:700
             });
             calendar.next();
             calendar.next();
@@ -216,7 +220,6 @@
                                 <ul class="dropdown-menu">
                                     <li><a href="#">דוח סוף תורנות</a></li>
                                     <li><a href="#">טופס עליה לתורנות</a></li>
-                                    <li><a href="Insert_Courses.html">הכנסת הכשרות</a></li>
                                 </ul>
                             </li>
                             <li class="dropdown">
@@ -224,6 +227,7 @@
                                 <ul class="dropdown-menu">
                                     <li><a href="#">ההכשרות שלי</a></li>
                                     <li><a href="#">בקשה להכשרה</a></li>
+                                    <li><a href="Insert_Courses.html">הכנסת הכשרות</a></li>
                                 </ul>
                             </li>
                             <li><a href="#">פרטים אישיים</a></li>
