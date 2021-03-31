@@ -36,14 +36,22 @@ namespace Kal_Be_KKL.Controllers
             //צריך לעבור על כל הגושים בינתיים נעבור על אחד
             //צריך לעבור על כל התאריכים בחודש הבא בינתיים רק על אחד
             Day_In_Shift shift = new Day_In_Shift();
-            shift.Shift_Date = Convert.ToDateTime("2021-05-01");
-            int blockId = 1;
-            //List<Employee> wantArray = shift.getWant(shiftDate);
-            //List<Employee> canArray = shift.getcan(shiftDate);
-            List<RequirementForSpecificShift> permantReqs = shift.GetPermantReq(blockId);
-            List<RequirementForSpecificShift> speciaelReqs = shift.GetSpeciaelReq(blockId,shift.Shift_Date);
-            AssignToShift(permantReqs, shift,areaId, blockId);
-            AssignToShift(speciaelReqs, shift, areaId, blockId);
+            DateTime date = DateTime.Today.AddMonths(2); //לשנות ל1
+            var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
+            var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+            Area area = new Area();
+            var blockIds = area.getBlockIds(areaId);
+            for (var day = firstDayOfMonth.Date; day.Date <= lastDayOfMonth.Date; day = day.AddDays(1))
+            {
+                shift.Shift_Date = day;
+                foreach (int blockId in blockIds)
+                {
+                    List<RequirementForSpecificShift> permantReqs = shift.GetPermantReq(blockId);
+                    List<RequirementForSpecificShift> speciaelReqs = shift.GetSpeciaelReq(blockId, shift.Shift_Date);
+                    AssignToShift(permantReqs, shift, areaId, blockId);
+                    AssignToShift(speciaelReqs, shift, areaId, blockId);
+                }
+            }
         }
 
         private void AssignToShift(List<RequirementForSpecificShift> reqs, Day_In_Shift shift,int areaId,int blockId)

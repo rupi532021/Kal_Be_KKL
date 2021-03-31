@@ -19,9 +19,20 @@ namespace Kal_Be_KKL.Controllers
         }
 
         // GET api/<controller>/5
-        public string Get(int id)
+        [Route("api/Area/GetAreaByEmpId/{id}")]
+        [HttpGet]
+        public HttpResponseMessage GetAreaByEmpId(string id)
         {
-            return "value";
+            Area area = new Area();
+            area = area.Read_Area_By_Emp_Id(id);
+            if (area.Area_Id == 0)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Id incorrect");
+            }
+            else
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, area);
+            }
         }
 
         // POST api/<controller>

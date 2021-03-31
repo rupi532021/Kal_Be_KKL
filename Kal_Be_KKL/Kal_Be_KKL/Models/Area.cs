@@ -35,8 +35,21 @@ namespace Kal_Be_KKL.Models
         {
             DBServices dbs = new DBServices();
             List<Area> Area_List = dbs.Read_Area();
-                return Area_List;
+            return Area_List;
         }
         public Area() { }
+        public List<int> getBlockIds(int areaId)
+        {
+            DBServices dbs = new DBServices();
+            List<int> Area_List = dbs.Read_BlocksOfArea(areaId);
+            return Area_List;
+        }
+
+        public Area Read_Area_By_Emp_Id (string id)
+        {
+            DBServices dbs = new DBServices();
+            Area area = dbs.Read_Area_By_Emp_Id(id);
+            return area;
+        }
     }
 }

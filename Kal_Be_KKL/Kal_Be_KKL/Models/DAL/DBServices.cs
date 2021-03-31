@@ -972,6 +972,87 @@ namespace Kal_Be_KKL.Models.DAL
             return command;
         }
 
+        public List<int> Read_BlocksOfArea(int areaId)
+        {
+            SqlConnection con = null;
+            List<int> blockIds = new List<int>();
+            try
+            {
+                con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
+
+                String selectSTR = @"select Block_Id
+                                     from kkl_Block
+                                     where Area_Id="+areaId;
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+                    blockIds.Add(Convert.ToInt32(dr["Block_Id"]));
+                }
+                return blockIds;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+
+        }
+
+        public Area Read_Area_By_Emp_Id(string id)
+        {
+            SqlConnection con = null;
+            Area area = new Area();
+            try
+            {
+                con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
+
+                String selectSTR = @"SELECT a.*
+                                     FROM kkl_Worker_In_Area wia inner join kkl_Area a on wia.Area_Id=a.Area_Id
+                                     where id='"+id+"'";
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+                    area.Region_Id = Convert.ToInt32(dr["Region_Id"]);
+                    area.Area_Id = Convert.ToInt32(dr["Area_Id"]);
+                    area.Area_Name = (string)dr["Area_Name"];
+                    area.Patrol_Id = (string)dr["Patrolman_Id"];
+                    area.Manager_Id = (string)dr["Manager_Id"];
+                    area.Forester_Id = (string)dr["Forester_Id"];
+                }
+                return area;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+
+        }
+
     }
 
 

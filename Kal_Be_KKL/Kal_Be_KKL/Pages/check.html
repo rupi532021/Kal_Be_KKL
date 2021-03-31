@@ -7,14 +7,33 @@
     <script src="../Scripts/jquery-3.4.1.js"></script>
 
     <script>
+        var areaId;
         $(document).ready(function () {
-            let api = "../api/Day_In_Shift/SmartPost/" + "1";
-            ajaxCall("POST", api, "", postSmartPostSuccess, postSmartPostError);
+            let id = JSON.parse(localStorage["Employee"]).Id;
+            let getApi = "../api/Area/GetAreaByEmpId/" + id ;
+            ajaxCall("GET", getApi, "", getSuccess, getError);
         });
+
+        function getSuccess(area)
+        {
+            areaId = area.Area_Id;
+        }
+        function getError()
+        {
+            console.log(err)
+        }
+
+        function assignToShifts()
+        {
+                let postApi = "../api/Day_In_Shift/SmartPost/" + areaId;
+                ajaxCall("POST", postApi, "", postSmartPostSuccess, postSmartPostError);
+        }
+
         function postSmartPostSuccess(data)
         {
             console.log(data)
         }
+
         function postSmartPostError(err)
         {
             console.log(err)
@@ -22,6 +41,8 @@
     </script>
 </head>
 <body>
-
+    <div id="container">
+        <button onclick="assignToShifts()">בצע שיבוץ</button>
+    </div>
 </body>
 </html>
