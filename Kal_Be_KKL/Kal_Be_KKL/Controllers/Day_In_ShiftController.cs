@@ -33,8 +33,6 @@ namespace Kal_Be_KKL.Controllers
         [HttpPost]
         public void SmartPost(int areaId)
         {
-            //צריך לעבור על כל הגושים בינתיים נעבור על אחד
-            //צריך לעבור על כל התאריכים בחודש הבא בינתיים רק על אחד
             Day_In_Shift shift = new Day_In_Shift();
             DateTime date = DateTime.Today.AddMonths(2); //לשנות ל1
             var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);

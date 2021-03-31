@@ -7,16 +7,17 @@
     <script src="../Scripts/jquery-3.4.1.js"></script>
 
     <script>
-        var areaId;
+        var area;
         $(document).ready(function () {
             let id = JSON.parse(localStorage["Employee"]).Id;
             let getApi = "../api/Area/GetAreaByEmpId/" + id ;
             ajaxCall("GET", getApi, "", getSuccess, getError);
         });
 
-        function getSuccess(area)
+        function getSuccess(areaData)
         {
-            areaId = area.Area_Id;
+            area = areaData;
+            $("#assignBTN").prop('disabled', false);
         }
         function getError()
         {
@@ -25,13 +26,13 @@
 
         function assignToShifts()
         {
-                let postApi = "../api/Day_In_Shift/SmartPost/" + areaId;
+            let postApi = "../api/Day_In_Shift/SmartPost/" + area.Area_Id;
                 ajaxCall("POST", postApi, "", postSmartPostSuccess, postSmartPostError);
         }
 
-        function postSmartPostSuccess(data)
+        function postSmartPostSuccess()
         {
-            console.log(data)
+            console.log("שיבוץ בוצע");
         }
 
         function postSmartPostError(err)
@@ -42,7 +43,7 @@
 </head>
 <body>
     <div id="container">
-        <button onclick="assignToShifts()">בצע שיבוץ</button>
+        <button id="assignBTN" onclick="assignToShifts()" disabled>בצע שיבוץ</button>
     </div>
 </body>
 </html>
