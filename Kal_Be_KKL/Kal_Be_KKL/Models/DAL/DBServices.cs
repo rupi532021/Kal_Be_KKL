@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Linq;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -304,6 +305,67 @@ namespace Kal_Be_KKL.Models.DAL
 
             return command;
         }
+
+        public int Insert_Worker_In_Region(Worker_In_Region WIR)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            String cStr = BuildInsertCommand(WIR);      // helper method to build the insert string
+
+            cmd = CreateCommand(cStr, con);             // create the command
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return numEffected;
+            }
+
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+
+        }
+
+        //--------------------------------------------------------------------
+        // Build the Insert command String
+        //--------------------------------------------------------------------
+        private String BuildInsertCommand(Worker_In_Region WIR)
+        {
+            String command;
+
+            StringBuilder sb = new StringBuilder();
+            // use a string builder to create the dynamic string
+            sb.AppendFormat("Values('{0}', '{1}', '{2}', '{3}')",
+                WIR.Id, WIR.Region_Id, WIR.Job_Id, WIR.Job_Start_Date.ToString("yyyy-MM-dd"));
+            String prefix = "INSERT INTO kkl_Worker_In_Region " + "([Id],[Region_Id], [Job_Id], [Job_Start_Date])";
+            command = prefix + sb.ToString();
+
+            return command;
+        }
+
 
 
 
