@@ -97,18 +97,51 @@
 
 
         // This function is called in case of a success
-        function postSuccess(data) {
+        function postEmployeeSuccess(data) {
+            localStorage["Employee"] = JSON.stringify(employee);
             swal("Added Successfuly!", "Great Job", "success");
             localStorage["Id"] = id
             localStorage["Full_Name"] = full_name
             setTimeout("", 5000)
 
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+            var yyyy = today.getFullYear();
+
+            today = mm + '/' + dd + '/' + yyyy;
+            console.log(today)
+            if (check == 1) {
+                employee_in_area =
+                {
+                    Id: id,
+                    Area_Id: $("#Area").val(),
+                    Job_Id: $("#JOB").val(),
+                    Job_Start_Date: today
+
+                }
+                console.log(employee_in_area)
+                ajaxCall("POST", "../api/Workers_In_Area", JSON.stringify(employee_in_area), postEmployee_in_areaSuccess, postError)
+            }
+            else {
+                worker_in_region =
+                {
+                    Id: id,
+                    Region_Id: $("#Region").val(),
+                    Job_Id: $("#JOB").val(),
+                    Job_Start_Date: today
+
+                }
+                console.log(worker_in_region)
+                ajaxCall("POST", "../api/Workers_In_Region", JSON.stringify(worker_in_region), postEmployee_in_regionSuccess, postError)
+            }
+
         }
 
         // This function is called in case of an error
         function postError(err) {
-            alert(err);
-            console.log(err);
+            alert(err.responseJSON.Message)
+           
         }
 
         function postEmployee_in_areaSuccess(data)
@@ -134,43 +167,7 @@
                 Mail: $("#MailTB").val(),
                 Password: $("#PasswordTB").val()
             }
-             
-            var today = new Date();
-            var dd = String(today.getDate()).padStart(2, '0');
-            var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-            var yyyy = today.getFullYear();
-
-            today = mm + '/' + dd + '/' + yyyy;
-            console.log(today)
-            if (check == 1) {
-                employee_in_area =
-                {
-                    Id: id,
-                    Area_Id: $("#Area").val(),
-                    Job_Id: $("#JOB").val(),
-                    Job_Start_Date: today
-
-                }
-                console.log(employee_in_area)
-                ajaxCall("POST", "../api/Workers_In_Area", JSON.stringify(employee_in_area), postEmployee_in_areaSuccess, postError)
-            }
-            else
-            {
-                worker_in_region =
-                {
-                    Id: id,
-                    Region_Id: $("#Region").val(),
-                    Job_Id: $("#JOB").val(),
-                    Job_Start_Date: today
-
-                }
-                console.log(worker_in_region)
-                ajaxCall("POST", "../api/Workers_In_Region", JSON.stringify(worker_in_region), postEmployee_in_regionSuccess, postError)
-            }
-            
-            localStorage["Employee"] = JSON.stringify(employee);
-            ajaxCall("POST", "../api/Employees", JSON.stringify(employee), postSuccess, postError)
-            
+            ajaxCall("POST", "../api/Employees", JSON.stringify(employee), postEmployeeSuccess, postError)
 
             return false;
         }
@@ -211,6 +208,7 @@
             }
 
         }
+
     </script>
 
 </head>

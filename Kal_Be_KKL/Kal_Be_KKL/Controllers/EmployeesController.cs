@@ -1,6 +1,7 @@
 ﻿using Kal_Be_KKL.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -39,11 +40,21 @@ namespace Kal_Be_KKL.Controllers
                 emp.insert_course_of_duty(Receipt_Course_Date, Course_Id, Id);
         }
         // POST api/<controller>
-        public void Post(Employee emp)
+        public HttpResponseMessage Post(Employee emp)
         {
-            emp.Insert_Employee();
+            try
+            {
+                emp.Insert_Employee();
+                return Request.CreateErrorResponse(HttpStatusCode.OK, "בוצע");
+            }
+            catch(SqlException ex) 
+            {
+                if(ex.Number == 2627)
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "תעודת זהות קיימת במערכת");
+                else
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "מצטערים קיימת בעיה במערכת יש לנסות שוב במועד מאוחר יותר");
+            }
         }
-
         // PUT api/<controller>/5
         public void Put(int id, [FromBody] string value)
         {

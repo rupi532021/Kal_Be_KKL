@@ -213,10 +213,10 @@ namespace Kal_Be_KKL.Models.DAL
                 int numEffected = cmd.ExecuteNonQuery(); // execute the command
                 return numEffected;
             }
-            catch (Exception ex)
+            catch (SqlException ex)
             {
-                // write to log
-                throw (ex);
+               
+                throw(ex);
             }
 
             finally
