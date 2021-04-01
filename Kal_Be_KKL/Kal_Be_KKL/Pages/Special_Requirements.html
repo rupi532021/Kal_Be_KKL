@@ -14,6 +14,7 @@
         h3 {
             text-align: right
         }
+
         .form-control {
             width: 310px
         }
@@ -30,23 +31,23 @@
     <script>
         $(document).ready(function () {
             $("#pForm").submit(addSpecialRequirement)
-            
             getRequirements();
             getBlocks();
-          var wWidth = $(window).width();
-  if(wWidth > 768){
-  $("ul.bts-nav li").hover(function(){
-     $(this).children("ul").slideToggle(400);
-  });
-}
-else{
-  $("ul.bts-nav li a").click(function(){
-     $(this).next("ul").slideToggle(400);
-  });
-        }
-                let employee = JSON.parse(localStorage["Employee"]);
-                        str1= "<h3>שלום "+ employee.First_Name+" "+employee.Last_Name+"</h3>";
-          $("#phHello").append(str1);
+
+            var wWidth = $(window).width();
+            if (wWidth > 768) {
+                $("ul.bts-nav li").hover(function () {
+                    $(this).children("ul").slideToggle(400);
+                });
+            }
+            else {
+                $("ul.bts-nav li a").click(function () {
+                    $(this).next("ul").slideToggle(400);
+                });
+            }
+            let employee = JSON.parse(localStorage["Employee"]);
+            str1 = "<h3>שלום " + employee.First_Name + " " + employee.Last_Name + "</h3>";
+            $("#phHello").append(str1);
         });
 
         function getBlocks() {
@@ -81,9 +82,25 @@ else{
             console.log(err)
         }
 
+        function make_all_boxes_are_disable_or_enable(is_Disable) {
+            $("#permanent_Requirements").html("")
+            $("#special_Requirements").html("")
+            $("#dateTB").val("");
+            $("#requirementTB").val(0);
+            $("#amountTB").val("");
+            $("#commentTB").val("");
+            $("#dateTB").prop('disabled', is_Disable);
+            $("#requirementTB").prop('disabled', is_Disable);
+            $("#amountTB").prop('disabled', is_Disable);
+            $("#commentTB").prop('disabled', is_Disable);
+            $("#submitBTN").prop('disabled', is_Disable);
+        }
+
         function blockchoose() {
-            $("#dateTB").prop('disabled', false);
-            if ($("#blockTB").val() == "0") {console.log("לטפל")}
+            if ($("#blockTB").val() == "0")
+                make_all_boxes_are_disable_or_enable(true)
+            else
+                make_all_boxes_are_disable_or_enable(false)
         }
 
         function isDateGreaterThanToday(b) {
@@ -97,8 +114,7 @@ else{
             }
         }
 
-        function Show_Requirements()
-        {
+        function Show_Requirements() {
             shiftDate = $("#dateTB").val();
 
             console.log(shiftDate)
@@ -106,39 +122,40 @@ else{
                 blockId = $("#blockTB").val();
                 getPermanentRequirements(blockId)
                 getSpecialRequirements(blockId, shiftDate)
+                $("#requirementTB").val(0);
+                $("#amountTB").val("");
+                $("#commentTB").val("");
             }
-            else
-            {
+            else {
                 alert("יש לבחור תאריך שחל מהחודש הבא")
                 $("#dateTB").val("");
                 $("#permanent_Requirements").html("")
                 $("#special_Requirements").html("")
+                $("#requirementTB").val(0);
+                $("#amountTB").val("");
+                $("#commentTB").val("");
             }
 
         }
 
-        function getPermanentRequirements(blockId)
-        {
+        function getPermanentRequirements(blockId) {
             let apiPr = "../api/PermanentRequirements/" + blockId;
             ajaxCall("GET", apiPr, "", getPermanentRequirementsSuccess, getPermanentRequirementstError)
         }
 
-        function getSpecialRequirements(blockId, shiftDate)
-        {
+        function getSpecialRequirements(blockId, shiftDate) {
             let apiSr = "../api/SpecialRequirements/" + blockId + "/" + shiftDate;
             ajaxCall("GET", apiSr, "", getSpecialRequirementsSuccess, getSpecialRequirementsError)
         }
 
-        function getSpecialRequirementsSuccess(data)
-        {
+        function getSpecialRequirementsSuccess(data) {
             $("#special_Requirements").html("<h1>דרישות מיוחדות לגוש:</h1>");
             data.forEach(sr => {
                 $("#special_Requirements").append("<p>שם :" + sr.Requirement_Name + " כמות: " + sr.Quantity + " הערות: " + (sr.Comments == null ? 'אין הערות' : sr.Comments) + " </p>")
             })
         }
 
-        function getSpecialRequirementsError(err)
-        {
+        function getSpecialRequirementsError(err) {
             console.log(err)
         }
 
@@ -154,6 +171,21 @@ else{
         }
 
         function addSpecialRequirement() {
+            if ($("#dateTB").val() == "") {
+                alert("יש לבחור תאריך")
+                return false
+            }
+            if ($("#requirementTB").val() == "0") {
+                alert("יש לבחור דרישה")
+                return false
+            }
+            if (parseInt($("#amountTB").val()) <= 0 || $("#amountTB").val() == "") {
+                alert("יש לבחור כמות הגדולה מ - 0")
+                return false
+            }
+
+
+
             sr = {
                 "Block_Id": $("#blockTB").val(),
                 "Shift_Date": $("#dateTB").val(),
@@ -163,16 +195,17 @@ else{
             }
             console.log(sr)
             ajaxCall("POST", "../api/SpecialRequirements", JSON.stringify(sr), postSrSuccess, postSrError);
+            $("#requirementTB").val(0);
+            $("#amountTB").val("");
+            $("#commentTB").val("");
             return false;
         }
-        function postSrSuccess()
-        {
+        function postSrSuccess() {
             console.log("success")
             getSpecialRequirements(blockId, shiftDate)
         }
 
-        function postSrError(err)
-        {
+        function postSrError(err) {
             console.log(err)
         }
 
@@ -209,12 +242,12 @@ else{
                                     <li><a href="#">הסידור שלי</a></li>
 
                                     <!--<li class="dropdown">
-                <a href="#">Another Dropdown <span class="caret dropdown-caret"></span></a>
-                <ul class="dropdown-menu">
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Action</a></li>
-                </ul>
-            </li>-->
+                                        <a href="#">Another Dropdown <span class="caret dropdown-caret"></span></a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#">Action</a></li>
+                                            <li><a href="#">Action</a></li>
+                                        </ul>
+                                    </li>-->
                                     <!--<li><a href="#">Action</a></li>-->
                                 </ul>
                             </li>
@@ -254,7 +287,7 @@ else{
                 </select>
                 <br />
                 <label for="dateTB">תאריך</label>
-                <input type="date" class="form-control" id="dateTB"  disabled onchange="Show_Requirements()">
+                <input type="date" class="form-control" id="dateTB" disabled onchange="Show_Requirements()">
                 <br />
                 <div id="permanent_Requirements">
 
@@ -263,17 +296,17 @@ else{
                 </div>
                 <br />
                 <label for="requirementTB">בחר דרישה</label>
-                <select class="form-control" id="requirementTB" data-component="dropdown">
+                <select class="form-control" id="requirementTB" disabled data-component="dropdown">
                     <option value="0">בחר דרישה</option>
                 </select>
                 <br />
                 <label for="amountTB">כמות</label>
-                <input type="number" class="form-control" id="amountTB" min="0">
+                <input type="number" class="form-control" disabled id="amountTB" min="0">
                 <br />
                 <label for="commentTB">הערות</label>
-                <input type="text" class="form-control" id="commentTB">
+                <input type="text" class="form-control" disabled id="commentTB">
                 <br />
-                <button type="submit" class="btn btn-primary" value="submit">שמירה</button>
+                <button type="submit" class="btn btn-primary" disabled id="submitBTN" value="submit">שמירה</button>
             </div>
         </form>
 

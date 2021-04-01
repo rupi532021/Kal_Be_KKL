@@ -45,7 +45,7 @@ namespace Kal_Be_KKL.Controllers
             try
             {
                 emp.Insert_Employee();
-                return Request.CreateErrorResponse(HttpStatusCode.OK, "בוצע");
+                return Request.CreateResponse(HttpStatusCode.OK, "בוצע");
             }
             catch(SqlException ex) 
             {
@@ -53,6 +53,10 @@ namespace Kal_Be_KKL.Controllers
                     return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "תעודת זהות קיימת במערכת");
                 else
                     return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "מצטערים קיימת בעיה במערכת יש לנסות שוב במועד מאוחר יותר");
+            }
+            catch (Exception ex) 
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "מצטערים קיימת בעיה במערכת יש לנסות שוב במועד מאוחר יותר");
             }
         }
         // PUT api/<controller>/5
