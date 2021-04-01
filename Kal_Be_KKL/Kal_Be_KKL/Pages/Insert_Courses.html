@@ -52,14 +52,19 @@
             margin: 5px;
             margin-right: 120px;
         }
+  
 
         .choose_cousre {
             border: 3px double black;
             background-color: lightgreen;
             text-align: center;
-            width: 300px;
-            float: right
+            width: 200px;
+            float: right;
+            margin-right: 10PX;
+      
         }
+
+        
 
         p {
             font-size: 20px;
@@ -156,8 +161,17 @@ else{
         function addcourse()
         {
 
-            date_of_start_course = $("#DateTB").val()
+            date_of_start_course1 = $("#DateTB").val()
             course_id = $("#Course").val()
+            Current_Date = new Date()
+            date_of_start_course = new Date(date_of_start_course1)
+            if (date_of_start_course > Current_Date) {
+                alert("בחרת תאריך גדול יותר מהיו הנוכחי יש להזין תאריך מחדש ")
+
+                return;
+            
+            }
+            date_of_start_course = $("#DateTB").val()
             if (course_id != "0" && $("#DateTB").val() != "")
             {
                 courses_arr.forEach(c => {
