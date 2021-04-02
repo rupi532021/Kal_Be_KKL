@@ -26,6 +26,20 @@
         #ph {
             float: left;
         }
+        #addrequirementbtn {
+            padding: 5px;
+            margin: 5px;
+            margin-right: 120px;
+        }
+
+        .choose_requirement {
+            border: 3px double black;
+            background-color: lightgreen;
+            text-align: center;
+            width: 200px;
+            float: right;
+            /*display:flex;*/
+        }
     </style>
 
     <script>
@@ -151,8 +165,9 @@
         function getSpecialRequirementsSuccess(data) {
             $("#special_Requirements").html("<h1>דרישות מיוחדות לגוש:</h1>");
             data.forEach(sr => {
-                $("#special_Requirements").append("<p>שם :" + sr.Requirement_Name + " כמות: " + sr.Quantity + " הערות: " + (sr.Comments == null ? 'אין הערות' : sr.Comments) + " </p>")
-            })
+                $("#special_Requirements").append("<div class='row choose_requirement'><p>שם :" + sr.Requirement_Name + "</br>כמות: " + sr.Quantity + "</br>הערות: " + (sr.Comments == null ? 'אין הערות' : sr.Comments) +
+        " </br></p><input type='button' value='מחק' /></div>")
+        })
         }
 
         function getSpecialRequirementsError(err) {
@@ -162,8 +177,9 @@
         function getPermanentRequirementsSuccess(data) {
             $("#permanent_Requirements").html("<h1>דרישות קבועות לגוש:</h1>");
             data.forEach(pr => {
-                $("#permanent_Requirements").append("<p>שם :" + pr.Requirement_Name + " כמות: " + pr.Quantity + " הערות: " + (pr.Comments == null ? 'אין הערות' : pr.Comments) + " </p>")
-            })
+                $("#permanent_Requirements").append("<div class='row choose_requirement'><p>שם :" + pr.Requirement_Name + "</br>כמות: " + pr.Quantity + "</br>הערות: " + (pr.Comments == null ? 'אין הערות' : pr.Comments) 
+        + " </br></p><input type='button' value='מחק'  /></div>");
+        })
         }
 
         function getPermanentRequirementstError(err) {

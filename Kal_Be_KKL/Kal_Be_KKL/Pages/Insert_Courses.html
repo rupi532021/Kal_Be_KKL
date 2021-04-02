@@ -3,23 +3,21 @@
 <head>
     <title></title>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-
-    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <link href="../Scripts/StyleSheetNavBar.css" rel="stylesheet" />
-    <script src="../Scripts/ajaxCallsWithKey.js"></script>
-    <script src="../Scripts/jquery-3.4.1.js"></script>
-
-    <style type="text/css">
+        <meta name="viewport" content="width=device-width, initial-scale=1" >
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
+        <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" > </script >-->
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js" > </script >
+        <script src="../Scripts/ajaxCallsWithKey.js" > </script >
+        <script src="../Scripts/jquery-3.4.1.js" > </script >
+        <link href="../Scripts/StyleSheetNavBar.css" rel="stylesheet" />
+        <style type="text/css">
 
         h3 {
             font-size: 30px;
             font-weight: 600;
             text-align: right;
         }
+
         h2 {
             font-size: 30px;
             font-weight: 600;
@@ -52,7 +50,7 @@
             margin: 5px;
             margin-right: 120px;
         }
-  
+
 
         .choose_cousre {
             border: 3px double black;
@@ -61,10 +59,9 @@
             width: 200px;
             float: right;
             margin-right: 10PX;
-      
         }
 
-        
+
 
         p {
             font-size: 20px;
@@ -169,7 +166,7 @@ else{
                 alert("בחרת תאריך גדול יותר מהיו הנוכחי יש להזין תאריך מחדש ")
 
                 return;
-            
+
             }
             date_of_start_course = $("#DateTB").val()
             if (course_id != "0" && $("#DateTB").val() != "")
