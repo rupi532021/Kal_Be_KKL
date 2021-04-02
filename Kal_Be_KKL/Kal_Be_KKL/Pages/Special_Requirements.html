@@ -36,9 +36,15 @@
             border: 3px double black;
             background-color: lightgreen;
             text-align: center;
-            width: 200px;
+            width: 300px;
             float: right;
-            /*display:flex;*/
+            box-shadow: 0 0 0 1px black;
+            margin-bottom: 10px;
+            margin-left:75px;
+        }
+        #permanent_Requirements  {
+            display: flex;
+            flex-wrap: wrap;
         }
     </style>
 
@@ -97,7 +103,9 @@
         }
 
         function make_all_boxes_are_disable_or_enable(is_Disable) {
+            $("#permanent_Requirements_Title").html("")
             $("#permanent_Requirements").html("")
+            $("#special_Requirements_Title").html("")
             $("#special_Requirements").html("")
             $("#dateTB").val("");
             $("#requirementTB").val(0);
@@ -129,8 +137,10 @@
         }
 
         function Show_Requirements() {
-            shiftDate = $("#dateTB").val();
+            $("#permanent_Requirements").html("")
+                            $("#special_Requirements").html("")
 
+            shiftDate = $("#dateTB").val();
             console.log(shiftDate)
             if (isDateGreaterThanToday(shiftDate)) {
                 blockId = $("#blockTB").val();
@@ -143,7 +153,9 @@
             else {
                 alert("יש לבחור תאריך שחל מהחודש הבא")
                 $("#dateTB").val("");
+                $("#permanent_Requirements_Title").html("")
                 $("#permanent_Requirements").html("")
+                $("#special_Requirements_Title").html("")
                 $("#special_Requirements").html("")
                 $("#requirementTB").val(0);
                 $("#amountTB").val("");
@@ -163,22 +175,24 @@
         }
 
         function getSpecialRequirementsSuccess(data) {
-            $("#special_Requirements").html("<h1>דרישות מיוחדות לגוש:</h1>");
+
+            $("#special_Requirements_Title").html("<h1>דרישות מיוחדות לגוש:</h1>");
             data.forEach(sr => {
                 $("#special_Requirements").append("<div class='row choose_requirement'><p>שם :" + sr.Requirement_Name + "</br>כמות: " + sr.Quantity + "</br>הערות: " + (sr.Comments == null ? 'אין הערות' : sr.Comments) +
         " </br></p><input type='button' value='מחק' /></div>")
         })
         }
+        
 
         function getSpecialRequirementsError(err) {
             console.log(err)
         }
 
         function getPermanentRequirementsSuccess(data) {
-            $("#permanent_Requirements").html("<h1>דרישות קבועות לגוש:</h1>");
+            $("#permanent_Requirements_Title").html("<h1>דרישות קבועות לגוש:</h1>");
             data.forEach(pr => {
                 $("#permanent_Requirements").append("<div class='row choose_requirement'><p>שם :" + pr.Requirement_Name + "</br>כמות: " + pr.Quantity + "</br>הערות: " + (pr.Comments == null ? 'אין הערות' : pr.Comments) 
-        + " </br></p><input type='button' value='מחק'  /></div>");
+        + " </br></p></div>");
         })
         }
 
@@ -304,13 +318,20 @@
                 <br />
                 <label for="dateTB">תאריך</label>
                 <input type="date" class="form-control" id="dateTB" disabled onchange="Show_Requirements()">
-                <br />
+
+
+
+                <div id="permanent_Requirements_Title">
+
+                </div>
                 <div id="permanent_Requirements">
 
                 </div>
-                <div id="special_Requirements">
-                </div>
+
                 <br />
+                <br />
+                <div id="special_Requirements_Title">
+                </div>
                 <label for="requirementTB">בחר דרישה</label>
                 <select class="form-control" id="requirementTB" disabled data-component="dropdown">
                     <option value="0">בחר דרישה</option>
@@ -322,6 +343,10 @@
                 <label for="commentTB">הערות</label>
                 <input type="text" class="form-control" disabled id="commentTB">
                 <br />
+                <div id="special_Requirements">
+                </div>
+
+
                 <button type="submit" class="btn btn-primary" disabled id="submitBTN" value="submit">שמירה</button>
             </div>
         </form>

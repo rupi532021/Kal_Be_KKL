@@ -52,21 +52,28 @@
         }
 
 
-        .choose_cousre {
-            border: 3px double black;
-            background-color: lightgreen;
-            text-align: center;
-            width: 200px;
-            float: right;
-            margin-right: 10PX;
-        }
+            .choose_cousre {
+                border: 3px double black;
+                background-color: lightgreen;
+                text-align: center;
+                width: 200px;
+                float: right;
+                box-shadow: 0 0 0 1px black;
+                margin-bottom: 10px;
+                margin-left: 25px;
+            }
+
+            #courses {
+                display: flex;
+                flex-wrap: wrap;
+            }
 
 
 
-        p {
-            font-size: 20px;
-            margin-top: 5px;
-        }
+            p {
+                font-size: 20px;
+                margin-top: 5px;
+            }
 
         #imgKKLCenter {
             height: 50px;
@@ -283,7 +290,7 @@ else{
 
 
         </form>
-        <div id="courses"><h2>הקורסים של העובד:</h2></div>
+        <div id="courses"></div>
 
     </div>
     <div id="ph1"> <input type="submit" class="btn btn-primary" value="שמור קורסים" onclick="Add_Course_To_DB()" /></div>
