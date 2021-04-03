@@ -839,9 +839,10 @@ namespace Kal_Be_KKL.Models.DAL
             {
                 con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
 
-                String selectSTR = @"select pr.Requirement_Id,pr.Quantity
-                                     from kkl_Permanent_Requirements_To_Block_In_a_shift pr
-                                     where pr.Block_Id=" + blockId;
+                String selectSTR = @"select pr.Requirement_Id,pr.Quantity,sr.Requirement_Name
+                                    from kkl_Permanent_Requirements_To_Block_In_a_shift pr inner join
+                                    kkl_Shift_Requirements sr on pr.Requirement_Id=sr.Requirement_Id
+                                    where pr.Block_Id=" + blockId;
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
 
                 // get a reader
@@ -851,6 +852,7 @@ namespace Kal_Be_KKL.Models.DAL
                 {   // Read till the end of the data into a row
                     RequirementForSpecificShift req = new RequirementForSpecificShift();
                     req.Requirement_Id = Convert.ToInt32(dr["Requirement_Id"]);
+                    req.Requirement_Name = (string)dr["Requirement_Name"];
                     req.Quantity = Convert.ToInt32(dr["Quantity"]);
                     permantReqListForBlock.Add(req);
                 }
@@ -880,10 +882,11 @@ namespace Kal_Be_KKL.Models.DAL
             {
                 con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
 
-                String selectSTR = @"select sr.Requirement_Id,sr.Quantity
-                                    from kkl_Special_requirements_for_a_day_in_a_shift_of_a_block sr
-                                    where sr.Block_Id=" + blockId + @" and
-                                    sr.Shift_Date='" + Shift_Date.ToString("yyyy-MM-dd") + "'";
+                String selectSTR = @"select srd.Requirement_Id,srd.Quantity,sr.Requirement_Name
+                                    from kkl_Special_requirements_for_a_day_in_a_shift_of_a_block srd inner join
+                                    kkl_Shift_Requirements sr on srd.Requirement_Id = sr.Requirement_Id
+                                    where srd.Block_Id=" + blockId + @" and
+                                    srd.Shift_Date='" + Shift_Date.ToString("yyyy-MM-dd") + "'";
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
 
                 // get a reader
@@ -893,6 +896,7 @@ namespace Kal_Be_KKL.Models.DAL
                 {   // Read till the end of the data into a row
                     RequirementForSpecificShift req = new RequirementForSpecificShift();
                     req.Requirement_Id = Convert.ToInt32(dr["Requirement_Id"]);
+                    req.Requirement_Name = (string)dr["Requirement_Name"];
                     req.Quantity = Convert.ToInt32(dr["Quantity"]);
                     speciaelReqListForBlock.Add(req);
                 }
@@ -959,6 +963,8 @@ namespace Kal_Be_KKL.Models.DAL
                 {
                     // Read till the end of the data into a row
                     emp.Id = (string)(dr["Id"]);
+                    emp.First_Name = (string)dr["First_Name"];
+                    emp.Last_Name = (string)dr["Last_Name"];
                 }
                 return emp;
             }
@@ -977,6 +983,7 @@ namespace Kal_Be_KKL.Models.DAL
             }
 
         }
+
 
         public int InsertEmployeeToShift(string id, int blockId, DateTime shift_Date, int Requirement_Id)
         {
@@ -1157,6 +1164,55 @@ namespace Kal_Be_KKL.Models.DAL
             }
 
         }
+
+        public List<DutyInShift> ReadDutiesInShift(string date)
+        {
+            SqlConnection con = null;
+            List<DutyInShift> dutyInShifts = new List<DutyInShift>();
+            try
+            {
+                con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
+
+                String selectSTR = @" select e.First_Name,e.Last_Name,sr.Requirement_Name,b.Block_Name
+                                        from kkl_Day_In_Shift dis inner join
+                                        kkl_Employee e on e.Id=dis.Id inner join
+                                        kkl_Block b on dis.Block_Id=b.Block_Id inner join
+                                        kkl_Shift_Requirements sr on dis.Requirement_Id=sr.Requirement_Id
+                                        where Shift_Date='" + date + "'";
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+                    DutyInShift dis = new DutyInShift();
+                    dis.First_Name = (string)dr["First_Name"];
+                    dis.Last_Name = (string)dr["Last_Name"];
+                    dis.Requirement_Name = (string)dr["Requirement_Name"];
+                    dis.Block_Name = (string)dr["Block_Name"];
+                    dutyInShifts.Add(dis);
+                }
+                return dutyInShifts;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+
+        }
+
+
+
 
     }
 

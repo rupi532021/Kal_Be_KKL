@@ -19,9 +19,24 @@ namespace Kal_Be_KKL.Controllers
         }
 
         // GET api/<controller>/5
-        public string Get(int id)
+        [Route("api/Day_In_Shift/GetDutiesInShift/{areaId}")]
+        [HttpGet]
+        public Dictionary<string, List<DutyInShift>> GetDutiesInShift(int areaId)
         {
-            return "value";
+            DateTime date = DateTime.Today.AddMonths(1);
+            var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
+            var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+            Area area = new Area();
+            var blocks = area.GetBlocksOfArea(areaId);
+            Dictionary <string,List < DutyInShift >> AssignToShift = new Dictionary<string,List < DutyInShift >> ();
+            for (var day = firstDayOfMonth.Date; day.Date <= lastDayOfMonth.Date; day = day.AddDays(1))
+            {
+                string dayS = (day.ToString("yyyy-MM-dd"));
+                List<DutyInShift> dutiesInShift = new List<DutyInShift>();
+                dutiesInShift = area.ReadDutiesInShift(dayS);
+                AssignToShift.Add(dayS, dutiesInShift);
+            }
+            return AssignToShift;
         }
 
         // POST api/<controller>
@@ -34,37 +49,40 @@ namespace Kal_Be_KKL.Controllers
         public void SmartPost(int areaId)
         {
             Day_In_Shift shift = new Day_In_Shift();
-            DateTime date = DateTime.Today.AddMonths(2); //לשנות ל1
+            DateTime date = DateTime.Today.AddMonths(1);
             var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
             var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
             Area area = new Area();
-            var blockIds = area.getBlockIds(areaId);
+            var blocks = area.GetBlocksOfArea(areaId);
             for (var day = firstDayOfMonth.Date; day.Date <= lastDayOfMonth.Date; day = day.AddDays(1))
             {
                 shift.Shift_Date = day;
-                foreach (int blockId in blockIds)
+                List<DutyInShift> dutiesInShift = new List<DutyInShift>();
+                foreach (Block block in blocks)
                 {
-                    List<RequirementForSpecificShift> permantReqs = shift.GetPermantReq(blockId);
-                    List<RequirementForSpecificShift> speciaelReqs = shift.GetSpeciaelReq(blockId, shift.Shift_Date);
-                    AssignToShift(permantReqs, shift, areaId, blockId);
-                    AssignToShift(speciaelReqs, shift, areaId, blockId);
+                    List<RequirementForSpecificShift> permantReqs = shift.GetPermantReq(block.Block_Id);
+                    List<RequirementForSpecificShift> speciaelReqs = shift.GetSpeciaelReq(block.Block_Id, shift.Shift_Date);
+                    AssignToShift(permantReqs, shift, areaId, block);
+                    AssignToShift(speciaelReqs, shift, areaId, block);
                 }
             }
         }
 
-        private void AssignToShift(List<RequirementForSpecificShift> reqs, Day_In_Shift shift,int areaId,int blockId)
+        private List<DutyInShift> AssignToShift(List<RequirementForSpecificShift> reqs, Day_In_Shift shift,int areaId,Block block)
         {
+            List<DutyInShift> dutyInShifts = new List<DutyInShift>();
             foreach (var req in reqs)
             {
                 for (int i = 0; i < req.Quantity; i++)
                 {
                     Employee matchEmployee = shift.FindMatchEmployee(areaId,shift.Shift_Date,req.Requirement_Id);
                     if (matchEmployee.Id != null)
-                        shift.InsertEmployeeToShift(matchEmployee.Id, blockId,shift.Shift_Date,req.Requirement_Id);
+                        shift.InsertEmployeeToShift(matchEmployee.Id, block.Block_Id, shift.Shift_Date, req.Requirement_Id);
                     else
                         break;
                 }
             }
+            return dutyInShifts;
         }
 
         // PUT api/<controller>/5

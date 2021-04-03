@@ -35,6 +35,15 @@ namespace Kal_Be_KKL.Controllers
             }
         }
 
+        [Route("api/Area/GetAreaBlcoks/{id}")]
+        [HttpGet]
+        public List<Block> GetAreaBlcoks(int id)
+        {
+            Area area = new Area();
+            List<Block> blocks = area.GetBlocksOfArea(id);
+            return blocks;
+        }
+
         // POST api/<controller>
         public void Post([FromBody] string value)
         {

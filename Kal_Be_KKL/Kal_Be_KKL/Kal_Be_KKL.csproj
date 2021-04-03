@@ -177,6 +177,7 @@
     <Compile Include="Models\Course.cs" />
     <Compile Include="Models\DAL\DBServices.cs" />
     <Compile Include="Models\Day_In_Shift.cs" />
+    <Compile Include="Models\DutyInShift.cs" />
     <Compile Include="Models\Employee.cs" />
     <Compile Include="Models\BlockShiftRequirementWithName.cs" />
     <Compile Include="Models\Request.cs" />
