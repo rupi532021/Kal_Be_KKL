@@ -197,6 +197,9 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="images\jerusalem_forest_flowers_big.jpg" />
+    <Content Include="images\KKL120.jpg" />
+    <Content Include="images\KKLLogo.png" />
     <Content Include="Pages\check.html" />
     <Content Include="Pages\Insert_Courses.html" />
     <Content Include="Pages\Login.html" />
