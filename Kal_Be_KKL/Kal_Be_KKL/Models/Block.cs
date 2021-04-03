@@ -19,7 +19,7 @@ namespace Kal_Be_KKL.Models
             Block_Name = block_Name;
         }
 
-        public Block() 
+        public Block()
         {
 
         }
@@ -32,6 +32,12 @@ namespace Kal_Be_KKL.Models
         {
             DBServices dbs = new DBServices();
             List<Block> blocks_List = dbs.Read_Blocks();
+            return blocks_List;
+        }
+        public List<Block> Read_Blocks_With_Area_Id(int Area_Id)
+        {
+            DBServices dbs = new DBServices();
+            List<Block> blocks_List = dbs.Read_Blocks_With_Area_Id(Area_Id);
             return blocks_List;
         }
     }

@@ -115,7 +115,7 @@ namespace Kal_Be_KKL.Models.DAL
                 throw (ex);
             }
 
-            String cStr = "Delete from kkl_Request where Id = '" + id + "' AND MONTH(Request_Date) = "+month;
+            String cStr = "Delete from kkl_Request where Id = '" + id + "' AND MONTH(Request_Date) = " + month;
 
             cmd = CreateCommand(cStr, con);             // create the command
 
@@ -215,8 +215,8 @@ namespace Kal_Be_KKL.Models.DAL
             }
             catch (SqlException ex)
             {
-               
-                throw(ex);
+
+                throw (ex);
             }
 
             finally
@@ -410,7 +410,7 @@ namespace Kal_Be_KKL.Models.DAL
 
             }
 
-        } 
+        }
         public List<Course> Read_Courses()
         {
             SqlConnection con = null;
@@ -633,7 +633,7 @@ namespace Kal_Be_KKL.Models.DAL
 
         }
 
-        public List<BlockShiftRequirementWithName> Read_SpecialRequirement(int blockId,DateTime shiftDate)
+        public List<BlockShiftRequirementWithName> Read_SpecialRequirement(int blockId, DateTime shiftDate)
         {
             SqlConnection con = null;
             List<BlockShiftRequirementWithName> specialRequirements_List = new List<BlockShiftRequirementWithName>();
@@ -643,7 +643,7 @@ namespace Kal_Be_KKL.Models.DAL
 
                 String selectSTR = @" select Requirement_Name,sr.Quantity,Comments
                                       from kkl_Special_requirements_for_a_day_in_a_shift_of_a_block sr join kkl_Shift_Requirements ks on sr.Requirement_Id = ks.Requirement_Id
-                                      where sr.Block_Id = "+blockId+" and sr.Shift_Date= '" + shiftDate.ToString("yyyy-MM-dd")+"'";
+                                      where sr.Block_Id = " + blockId + " and sr.Shift_Date= '" + shiftDate.ToString("yyyy-MM-dd") + "'";
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
 
                 // get a reader
@@ -841,7 +841,7 @@ namespace Kal_Be_KKL.Models.DAL
 
                 String selectSTR = @"select pr.Requirement_Id,pr.Quantity
                                      from kkl_Permanent_Requirements_To_Block_In_a_shift pr
-                                     where pr.Block_Id="+blockId;
+                                     where pr.Block_Id=" + blockId;
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
 
                 // get a reader
@@ -882,8 +882,8 @@ namespace Kal_Be_KKL.Models.DAL
 
                 String selectSTR = @"select sr.Requirement_Id,sr.Quantity
                                     from kkl_Special_requirements_for_a_day_in_a_shift_of_a_block sr
-                                    where sr.Block_Id="+ blockId+@" and
-                                    sr.Shift_Date='"+ Shift_Date.ToString("yyyy-MM-dd") + "'";
+                                    where sr.Block_Id=" + blockId + @" and
+                                    sr.Shift_Date='" + Shift_Date.ToString("yyyy-MM-dd") + "'";
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
 
                 // get a reader
@@ -1044,7 +1044,7 @@ namespace Kal_Be_KKL.Models.DAL
 
                 String selectSTR = @"select Block_Id
                                      from kkl_Block
-                                     where Area_Id="+areaId;
+                                     where Area_Id=" + areaId;
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
 
                 // get a reader
@@ -1072,6 +1072,49 @@ namespace Kal_Be_KKL.Models.DAL
 
         }
 
+
+        public List<Block> Read_Blocks_With_Area_Id(int Area_Id)
+        {
+            SqlConnection con = null;
+            List<Block> blocklist = new List<Block>();
+            try
+            {
+                con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
+
+                String selectSTR = @"select *
+                                     from kkl_Block
+                                     where Area_Id=" + Area_Id;
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+                    Block b = new Block();
+                    b.Block_Id = Convert.ToInt32(dr["Block_Id"]);
+                    b.Area_Id = Area_Id;
+                    b.Block_Name = (string)dr["Block_Name"];
+                    blocklist.Add(b);
+                }
+                return blocklist;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+
+        }
+
         public Area Read_Area_By_Emp_Id(string id)
         {
             SqlConnection con = null;
@@ -1082,7 +1125,7 @@ namespace Kal_Be_KKL.Models.DAL
 
                 String selectSTR = @"SELECT a.*
                                      FROM kkl_Worker_In_Area wia inner join kkl_Area a on wia.Area_Id=a.Area_Id
-                                     where id='"+id+"'";
+                                     where id='" + id + "'";
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
 
                 // get a reader

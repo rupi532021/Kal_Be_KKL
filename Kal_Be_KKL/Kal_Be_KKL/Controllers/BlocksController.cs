@@ -19,9 +19,13 @@ namespace Kal_Be_KKL.Controllers
         }
 
         // GET api/<controller>/5
-        public string Get(int id)
+        [Route("api/Blocks/Get_Blocks_With_Area_Id/{Area_Id}")]
+        [HttpGet]
+        public List<Block> Get(int Area_Id)
         {
-            return "value";
+            Block block = new Block();
+            List<Block> blocksList = block.Read_Blocks_With_Area_Id(Area_Id);
+            return blocksList;
         }
 
         // POST api/<controller>

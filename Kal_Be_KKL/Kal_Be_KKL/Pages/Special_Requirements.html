@@ -26,6 +26,7 @@
         #ph {
             float: left;
         }
+
         #addrequirementbtn {
             padding: 5px;
             margin: 5px;
@@ -40,9 +41,10 @@
             float: right;
             box-shadow: 0 0 0 1px black;
             margin-bottom: 10px;
-            margin-left:75px;
+            margin-left: 75px;
         }
-        #permanent_Requirements  {
+
+        #permanent_Requirements {
             display: flex;
             flex-wrap: wrap;
         }
@@ -52,7 +54,8 @@
         $(document).ready(function () {
             $("#pForm").submit(addSpecialRequirement)
             getRequirements();
-            getBlocks();
+            create_Area_arr();
+
 
             var wWidth = $(window).width();
             if (wWidth > 768) {
@@ -70,8 +73,8 @@
             $("#phHello").append(str1);
         });
 
-        function getBlocks() {
-            let api = "../api/Blocks";
+        function getBlocks(Area_Id) {
+            let api = "../api/Blocks/Get_Blocks_With_Area_Id/" + Area_Id + "/";
             ajaxCall("GET", api, "", getBlocksSuccess, getBlockstError)
         }
 
@@ -89,6 +92,8 @@
 
         function getBlocksSuccess(blocks) {
             console.log(blocks)
+            $("#blockTB").html("");
+            $("#blockTB").append('<option value = "0" > בחר גוש</option >');
             blocks.forEach(b => {
                 $("#blockTB").append('<option value="' + b.Block_Id + '">' + b.Block_Name + '</option>')
             })
@@ -137,10 +142,8 @@
         }
 
         function Show_Requirements() {
-            $("#permanent_Requirements").html("")
-                            $("#special_Requirements").html("")
-
             shiftDate = $("#dateTB").val();
+
             console.log(shiftDate)
             if (isDateGreaterThanToday(shiftDate)) {
                 blockId = $("#blockTB").val();
@@ -179,10 +182,9 @@
             $("#special_Requirements_Title").html("<h1>דרישות מיוחדות לגוש:</h1>");
             data.forEach(sr => {
                 $("#special_Requirements").append("<div class='row choose_requirement'><p>שם :" + sr.Requirement_Name + "</br>כמות: " + sr.Quantity + "</br>הערות: " + (sr.Comments == null ? 'אין הערות' : sr.Comments) +
-        " </br></p><input type='button' value='מחק' /></div>")
-        })
+                    " </br></p><input type='button' value='מחק' /></div>")
+            })
         }
-        
 
         function getSpecialRequirementsError(err) {
             console.log(err)
@@ -191,9 +193,9 @@
         function getPermanentRequirementsSuccess(data) {
             $("#permanent_Requirements_Title").html("<h1>דרישות קבועות לגוש:</h1>");
             data.forEach(pr => {
-                $("#permanent_Requirements").append("<div class='row choose_requirement'><p>שם :" + pr.Requirement_Name + "</br>כמות: " + pr.Quantity + "</br>הערות: " + (pr.Comments == null ? 'אין הערות' : pr.Comments) 
-        + " </br></p></div>");
-        })
+                $("#permanent_Requirements").append("<div class='row choose_requirement'><p>שם :" + pr.Requirement_Name + "</br>כמות: " + pr.Quantity + "</br>הערות: " + (pr.Comments == null ? 'אין הערות' : pr.Comments)
+                    + " </br></p></div>");
+            })
         }
 
         function getPermanentRequirementstError(err) {
@@ -238,6 +240,35 @@
         function postSrError(err) {
             console.log(err)
         }
+
+        function areachoose() {
+            Area_Id = $("#areaTB").val();
+            make_all_boxes_are_disable_or_enable(true)
+            if (Area_Id == "0") {
+                $("#blockTB").html("");
+                $("#blockTB").prop('disabled', true);
+                alert("נא לבחור אזור");
+                return false;
+            }
+            $("#blockTB").prop('disabled', false);
+            getBlocks(Area_Id);
+        }
+
+        function create_Area_arr() {
+            let api = "../api/Area";
+            ajaxCall("GET", api, "", getAreaSuccess, getAreaError)
+        }
+        function getAreaSuccess(area_arr) {
+            areas = '<option value="0">בחר אזור</option>';
+            area_arr.forEach(a => {
+                areas += '<option value="' + a.Area_Id + '">' + a.Area_Name + '</option>';
+            })
+            $("#areaTB").append(areas)
+        }
+        function getAreaError(err) {
+            console.log(err)
+        }
+
 
     </script>
 </head>
@@ -307,12 +338,17 @@
         </div>
         <!--NavBar-->
 
+
         <form id="pForm" method="post" enctype="multipart/form-data">
             <h2>עריכת דרישות משתנות</h2>
             <div id="ph"> <img src="../images/KKL120.jpg" alt="קק'ל"> </div>
             <div class="form-group" id="Courses1">
+                <label for="areaTB">בחר אזור</label>
+                <select class="form-control" id="areaTB" data-component="dropdown" onchange="areachoose()">
+                </select>
+                <br />
                 <label for="blockTB">בחר גוש</label>
-                <select class="form-control" id="blockTB" data-component="dropdown" onchange="blockchoose()">
+                <select class="form-control" id="blockTB" data-component="dropdown" disabled onchange="blockchoose()">
                     <option value="0">בחר גוש</option>
                 </select>
                 <br />
@@ -350,7 +386,6 @@
                 <button type="submit" class="btn btn-primary" disabled id="submitBTN" value="submit">שמירה</button>
             </div>
         </form>
-
     </div>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
