@@ -20,16 +20,20 @@ namespace Kal_Be_KKL.Controllers
             return SpecialRequirement_List;
         }
 
-        // GET api/<controller>/5
-        public string Get(int id)
+        public int If_SpecialRequirement_Is_Exist(SpecialRequirement specialRequirement) 
         {
-            return "value";
+            return specialRequirement.If_SpecialRequirement_Is_Exist(specialRequirement);
         }
 
         // POST api/<controller>
         public void Post([FromBody] SpecialRequirement specialRequirement)
         {
-            specialRequirement.Insert();
+            int Current_Value = If_SpecialRequirement_Is_Exist(specialRequirement);
+            if(Current_Value == 0)
+                specialRequirement.Insert();
+            else
+                specialRequirement.Quantity += Current_Value;
+                specialRequirement.Update_SpecialRequirement();
         }
 
         // PUT api/<controller>/5
@@ -38,8 +42,13 @@ namespace Kal_Be_KKL.Controllers
         }
 
         // DELETE api/<controller>/5
-        public void Delete(int id)
+        [Route("api/SpecialRequirements/Delete/{blockId}/{shiftDate}/{Requirement_Id}")]
+        [HttpDelete]
+        public List<BlockShiftRequirementWithName> Delete(int blockId, DateTime shiftDate, int Requirement_Id)
         {
+            BlockShiftRequirementWithName blockShiftRequirementWithName = new BlockShiftRequirementWithName();
+            blockShiftRequirementWithName.Delete_SpecialRequirement(blockId, shiftDate, Requirement_Id);
+            return Get(blockId, shiftDate);
         }
     }
 }
