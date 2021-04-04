@@ -3,6 +3,8 @@
 <head>
     <meta charset="utf-8" />
     <title></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
@@ -10,7 +12,7 @@
     <script src="../Scripts/ajaxCallsWithKey.js"></script>
     <link href="../Scripts/StyleSheetLogin.css" rel="stylesheet" />
     <script>
-    $(document).ready(function () {
+        $(document).ready(function () {
             $("#logInForm").submit(f1); // bind the submit event to a function called f1
         });
 
@@ -31,18 +33,11 @@
     </script>
 </head>
 <body>
-
-    <!------ Include the above in your HEAD tag ---------->
-    <!--
-        you can substitue the span of reauth email for a input with the email and
-        include the remember me checkbox
-        -->
     <div class="container">
             <div class="card card-container">
         <h4>מערכת לשיבוץ תורני קק"ל</h4>
-        </br>
+        <br />
                 <img id="profile-img" class="profile-img-card" src='../images/KKLLogo.png' />
-                <p id="logIn" class="profile-name-card"></p>
                 <form class="form-signin" id="logInForm" method="post" enctype="multipart/form-data">
                     <span id="reauth-email" class="reauth-email"></span>
                     <div class="form-group">
@@ -53,18 +48,13 @@
                         <label for="InputPassword">סיסמא</label>
                         <input type="password" id="InputPassword" class="form-control" placeholder="הכנס סיסמא" required>
                         </div>
-                        <!--<div id="remember" class="checkbox">
-                        <label>
-            <input type="checkbox" value="remember-me"> Remember me
-        </label>
-                    </div>-->
                         <button type="submit"class="btn btn-lg btn-primary btn-block btn-signin" >Sign in</button>
-                </form><!-- /form -->
-                <a href="SignUp_Page.html" class="signUp">Sign Up</a>
-            </div><!-- /card-container -->
-    </div><!-- /container -->
-
-
+                </form>
+     <!--/form--> 
+    <a href="SignUp_Page.html" class="signUp">Sign Up</a>
+    </div>
+     <!--/card-container--> 
+    </div> <!--/container--> 
     <!--<form class="text-center" id="logInForm" method="post" enctype="multipart/form-data">
         <div class="form-group">
             <label for="InputId">Id</label>
