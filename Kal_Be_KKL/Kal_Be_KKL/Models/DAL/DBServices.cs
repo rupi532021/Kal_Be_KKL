@@ -895,7 +895,7 @@ namespace Kal_Be_KKL.Models.DAL
             {
                 con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
 
-                String selectSTR = @"select pr.Requirement_Id,pr.Quantity,sr.Requirement_Name, 
+                String selectSTR = @"select pr.Requirement_Id,pr.Quantity,sr.Requirement_Name
                                     from kkl_Permanent_Requirements_To_Block_In_a_shift pr inner join
                                     kkl_Shift_Requirements sr on pr.Requirement_Id=sr.Requirement_Id
                                     where pr.Block_Id=" + blockId;

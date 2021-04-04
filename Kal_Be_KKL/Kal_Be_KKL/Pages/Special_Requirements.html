@@ -217,6 +217,7 @@
 
         function getPermanentRequirementsSuccess(data) {
             $("#permanent_Requirements_Title").html("<h1>דרישות קבועות לגוש:</h1>");
+            $("#permanent_Requirements").html("");
             data.forEach(pr => {
                 $("#permanent_Requirements").append("<div class='row choose_requirement'><p>שם :" + pr.Requirement_Name + "</br>כמות: " + pr.Quantity + "</br>הערות: " + (pr.Comments == null ? 'אין הערות' : pr.Comments)
                     + " </br></p></div>");
