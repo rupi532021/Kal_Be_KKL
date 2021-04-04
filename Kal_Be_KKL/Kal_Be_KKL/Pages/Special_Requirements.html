@@ -73,6 +73,30 @@
             $("#phHello").append(str1);
         });
 
+        function delete_special_requirement(Requirement_Id) {
+            shiftDate = $("#dateTB").val();
+            blockId = $("#blockTB").val();            
+            deleteSpecialRequirements(blockId, shiftDate, Requirement_Id)
+            $("#" + Requirement_Id).remove();
+        }
+        function deleteSpecialRequirements(blockId, shiftDate, Requirement_Id) {
+            let apiSr = "../api/SpecialRequirements/Delete/" + blockId + "/" + shiftDate + "/" + Requirement_Id + "/";
+            ajaxCall("DELETE", apiSr, "", deleteSpecialRequirementsSuccess, deleteSpecialRequirementsError)
+        }
+        function deleteSpecialRequirementsSuccess(data) {
+
+            getSpecialRequirementsSuccess(data);
+           
+
+            
+            alert("דרישה נמחקה")
+
+        }
+        function deleteSpecialRequirementsError(err) {
+            console.log(err)
+        }
+
+
         function getBlocks(Area_Id) {
             let api = "../api/Blocks/Get_Blocks_With_Area_Id/" + Area_Id + "/";
             ajaxCall("GET", api, "", getBlocksSuccess, getBlockstError)
@@ -180,9 +204,10 @@
         function getSpecialRequirementsSuccess(data) {
 
             $("#special_Requirements_Title").html("<h1>דרישות מיוחדות לגוש:</h1>");
+            $("#special_Requirements").html("")
             data.forEach(sr => {
-                $("#special_Requirements").append("<div class='row choose_requirement'><p>שם :" + sr.Requirement_Name + "</br>כמות: " + sr.Quantity + "</br>הערות: " + (sr.Comments == null ? 'אין הערות' : sr.Comments) +
-                    " </br></p><input type='button' value='מחק' /></div>")
+                $("#special_Requirements").append("<div id='" + sr.Requirement_Id + "' class='row choose_requirement'><p>שם :" + sr.Requirement_Name + "</br>כמות: " + sr.Quantity + "</br>הערות: " + (sr.Comments == null ? 'אין הערות' : sr.Comments) +
+                    " </br></p><input type='button' value='מחק' title='" + sr.Requirement_Id+"' onclick='delete_special_requirement(this.title)' /></div>")
             })
         }
 

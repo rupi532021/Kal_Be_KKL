@@ -38,6 +38,15 @@ namespace Kal_Be_KKL.Models
         {
             DBServices dbs = new DBServices();
             dbs.InsertSpecialRequirement(this);
+        } 
+        public void Update_SpecialRequirement()
+        {
+            DBServices dbs = new DBServices();
+            dbs.Update_SpecialRequirement(this);
+        }
+        public int If_SpecialRequirement_Is_Exist(SpecialRequirement specialRequirement) 
+        {
+            return If_SpecialRequirement_Is_Exist(specialRequirement);
         }
     }
 }

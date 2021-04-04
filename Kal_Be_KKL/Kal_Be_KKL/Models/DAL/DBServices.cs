@@ -306,6 +306,61 @@ namespace Kal_Be_KKL.Models.DAL
             return command;
         }
 
+        public int Update_SpecialRequirement(SpecialRequirement specialRequirement)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            String cStr = BuildSpecialRequirementUpdateCommand(specialRequirement);      // helper method to build the update string
+
+            cmd = CreateCommand(cStr, con);             // create the command
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+
+        }
+        private String BuildSpecialRequirementUpdateCommand(SpecialRequirement sr)
+        {
+            String command;
+
+            StringBuilder sb = new StringBuilder();
+            // use a string builder to create the dynamic string
+            sb.AppendFormat("SET[Block_Id] ={0}, [Shift_Date]={1}, Requirement_Id ={2}, Quantity ={3}, Comments ={4}",
+                 sr.Block_Id, sr.Shift_Date.ToString("yyyy-MM-dd"), sr.Requirement_Id, sr.Quantity, sr.Comments);
+            String prefix = "UPDATE kkl_Special_requirements_for_a_day_in_a_shift_of_a_block ";
+            command = prefix + sb.ToString()+ " WHERE Block_Id =  " + sr.Block_Id + "Shift_Date = "+sr.Shift_Date + " Requirement_Id = " + sr.Requirement_Id;
+            return command;
+
+        }
+
         public int Insert_Worker_In_Region(Worker_In_Region WIR)
         {
 
@@ -641,7 +696,7 @@ namespace Kal_Be_KKL.Models.DAL
             {
                 con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
 
-                String selectSTR = @" select Requirement_Name,sr.Quantity,Comments
+                String selectSTR = @" select Requirement_Name,sr.Quantity,Comments, sr.Requirement_Id
                                       from kkl_Special_requirements_for_a_day_in_a_shift_of_a_block sr join kkl_Shift_Requirements ks on sr.Requirement_Id = ks.Requirement_Id
                                       where sr.Block_Id = " + blockId + " and sr.Shift_Date= '" + shiftDate.ToString("yyyy-MM-dd") + "'";
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
@@ -654,6 +709,7 @@ namespace Kal_Be_KKL.Models.DAL
                     BlockShiftRequirementWithName specialRequirement = new BlockShiftRequirementWithName();
                     specialRequirement.Requirement_Name = (string)dr["Requirement_Name"];
                     specialRequirement.Quantity = Convert.ToInt32(dr["Quantity"]);
+                    specialRequirement.Requirement_Id = Convert.ToInt32(dr["Requirement_Id"]);
                     specialRequirement.Comments = dr["Comments"] != DBNull.Value ? (string)dr["Comments"] : default; ;
                     specialRequirements_List.Add(specialRequirement);
                 }
@@ -839,7 +895,7 @@ namespace Kal_Be_KKL.Models.DAL
             {
                 con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
 
-                String selectSTR = @"select pr.Requirement_Id,pr.Quantity,sr.Requirement_Name
+                String selectSTR = @"select pr.Requirement_Id,pr.Quantity,sr.Requirement_Name, 
                                     from kkl_Permanent_Requirements_To_Block_In_a_shift pr inner join
                                     kkl_Shift_Requirements sr on pr.Requirement_Id=sr.Requirement_Id
                                     where pr.Block_Id=" + blockId;
@@ -873,6 +929,95 @@ namespace Kal_Be_KKL.Models.DAL
             }
 
         }
+
+        public int If_SpecialRequirement_Is_Exist(SpecialRequirement specialRequirement)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            string cStr = "Select * from kkl_Special_requirements_for_a_day_in_a_shift_of_a_block where [Block_Id] = '" + specialRequirement.Block_Id + "' and [Shift_Date] =" +
+                " '" + specialRequirement.Shift_Date.ToString("yyyy-MM-dd") + "' and [Requirement_Id] = '" + specialRequirement.Requirement_Id + "'";
+
+            cmd = CreateCommand(cStr, con);             // create the command
+            SqlDataReader dr = null;
+            try
+            {
+                dr = cmd.ExecuteReader(); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            if (!dr.HasRows)
+            {
+                dr.Close();
+                con.Close();
+                con.Dispose();
+                return 0;
+            }
+            while (dr.Read())
+            {   // Read till the end of the data into a row
+                RequirementForSpecificShift req = new RequirementForSpecificShift();
+                req.Quantity = Convert.ToInt32(dr["Quantity"]);
+                return req.Quantity;
+
+            }
+            return 0;
+
+        }
+            public int Delete_SpecialRequirement(int blockId, DateTime Shift_Date, int Requirement_Id)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            String cStr = "Delete from kkl_Special_requirements_for_a_day_in_a_shift_of_a_block where [Block_Id] = '" + blockId + "' and [Shift_Date] =" +
+                " '"+Shift_Date.ToString("yyyy-MM-dd") + "' and [Requirement_Id] = '"+ Requirement_Id + "'";      // helper method to build the insert string
+
+            cmd = CreateCommand(cStr, con);             // create the command
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+
+        }
+
 
         public List<RequirementForSpecificShift> ReadSpeciaelReqListForBlock(int blockId, DateTime Shift_Date)
         {
