@@ -20,20 +20,17 @@ namespace Kal_Be_KKL.Controllers
             return SpecialRequirement_List;
         }
 
-        public int If_SpecialRequirement_Is_Exist(SpecialRequirement specialRequirement) 
-        {
-            return specialRequirement.If_SpecialRequirement_Is_Exist(specialRequirement);
-        }
-
         // POST api/<controller>
         public void Post([FromBody] SpecialRequirement specialRequirement)
         {
-            int Current_Value = If_SpecialRequirement_Is_Exist(specialRequirement);
-            if(Current_Value == 0)
+            int Current_Value = specialRequirement.If_SpecialRequirement_Is_Exist(specialRequirement);
+            if (Current_Value == 0)
                 specialRequirement.Insert();
             else
+            {
                 specialRequirement.Quantity += Current_Value;
                 specialRequirement.Update_SpecialRequirement();
+            }
         }
 
         // PUT api/<controller>/5

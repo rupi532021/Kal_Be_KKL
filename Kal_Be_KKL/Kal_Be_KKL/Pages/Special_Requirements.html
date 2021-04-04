@@ -249,6 +249,7 @@
                 "Requirement_Id": $("#requirementTB").val(),
                 "Quantity": $("#amountTB").val(),
                 "Comments": $("#commentTB").val(),
+
             }
             console.log(sr)
             ajaxCall("POST", "../api/SpecialRequirements", JSON.stringify(sr), postSrSuccess, postSrError);

@@ -46,7 +46,8 @@ namespace Kal_Be_KKL.Models
         }
         public int If_SpecialRequirement_Is_Exist(SpecialRequirement specialRequirement) 
         {
-            return If_SpecialRequirement_Is_Exist(specialRequirement);
+            DBServices dbs = new DBServices();
+            return  dbs.If_SpecialRequirement_Is_Exist(specialRequirement);
         }
     }
 }

@@ -353,10 +353,10 @@ namespace Kal_Be_KKL.Models.DAL
 
             StringBuilder sb = new StringBuilder();
             // use a string builder to create the dynamic string
-            sb.AppendFormat("SET[Block_Id] ={0}, [Shift_Date]={1}, Requirement_Id ={2}, Quantity ={3}, Comments ={4}",
+            sb.AppendFormat("SET[Block_Id] ={0}, [Shift_Date]='{1}', Requirement_Id ={2}, Quantity ={3}, Comments ='{4}'",
                  sr.Block_Id, sr.Shift_Date.ToString("yyyy-MM-dd"), sr.Requirement_Id, sr.Quantity, sr.Comments);
             String prefix = "UPDATE kkl_Special_requirements_for_a_day_in_a_shift_of_a_block ";
-            command = prefix + sb.ToString()+ " WHERE Block_Id =  " + sr.Block_Id + "Shift_Date = "+sr.Shift_Date + " Requirement_Id = " + sr.Requirement_Id;
+            command = prefix + sb.ToString()+ " WHERE Block_Id =  " + sr.Block_Id + "and Shift_Date = '"+ sr.Shift_Date.ToString("yyyy-MM-dd") + "' and Requirement_Id = " + sr.Requirement_Id;
             return command;
 
         }
@@ -932,49 +932,45 @@ namespace Kal_Be_KKL.Models.DAL
 
         public int If_SpecialRequirement_Is_Exist(SpecialRequirement specialRequirement)
         {
-
-            SqlConnection con;
-            SqlCommand cmd;
-
+            SqlConnection con = null;
+            RequirementForSpecificShift req = new RequirementForSpecificShift(); 
             try
             {
-                con = connect("DBConnectionString"); // create the connection
+                con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
+
+                String selectSTR = @"Select* from kkl_Special_requirements_for_a_day_in_a_shift_of_a_block where[Block_Id] = '" + specialRequirement.Block_Id + "' and[Shift_Date] = " +
+                " '" + specialRequirement.Shift_Date.ToString("yyyy-MM-dd") + "' and [Requirement_Id] = '" + specialRequirement.Requirement_Id + "'";
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+                    req.Requirement_Id = Convert.ToInt32(dr["Requirement_Id"]);
+                    req.Quantity = Convert.ToInt32(dr["Quantity"]);
+                }
+                if (req.Requirement_Id != 0)
+                    return req.Quantity;
+                return 0;
             }
             catch (Exception ex)
             {
                 // write to log
                 throw (ex);
             }
-            string cStr = "Select * from kkl_Special_requirements_for_a_day_in_a_shift_of_a_block where [Block_Id] = '" + specialRequirement.Block_Id + "' and [Shift_Date] =" +
-                " '" + specialRequirement.Shift_Date.ToString("yyyy-MM-dd") + "' and [Requirement_Id] = '" + specialRequirement.Requirement_Id + "'";
-
-            cmd = CreateCommand(cStr, con);             // create the command
-            SqlDataReader dr = null;
-            try
+            finally
             {
-                dr = cmd.ExecuteReader(); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            if (!dr.HasRows)
-            {
-                dr.Close();
-                con.Close();
-                con.Dispose();
-                return 0;
-            }
-            while (dr.Read())
-            {   // Read till the end of the data into a row
-                RequirementForSpecificShift req = new RequirementForSpecificShift();
-                req.Quantity = Convert.ToInt32(dr["Quantity"]);
-                return req.Quantity;
+                if (con != null)
+                {
+                    con.Close();
+                }
 
             }
-            return 0;
 
         }
+
+        
             public int Delete_SpecialRequirement(int blockId, DateTime Shift_Date, int Requirement_Id)
         {
 
