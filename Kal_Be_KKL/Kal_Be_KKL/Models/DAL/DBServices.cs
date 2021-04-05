@@ -1352,6 +1352,50 @@ namespace Kal_Be_KKL.Models.DAL
 
         }
 
+        public int DeleteExistAssign(string startDate, string endDate)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            String cStr = @"DELETE FROM kkl_Day_In_Shift
+                            WHERE Shift_Date between '"+startDate+"' and '"+ endDate + "'";
+
+            cmd = CreateCommand(cStr, con);             // create the command
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+
+        }
+
+
 
 
 
