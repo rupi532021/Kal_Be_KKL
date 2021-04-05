@@ -30,7 +30,7 @@ namespace Kal_Be_KKL.Controllers
             Dictionary <string,List < DutyInShift >> AssignToShift = new Dictionary<string,List < DutyInShift >> ();
             for (var day = firstDayOfMonth.Date; day.Date <= lastDayOfMonth.Date; day = day.AddDays(1))
             {
-                string dayS = (day.ToString("yyyy-MM-dd"));
+                string dayS = day.ToString("yyyy-MM-dd");
                 List<DutyInShift> dutiesInShift;
                 dutiesInShift = area.ReadDutiesInShift(dayS);
                 AssignToShift.Add(dayS, dutiesInShift);
@@ -67,9 +67,8 @@ namespace Kal_Be_KKL.Controllers
             }
         }
 
-        private List<DutyInShift> AssignToShift(List<RequirementForSpecificShift> reqs, Day_In_Shift shift,int areaId,Block block)
+        private void AssignToShift(List<RequirementForSpecificShift> reqs, Day_In_Shift shift,int areaId,Block block)
         {
-            List<DutyInShift> dutyInShifts = new List<DutyInShift>();
             foreach (var req in reqs)
             {
                 for (int i = 0; i < req.Quantity; i++)
@@ -81,7 +80,6 @@ namespace Kal_Be_KKL.Controllers
                         break;
                 }
             }
-            return dutyInShifts;
         }
 
         // PUT api/<controller>/5
