@@ -32,7 +32,7 @@ namespace Kal_Be_KKL.Controllers
             {
                 string dayS = day.ToString("yyyy-MM-dd");
                 List<DutyInShift> dutiesInShift;
-                dutiesInShift = area.ReadDutiesInShift(dayS);
+                dutiesInShift = area.ReadDutiesInShift(dayS, areaId);
                 AssignToShift.Add(dayS, dutiesInShift);
             }
             return AssignToShift;
@@ -51,7 +51,7 @@ namespace Kal_Be_KKL.Controllers
             DateTime date = DateTime.Today.AddMonths(1);
             var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
             var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
-            shift.DeleteExistAssign(firstDayOfMonth, lastDayOfMonth);
+            shift.DeleteExistAssign(areaId, firstDayOfMonth, lastDayOfMonth);
             Area area = new Area();
             var blocks = area.GetBlocksOfArea(areaId);
             for (var day = firstDayOfMonth.Date; day.Date <= lastDayOfMonth.Date; day = day.AddDays(1))

@@ -1306,7 +1306,7 @@ namespace Kal_Be_KKL.Models.DAL
 
         }
 
-        public List<DutyInShift> ReadDutiesInShift(string date)
+        public List<DutyInShift> ReadDutiesInShift(string date,int areaId)
         {
             SqlConnection con = null;
             List<DutyInShift> dutyInShifts = new List<DutyInShift>();
@@ -1318,8 +1318,9 @@ namespace Kal_Be_KKL.Models.DAL
                                         from kkl_Day_In_Shift dis inner join
                                         kkl_Employee e on e.Id=dis.Id inner join
                                         kkl_Block b on dis.Block_Id=b.Block_Id inner join
-                                        kkl_Shift_Requirements sr on dis.Requirement_Id=sr.Requirement_Id
-                                        where Shift_Date='" + date + "'";
+                                        kkl_Shift_Requirements sr on dis.Requirement_Id=sr.Requirement_Id inner join
+                                        kkl_Area a on b.Area_Id=a.Area_Id
+                                        where Shift_Date='" + date + "' and a.Area_Id="+ areaId;
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
 
                 // get a reader
@@ -1352,7 +1353,7 @@ namespace Kal_Be_KKL.Models.DAL
 
         }
 
-        public int DeleteExistAssign(string startDate, string endDate)
+        public int DeleteExistAssign(int areaId,string startDate, string endDate)
         {
 
             SqlConnection con;
@@ -1369,7 +1370,7 @@ namespace Kal_Be_KKL.Models.DAL
             }
 
             String cStr = @"DELETE FROM kkl_Day_In_Shift
-                            WHERE Shift_Date between '"+startDate+"' and '"+ endDate + "'";
+                            WHERE Shift_Date between '"+startDate+"' and '"+ endDate + "' and Block_Id in (select Block_Id from kkl_Block where Area_Id ="+areaId+")";
 
             cmd = CreateCommand(cStr, con);             // create the command
 

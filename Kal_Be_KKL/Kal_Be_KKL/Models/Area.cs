@@ -52,10 +52,10 @@ namespace Kal_Be_KKL.Models
             return area;
         }
 
-        public List<DutyInShift> ReadDutiesInShift (string date)
+        public List<DutyInShift> ReadDutiesInShift (string date, int areaId)
         {
             DBServices dbs = new DBServices();
-            List<DutyInShift> dutiesInShift = dbs.ReadDutiesInShift(date);
+            List<DutyInShift> dutiesInShift = dbs.ReadDutiesInShift(date, areaId);
             return dutiesInShift;
         }
     }

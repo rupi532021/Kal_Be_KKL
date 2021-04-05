@@ -71,10 +71,10 @@ namespace Kal_Be_KKL.Models
             dbs.InsertEmployeeToShift(id, blockId, shift_Date, Requirement_Id);
         }
 
-        public void DeleteExistAssign(DateTime startDate, DateTime endDate)
+        public void DeleteExistAssign(int areaId, DateTime startDate, DateTime endDate)
         {
             DBServices dbs = new DBServices();
-            dbs.DeleteExistAssign(startDate.ToString("yyyy-MM-dd"), endDate.ToString("yyyy-MM-dd"));
+            dbs.DeleteExistAssign(areaId, startDate.ToString("yyyy-MM-dd"), endDate.ToString("yyyy-MM-dd"));
         }
     }
 }
