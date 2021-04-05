@@ -27,12 +27,11 @@ namespace Kal_Be_KKL.Controllers
             var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
             var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
             Area area = new Area();
-            var blocks = area.GetBlocksOfArea(areaId);
             Dictionary <string,List < DutyInShift >> AssignToShift = new Dictionary<string,List < DutyInShift >> ();
             for (var day = firstDayOfMonth.Date; day.Date <= lastDayOfMonth.Date; day = day.AddDays(1))
             {
                 string dayS = (day.ToString("yyyy-MM-dd"));
-                List<DutyInShift> dutiesInShift = new List<DutyInShift>();
+                List<DutyInShift> dutiesInShift;
                 dutiesInShift = area.ReadDutiesInShift(dayS);
                 AssignToShift.Add(dayS, dutiesInShift);
             }
@@ -57,7 +56,6 @@ namespace Kal_Be_KKL.Controllers
             for (var day = firstDayOfMonth.Date; day.Date <= lastDayOfMonth.Date; day = day.AddDays(1))
             {
                 shift.Shift_Date = day;
-                List<DutyInShift> dutiesInShift = new List<DutyInShift>();
                 foreach (Block block in blocks)
                 {
                     List<RequirementForSpecificShift> permantReqs = shift.GetPermantReq(block.Block_Id);
