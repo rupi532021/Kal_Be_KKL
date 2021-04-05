@@ -55,8 +55,8 @@ namespace Kal_Be_KKL.Models
         public List<DutyInShift> ReadDutiesInShift (string date)
         {
             DBServices dbs = new DBServices();
-            List<DutyInShift> block_list = dbs.ReadDutiesInShift(date);
-            return block_list;
+            List<DutyInShift> dutiesInShift = dbs.ReadDutiesInShift(date);
+            return dutiesInShift;
         }
     }
 }
