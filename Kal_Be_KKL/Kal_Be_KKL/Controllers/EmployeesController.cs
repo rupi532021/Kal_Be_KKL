@@ -24,7 +24,7 @@ namespace Kal_Be_KKL.Controllers
             e = e.LogIn(id, password);
             if (e.Id == null)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Id or password incorrect");
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "שם משתמש או סיסמא לא נכונים");
             }
             else
             {
