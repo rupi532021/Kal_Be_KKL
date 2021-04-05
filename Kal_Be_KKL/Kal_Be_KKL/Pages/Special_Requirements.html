@@ -52,9 +52,9 @@
 
     <script>
         $(document).ready(function () {
-            $("#pForm").submit(addSpecialRequirement)
-            getRequirements();
-            create_Area_arr();
+            $("#pForm").submit(addSpecialRequirement) //לחיצה על כפתור שמירה ששולח אותך לשמור על הדרישה המיוחדת 
+            getRequirements();                        // הפונקציה מביאה את הדרישות הקיימות שבמערכת
+            create_Area_arr();                        //הפונקציה מביאה את האזורים הקיימים במערכת על מנת שנוכל להביא את הגושים
 
 
             var wWidth = $(window).width();
@@ -97,7 +97,7 @@
         }
 
 
-        function getBlocks(Area_Id) {
+        function getBlocks(Area_Id) {                                           //הפונקציה מקבלת תעודת זהות אזור ומביאה את כל הגושים של אותו איזור
             let api = "../api/Blocks/Get_Blocks_With_Area_Id/" + Area_Id + "/";
             ajaxCall("GET", api, "", getBlocksSuccess, getBlockstError)
         }
@@ -229,6 +229,9 @@
         }
 
         function addSpecialRequirement() {
+            // בדיקה האם התאריך תקין, בדיקה אם קיימת דרישה, ובדיקה שהכמות מאותה דרישה גדולה מ-0 
+            //ואז שולח את הדירשה המיוחדת שאנו רוצים להוסיף לשרת ולאחר מכן מרוקן את התיבת טקסט של הכמות, העערות ומחזיר את הדרישה לברירת מחדל
+            
             if ($("#dateTB").val() == "") {
                 alert("יש לבחור תאריך")
                 return false
@@ -261,14 +264,17 @@
         }
         function postSrSuccess() {
             console.log("success")
-            getSpecialRequirements(blockId, shiftDate)
+            getSpecialRequirements(blockId, shiftDate)//מביא את כל הדרישות החדשות של בלוק הרצוי בתאריך הרצוי
         }
 
         function postSrError(err) {
             console.log(err)
         }
 
-        function areachoose() {
+        function areachoose() {                         //מופעת כאשר בוחרים אזור להצגה
+                                                        //פעולות:
+                                                        //1) בודקת האם נבחר איזור נכון במידה ולא מחייבת אותך לבחור אזור ולא נותנת להמשיך
+                                                        //2)לאחר הבדיקה מביאה את כל הבלוקים הרלוונטים של אותו הגוש
             Area_Id = $("#areaTB").val();
             make_all_boxes_are_disable_or_enable(true)
             if (Area_Id == "0") {
