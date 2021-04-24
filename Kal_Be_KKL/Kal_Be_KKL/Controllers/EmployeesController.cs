@@ -12,17 +12,9 @@ namespace Kal_Be_KKL.Controllers
     public class EmployeesController : ApiController
     {
         // GET api/<controller>
-        public HttpResponseMessage getAreaOrRegionAndJob(string id)
+        public IEnumerable<string> Get()
         {
-            Employee e = new Employee();
-            Worker_In_Area wia = e.getAreaAndJob(id);
-            if (wia.Area_Id != 0)
-                return Request.CreateResponse(HttpStatusCode.OK, wia);
-            Worker_In_Region wir = e.getRegionAndJob(id);
-            if (wir.Region_Id!=0)
-                return Request.CreateResponse(HttpStatusCode.OK, wir);
-            else
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "תקלה בשרת");
+            return new string[] { "value1", "value2" };
         }
 
         // GET api/<controller>/5
@@ -42,10 +34,10 @@ namespace Kal_Be_KKL.Controllers
 
         [Route("api/Employees/insert_course_of_duty/{Receipt_Course_Date}/{Course_Id}/{Id}")]
         [HttpPost]
-        public void insert_course_of_duty(DateTime Receipt_Course_Date, int Course_Id, string Id )
+        public void insert_course_of_duty(DateTime Receipt_Course_Date, int Course_Id, string Id)
         {
             Employee emp = new Employee();
-                emp.insert_course_of_duty(Receipt_Course_Date, Course_Id, Id);
+            emp.insert_course_of_duty(Receipt_Course_Date, Course_Id, Id);
         }
         // POST api/<controller>
         public HttpResponseMessage Post(Employee emp)
@@ -55,21 +47,36 @@ namespace Kal_Be_KKL.Controllers
                 emp.Insert_Employee();
                 return Request.CreateResponse(HttpStatusCode.OK, "בוצע");
             }
-            catch(SqlException ex) 
+            catch (SqlException ex)
             {
-                if(ex.Number == 2627)
+                if (ex.Number == 2627)
                     return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "תעודת זהות קיימת במערכת");
                 else
                     return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "מצטערים קיימת בעיה במערכת יש לנסות שוב במועד מאוחר יותר");
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "מצטערים קיימת בעיה במערכת יש לנסות שוב במועד מאוחר יותר");
             }
         }
+        [Route("api/Employees/PutEmployee/")]
+        [HttpPut]
         // PUT api/<controller>/5
-        public void Put(int id, [FromBody] string value)
+        public HttpResponseMessage PutEmployee([FromBody] Employee emp)
         {
+            try
+            {
+
+                emp.Edit_Employee();
+                return Request.CreateResponse(HttpStatusCode.OK, "בוצע");
+            }
+
+
+
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "מצטערים קיימת בעיה במערכת יש לנסות שוב במועד מאוחר יותר");
+            }
         }
 
         // DELETE api/<controller>/5

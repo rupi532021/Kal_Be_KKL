@@ -233,6 +233,7 @@ namespace Kal_Be_KKL.Models.DAL
         //--------------------------------------------------------------------
         // Build the Insert command String
         //--------------------------------------------------------------------
+
         private String BuildInsertCommand(Employee emp)
         {
             String command;
@@ -1434,7 +1435,48 @@ namespace Kal_Be_KKL.Models.DAL
             }
 
         }
+        public int Edit_Employee(Employee emp)
+        {
 
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            String cStr = @"UPDATE kkl_Employee
+ SET First_Name ='" + emp.First_Name + "', Last_Name = '" + emp.Last_Name + "' , Gender = '" + emp.Gender + "'  , Birth_Date ='" + emp.Birth_Date.ToString("yyyy-MM-dd") + "' , Phone_Number = '" + emp.Phone_Number + "' , Mail = '" + emp.Mail + "',Password = '" + emp.Password + "' WHERE Id = '" + emp.Id + "'";      // helper method to build the insert string
+
+            cmd = CreateCommand(cStr, con);             // create the command
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return numEffected;
+            }
+            catch (SqlException ex)
+            {
+
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+
+        }
         public Worker_In_Region getRegionAndJob(string id)
         {
             SqlConnection con = null;

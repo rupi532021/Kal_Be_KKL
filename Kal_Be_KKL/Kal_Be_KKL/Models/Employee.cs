@@ -71,6 +71,12 @@ namespace Kal_Be_KKL.Models
             Worker_In_Area wia = dbs.getAreaAndJob(id);
             return wia;
         }
+        public void Edit_Employee()
+        {
+            DBServices dbs = new DBServices();
+            dbs.Edit_Employee(this);
+        }
+
 
         public Worker_In_Region getRegionAndJob(string id)
         {
