@@ -20,16 +20,31 @@
             let id = $("#InputId").val();
             let password = $("#InputPassword").val();
             let api = "../api/Employees?id=" + id + "&password=" + password;
-            ajaxCall("GET", api, "", getSuccess, getError);
+            ajaxCall("GET", api, "", getEmployeeSuccess, getEmployeeError);
             return false
         }
-        function getSuccess(e) {
+        function getEmployeeSuccess(e) {
             localStorage["Employee"] = JSON.stringify(e);
-            window.location.replace("Requests.html")
+
+            let id = $("#InputId").val();
+            let api = "../api/Employees/getAreaOrRegionAndJob?id=" + id;
+            ajaxCall("GET", api, "", getAreaOrRegionAndJobSuccess, getAreaOrRegionAndJobError);
         }
-        function getError(err) {
+        function getEmployeeError(err) {
             alert(err.responseJSON.Message)
         }
+        function getAreaOrRegionAndJobSuccess(e) {
+            if (e.hasOwnProperty('Area_Id'))
+                localStorage['Area_Id'] = JSON.stringify(e.Area_Id);
+            else
+                localStorage['Region_Id'] = JSON.stringify(e.Region_Id);
+            localStorage['Job_Id'] = JSON.stringify(e.Job_Id);
+            window.location.replace("Requests.html")
+        }
+        function getAreaOrRegionAndJobError(err) {
+            console.log(err)
+        }
+
     </script>
 </head>
 <body>

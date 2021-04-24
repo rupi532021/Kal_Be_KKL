@@ -1396,6 +1396,84 @@ namespace Kal_Be_KKL.Models.DAL
 
         }
 
+        public Worker_In_Area getAreaAndJob(string id)
+        {
+            SqlConnection con = null;
+            Worker_In_Area wia = new Worker_In_Area();
+            try
+            {
+                con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
+
+                String selectSTR = $"select * from kkl_Worker_In_Area where id='{id}'";
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+                    wia.Id = (string)dr["Id"];
+                    wia.Area_Id = Convert.ToInt32(dr["Area_Id"]);
+                    wia.Job_Id = Convert.ToInt32(dr["Job_Id"]);
+                    wia.Job_Start_Date = Convert.ToDateTime(dr["Job_Start_Date"]);
+                }
+                return wia;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+
+        }
+
+        public Worker_In_Region getRegionAndJob(string id)
+        {
+            SqlConnection con = null;
+            Worker_In_Region wir = new Worker_In_Region();
+            try
+            {
+                con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
+
+                String selectSTR = $"select * from kkl_Worker_In_Region where id='{id}'";
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+                    wir.Id = (string)dr["Id"];
+                    wir.Region_Id = Convert.ToInt32(dr["Region_Id"]);
+                    wir.Job_Id = Convert.ToInt32(dr["Job_Id"]);
+                    wir.Job_Start_Date = Convert.ToDateTime(dr["Job_Start_Date"]);
+                }
+                return wir;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+
+        }
+
 
 
 

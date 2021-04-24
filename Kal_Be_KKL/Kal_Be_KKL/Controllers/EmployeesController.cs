@@ -12,9 +12,17 @@ namespace Kal_Be_KKL.Controllers
     public class EmployeesController : ApiController
     {
         // GET api/<controller>
-        public IEnumerable<string> Get()
+        public HttpResponseMessage getAreaOrRegionAndJob(string id)
         {
-            return new string[] { "value1", "value2" };
+            Employee e = new Employee();
+            Worker_In_Area wia = e.getAreaAndJob(id);
+            if (wia.Area_Id != 0)
+                return Request.CreateResponse(HttpStatusCode.OK, wia);
+            Worker_In_Region wir = e.getRegionAndJob(id);
+            if (wir.Region_Id!=0)
+                return Request.CreateResponse(HttpStatusCode.OK, wir);
+            else
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "תקלה בשרת");
         }
 
         // GET api/<controller>/5

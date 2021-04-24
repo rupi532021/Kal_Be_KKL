@@ -64,5 +64,19 @@ namespace Kal_Be_KKL.Models
             DBServices dbl = new DBServices();
             dbl.insert_course_of_duty(Receipt_Course_Date, Course_Id, Id);
         }
+
+        public Worker_In_Area getAreaAndJob(string id)
+        {
+            DBServices dbs = new DBServices();
+            Worker_In_Area wia = dbs.getAreaAndJob(id);
+            return wia;
+        }
+
+        public Worker_In_Region getRegionAndJob(string id)
+        {
+            DBServices dbs = new DBServices();
+            Worker_In_Region wir = dbs.getRegionAndJob(id);
+            return wir;
+        }
     }
 }

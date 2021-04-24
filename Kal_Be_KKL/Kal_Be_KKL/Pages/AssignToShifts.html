@@ -58,10 +58,10 @@
 
     </style>
     <script>
-        var area;
+        var areaId = localStorage['Area_Id'];
         var blocks;
         var allAssigns;
-
+        
         $(document).ready(function () {
             var wWidth = $(window).width();
             if (wWidth > 768) {
@@ -77,17 +77,9 @@
             let employee = JSON.parse(localStorage["Employee"]);
             str1 = "<h3>שלום " + employee.First_Name + " " + employee.Last_Name + "</h3>";
             $("#phHello").append(str1);
-            let id = JSON.parse(localStorage["Employee"]).Id;
-            let getApi = "../api/Area/GetAreaByEmpId/" + id;
-            ajaxCall("GET", getApi, "", getAreaSuccess, getAreaError);
-
-        });
-
-        function getAreaSuccess(areaData) {
-            area = areaData;
-            let getApi = "../api/Area/GetAreaBlcoks/" + area.Area_Id;
+            let getApi = "../api/Area/GetAreaBlcoks/" + areaId;
             ajaxCall("GET", getApi, "", getAreaBlcoksSuccess, getAreaBlcoksError);
-        }
+        });
 
         function getAreaBlcoksSuccess(blocksData) {
             console.log(blocksData)
@@ -99,13 +91,10 @@
         function getAreaBlcoksError(err) {
             console.log(err)
         }
-        function getAreaError(err) {
-            console.log(err)
-        }
 
         function assignToShifts() {
             $('#loading').removeAttr('hidden')
-            let postApi = "../api/Day_In_Shift/SmartPost/" + area.Area_Id;
+            let postApi = "../api/Day_In_Shift/SmartPost/" + areaId;
             ajaxCall("POST", postApi, "", postSmartPostSuccess, postSmartPostError);
         }
 
@@ -120,7 +109,7 @@
         }
 
         function getAssigns() {
-            let getApi = "../api/Day_In_Shift/GetDutiesInShift/" + area.Area_Id;
+            let getApi = "../api/Day_In_Shift/GetDutiesInShift/" + areaId;
             ajaxCall("GET", getApi, "", getAssignsSuccess, getAssignsError);
         }
 
