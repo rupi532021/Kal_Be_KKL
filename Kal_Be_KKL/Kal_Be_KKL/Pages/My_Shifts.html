@@ -118,7 +118,6 @@
 
             for (var param in allAssigns) {
                 for (var i = 0; i < allAssigns[param].length; i++) {
-                    debugger
                     JSON.parse(localStorage['Employee'])
                     if (curentUser.First_Name + ' ' + curentUser.Last_Name == allAssigns[param][i].First_Name + ' ' + allAssigns[param][i].Last_Name)
                         allevent.push({ title: allAssigns[param][i].First_Name, start: param,end:param })
@@ -198,7 +197,7 @@
                                 <a href="#">סידור עבודה<span class="caret"></span></a>
                                 <ul class="dropdown-menu">
                                     <li><a href="Requests.html">הגשת סידור</a></li>
-                                    <li><a href="#">הסידור שלי</a></li>
+                                    <li><a href="My_Shifts.html">הסידור שלי</a></li>
                                     <li><a href="AssignToShifts.html">שיבוץ בקשות</a></li>
                                 </ul>
                             </li>
