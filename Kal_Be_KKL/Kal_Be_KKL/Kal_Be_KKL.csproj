@@ -203,6 +203,7 @@
     <Content Include="Pages\AssignToShifts.html" />
     <Content Include="Pages\Insert_Courses.html" />
     <Content Include="Pages\Login.html" />
+    <Content Include="Pages\My_Shifts.html" />
     <Content Include="Pages\Requests.html" />
     <Content Include="Pages\SignUp_Page.html" />
     <Content Include="Pages\Special_Requirements.html" />
