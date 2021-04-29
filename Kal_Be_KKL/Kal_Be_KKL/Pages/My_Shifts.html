@@ -30,18 +30,13 @@
             background-color: rgba(235, 237, 235, 0.4);
         }
 
-        #assignBTN {
-            margin-top: 10px;
-            margin-right:auto ;
-            margin-bottom: 13px;
-/*            padding: 10px 26px;
-*/            font-size: 25px;
-        }
+
 
         @media only screen and (max-width: 768px) {
-             #loading  {
+            #loading {
                 width: 40% !important
             }
+
             .blocks {
                 width: 80%;
                 float: right;
@@ -52,16 +47,15 @@
             }
         }
 
-        h4{
-            margin-right:10px;
+        h4 {
+            margin-right: 10px;
         }
-
     </style>
     <script>
         var areaId = localStorage['Area_Id'];
         var blocks;
         var allAssigns;
-        
+
         $(document).ready(function () {
             var wWidth = $(window).width();
             if (wWidth > 768) {
@@ -85,7 +79,6 @@
             console.log(blocksData)
             blocks = blocksData;
             getAssigns();
-            $("#assignBTN").prop('disabled', false);
         }
 
         function getAreaBlcoksError(err) {
@@ -114,6 +107,23 @@
         }
 
         document.addEventListener('DOMContentLoaded', function () {
+        });
+
+
+        function getAssignsSuccess(data) {
+            allAssigns = data;
+
+            var curentUser = JSON.parse(localStorage['Employee'])
+            var allevent = [];
+
+            for (var param in allAssigns) {
+                for (var i = 0; i < allAssigns[param].length; i++) {
+                    JSON.parse(localStorage['Employee'])
+                    if (curentUser.First_Name + ' ' + curentUser.Last_Name == allAssigns[param][i].First_Name + ' ' + allAssigns[param][i].Last_Name)
+                        allevent.push({ title: allAssigns[param][i].First_Name, start: param,end:param })
+                }                
+            }
+
             var calendarEl = document.getElementById('calendar');
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
@@ -122,6 +132,7 @@
                     center: 'title',
                     right: ''
                 },
+                events: allevent,
                 selectable: false,
                 showNonCurrentDates: false,
                 dateClick: function (el) {
@@ -150,11 +161,6 @@
             calendar.next();
             calendar.setOption('locale', 'he');
             calendar.render();
-        });
-
-
-        function getAssignsSuccess(data) {
-            allAssigns = data
             console.log(data)
         }
 
@@ -193,14 +199,6 @@
                                     <li><a href="Requests.html">הגשת סידור</a></li>
                                     <li><a href="My_Shifts.html">הסידור שלי</a></li>
                                     <li><a href="AssignToShifts.html">שיבוץ בקשות</a></li>
-                                    <!--<li class="dropdown">
-        <a href="#">Another Dropdown <span class="caret dropdown-caret"></span></a>
-        <ul class="dropdown-menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Action</a></li>
-        </ul>
-    </li>-->
-                                    <!--<li><a href="#">Action</a></li>-->
                                 </ul>
                             </li>
                             <li><a href="#">נוכחות</a></li>
@@ -228,8 +226,6 @@
             </nav>
         </div>
         <!--NavBar-->
-        <h2>שיבוץ בקשות</h2>
-        <button id="assignBTN" class="btn btn-primary" onclick="assignToShifts()" disabled>בצע שיבוץ</button>
         <div hidden id="loading">
             <img height="100" width="100" src="../images/Spinner-0.8s-200px.gif" />
             <h4>מספר שניות...</h4>

@@ -7,7 +7,7 @@
                                 <a href="#">סידור עבודה<span class="caret"></span></a>
                                 <ul class="dropdown-menu">
                                     <li><a href="Requests.html">הגשת סידור</a></li>
-                                    <li><a href="#">הסידור שלי</a></li>
+                                    <li><a href="My_Shifts.html">הסידור שלי</a></li>
                                 </ul>
                             </li>
                             <li><a href="#">נוכחות</a></li>
@@ -34,7 +34,7 @@
                 <a href="#">סידור עבודה<span class="caret"></span></a>
                 <ul class="dropdown-menu">
                     <li><a href="Requests.html">הגשת סידור</a></li>
-                    <li><a href="#">הסידור שלי</a></li>
+                    <li><a href="My_Shifts.html">הסידור שלי</a></li>
                     <li><a href="AssignToShifts.html">שיבוץ בקשות</a></li>
                 </ul>
             </li>

@@ -78,6 +78,18 @@ namespace Kal_Be_KKL.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "מצטערים קיימת בעיה במערכת יש לנסות שוב במועד מאוחר יותר");
             }
         }
+        public HttpResponseMessage getAreaOrRegionAndJob(string id)
+        {
+            Employee e = new Employee();
+            Worker_In_Area wia = e.getAreaAndJob(id);
+            if (wia.Area_Id != 0)
+                return Request.CreateResponse(HttpStatusCode.OK, wia);
+            Worker_In_Region wir = e.getRegionAndJob(id);
+            if (wir.Region_Id != 0)
+                return Request.CreateResponse(HttpStatusCode.OK, wir);
+            else
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "תקלה בשרת");
+        }
 
         // DELETE api/<controller>/5
         public void Delete(int id)
