@@ -32,6 +32,18 @@ namespace Kal_Be_KKL.Controllers
             }
         }
 
+
+        [Route("api/Employees/GetAll")]
+        [HttpGet]
+        public HttpResponseMessage GetAll()
+        {
+            Employee e = new Employee();
+            List<Employee> emps = e.GetAllEmployee();
+                return Request.CreateResponse(HttpStatusCode.OK, emps);
+            
+        }
+     
+
         [Route("api/Employees/insert_course_of_duty/{Receipt_Course_Date}/{Course_Id}/{Id}")]
         [HttpPost]
         public void insert_course_of_duty(DateTime Receipt_Course_Date, int Course_Id, string Id)
