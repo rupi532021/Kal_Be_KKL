@@ -536,10 +536,50 @@ namespace Kal_Be_KKL.Models.DAL
                     course.Course_Name = (string)dr["Course_Name"];
                     course.Description = (string)dr["Description"];
                     course.Validity = Convert.ToInt32(dr["Validity"]);
-
                     courseList.Add(course);
                 }
                 return courseList;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+
+        }
+        public List<Courses_Of_Duty> GetAllCoursesOfDuty(string id)
+        {
+            SqlConnection con = null;
+            List<Courses_Of_Duty> CoursesOfDuty = new List<Courses_Of_Duty>();
+            try
+            {
+                con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
+
+                String selectSTR = "select * from kkl_Courses_of_Duty where Id = "+id;
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+
+                    Courses_Of_Duty course_of_duty = new Courses_Of_Duty();
+                    course_of_duty.Course_Id = Convert.ToInt32(dr["Course_Id"]);
+                    course_of_duty.Id = (string)dr["Id"];
+                    course_of_duty.Receipt_Course_Date = Convert.ToDateTime(dr["Receipt_Course_Date"]);
+
+                    CoursesOfDuty.Add(course_of_duty);
+                }
+                return CoursesOfDuty;
             }
             catch (Exception ex)
             {

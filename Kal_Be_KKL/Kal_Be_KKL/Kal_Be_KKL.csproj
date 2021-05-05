@@ -161,6 +161,7 @@
     <Compile Include="Controllers\AreaController.cs" />
     <Compile Include="Controllers\BlocksController.cs" />
     <Compile Include="Controllers\CourseController.cs" />
+    <Compile Include="Controllers\Courses_Of_DutysController.cs" />
     <Compile Include="Controllers\Day_In_ShiftController.cs" />
     <Compile Include="Controllers\EmployeesController.cs" />
     <Compile Include="Controllers\PermanentRequirementsController.cs" />
@@ -175,6 +176,7 @@
     <Compile Include="Models\Area.cs" />
     <Compile Include="Models\Block.cs" />
     <Compile Include="Models\Course.cs" />
+    <Compile Include="Models\Courses_Of_Duty.cs" />
     <Compile Include="Models\DAL\DBServices.cs" />
     <Compile Include="Models\Day_In_Shift.cs" />
     <Compile Include="Models\DutyInShift.cs" />
@@ -218,6 +220,7 @@
     <Content Include="MyPlugins\jquery-ui-1.12.1.custom\jquery-ui.theme.css" />
     <Content Include="MyPlugins\jquery-ui-1.12.1.custom\jquery-ui.theme.min.css" />
     <Content Include="MyPlugins\jquery-ui-1.12.1.custom\LICENSE.txt" />
+    <Content Include="MyPlugins\moments\moment.js" />
     <Content Include="Pages\AssignToShifts.html" />
     <Content Include="Pages\Insert_Courses.html" />
     <Content Include="Pages\Login.html" />

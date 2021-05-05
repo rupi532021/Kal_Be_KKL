@@ -11,6 +11,7 @@
     <script src="../Scripts/ajaxCallsWithKey.js"></script>
     <script src="../Scripts/jquery-3.4.1.js"></script>
     <script src="../MyPlugins/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+    <script src="../MyPlugins/moments/moment.js"></script>
     <link href="../Scripts/StyleSheetNavBar.css" rel="stylesheet" />
     <style type="text/css">
 
@@ -83,8 +84,9 @@
             float: unset
         }
     </style>
+
     <script>
-        full_workers_arr = [];
+        
         workers_arr = [];
         courses_arr = [];
         chosen_courses = [];
@@ -93,7 +95,8 @@
                 alert("לא נבחרו הכשרות")
             else {
                 for (var i = 0; i < chosen_courses.length; i++) {
-                    api = "../api/Employees/insert_course_of_duty/" + chosen_courses[i].Receipt_Course_Date + "/" + chosen_courses[i].Course_Id + "/" + chosen_courses[i].Id + "/"
+                    api = "../api/Employees/insert_course_of_duty/" + moment(chosen_courses[i].Receipt_Course_Date).format("YYYY-MM-DD") + "/" + chosen_courses[i].Course_Id + "/" + chosen_courses[i].Id + "/"
+                    //api = "../api/Employees/insert_course_of_duty/" + "20210607" + "/" + chosen_courses[i].Course_Id + "/" + chosen_courses[i].Id + "/"
                     ajaxCall("POST", api, "", postSuccess, postError)
                 }
             }
@@ -131,8 +134,7 @@
             let api = "../api/Employees/GetAll";
             ajaxCall("GET", api, "", GetAllEmployeesSuccess, GetAllEmployeesError);
         }
-        function GetAllEmployeesSuccess(data)
-        {
+        function GetAllEmployeesSuccess(data) {
             full_workers_arr = data;
             data.forEach(c => {
                 worker = c.First_Name + " " + c.Last_Name + " - " + c.Id;
@@ -140,8 +142,7 @@
             })
             console.log(workers_arr);
         }
-        function GetAllEmployeesError(err)
-        {
+        function GetAllEmployeesError(err) {
             alert("in err")
             console.log(err)
         }
@@ -165,7 +166,7 @@
             let employee = JSON.parse(localStorage["Employee"]);
             str1 = "<h3>שלום " + employee.First_Name + " " + employee.Last_Name + "</h3>";
             $("#phHello").append(str1);
-            $("#WorkerNum").autocomplete({source:workers_arr});
+            $("#WorkerNum").autocomplete({ source: workers_arr });
 
         });
 
@@ -196,7 +197,7 @@
             if (course_id != "0" && $("#DateTB").val() != "") {
                 courses_arr.forEach(c => {
                     if (c.Course_Id == parseInt(course_id)) {
-                        if (chosen_courses.some(c => c.Course_Id == course_id) == false) {
+                        if (chosen_courses.some(c => c.Course_Id == course_id) == false) {                                                                                                                                                      
                             str = "<div class='choose_cousre' id='" + c.Course_Id + "'> <p>שם הקורס:  " + c.Course_Name + "</p><p> תאריך ביצוע הקורס: " + date_of_start_course + "</p><input type='button' value='מחק'  onclick='deletecourse(" + c.Course_Id + ")'/></div>";
                             mycourses = {
                                 "Name": c.Course_Name,
@@ -218,22 +219,55 @@
                 alert("אחד מהפרטים שהוכנסו שגויים")
         }
 
-        function Show_Worker_Details()
-        {
+        function Show_Worker_Details() {
             $("#courses").html("");
             name = $("#WorkerNum").val();
             res = "";
-            if (workers_arr.includes(name))
-            {
+            if (workers_arr.includes(name)) {
                 var res = name.split(" - ");
                 console.log(res)
                 $("#Course").prop("disabled", false);
                 $("#DateTB").prop("disabled", false);
+                $("#addcoursebtn").prop("disabled", false);
+                Show_Worker_Curses(res[1])
+                chosen_courses = [];
             }
             else
-                alert("not in")
+                alert("שם לא תקין")
             return false;
+        }
 
+        function Show_Worker_Curses(id) {
+            let api = "../api/Courses_Of_Dutys/GetAllCoursesOfDuty/" + id;
+            ajaxCall("GET", api, "", Show_Worker_Curses_Succsess, Show_Worker_Curses_Error);
+        }
+                function Show_Worker_Curses_Succsess(data) {
+            data.forEach(c => {
+                name_of_course = "";
+                str = "<div class='choose_cousre' id='" + c.Course_Id + "'>";
+                for (var i = 0; i < courses_arr.length; i++) {
+                    if (courses_arr[i].Course_Id == c.Course_Id) {
+                        str += "<p> שם הקורס: " + courses_arr[i].Course_Name + "</p>"
+                        name_of_course = courses_arr[i].Course_Name;
+                    }
+                }                
+                str += "<p> תאריך ביצוע הקורס: " + moment(c.Receipt_Course_Date).format("DD/MM/YYYY") + "</p>";
+                str += "<input type = 'button' value = 'מחק'  onclick = 'deletecourse(" + c.Course_Id + ")'/></div>";
+                $("#courses").append(str)
+
+                mycourses = {
+                    "Name": name_of_course,
+                    "Course_Id": c.Course_Id,
+                    "Receipt_Course_Date": c.Receipt_Course_Date,
+                    "Id": c.Id
+                }
+                chosen_courses.push(mycourses)
+
+            });
+           
+        }
+        function Show_Worker_Curses_Error(err) {
+            alert(err)
         }
     </script>
 </head>
@@ -268,14 +302,6 @@
                                     <li><a href="Requests.html">הגשת סידור</a></li>
                                     <li><a href="My_Shifts.html">הסידור שלי</a></li>
                                     <li><a href="AssignToShifts.html">שיבוץ בקשות</a></li>
-                                    <!--<li class="dropdown">
-                                        <a href="#">Another Dropdown <span class="caret dropdown-caret"></span></a>
-                                        <ul class="dropdown-menu">
-                                            <li><a href="#">Action</a></li>
-                                            <li><a href="#">Action</a></li>
-                                        </ul>
-                                    </li>-->
-                                    <!--<li><a href="#">Action</a></li>-->
                                 </ul>
                             </li>
                             <li><a href="#">נוכחות</a></li>

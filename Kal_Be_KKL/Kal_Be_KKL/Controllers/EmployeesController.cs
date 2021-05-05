@@ -46,10 +46,23 @@ namespace Kal_Be_KKL.Controllers
 
         [Route("api/Employees/insert_course_of_duty/{Receipt_Course_Date}/{Course_Id}/{Id}")]
         [HttpPost]
-        public void insert_course_of_duty(DateTime Receipt_Course_Date, int Course_Id, string Id)
+        public bool insert_course_of_duty(DateTime Receipt_Course_Date, int Course_Id, string Id)
         {
-            Employee emp = new Employee();
-            emp.insert_course_of_duty(Receipt_Course_Date, Course_Id, Id);
+            try
+            {
+                Employee emp = new Employee();
+                emp.insert_course_of_duty(Receipt_Course_Date, Course_Id, Id);
+                return true;
+            }
+            catch (SqlException ex)
+            {
+                return false;
+            }
+
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
         // POST api/<controller>
         public HttpResponseMessage Post(Employee emp)

@@ -31,6 +31,7 @@ namespace Kal_Be_KKL.Models
             DBServices dbs = new DBServices();
             List<Course> Course_List = dbs.Read_Courses();
             return Course_List;
-        }
+        } 
+
     }
 }
