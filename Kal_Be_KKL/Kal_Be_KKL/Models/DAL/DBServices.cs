@@ -927,9 +927,9 @@ namespace Kal_Be_KKL.Models.DAL
 
             StringBuilder sb = new StringBuilder();
             // use a string builder to create the dynamic string
-            sb.AppendFormat("Values('{0}', '{1}', '{2}','{3}')",
-                dayInShift.Id, dayInShift.Block_Id, dayInShift.Shift_Date.ToString("yyyy-MM-dd"), dayInShift.Requirement_Id);
-            String prefix = "INSERT INTO kkl_Day_In_Shift " + "([Id],[Block_Id], [Shift_Date],[Requirement_Id])";
+            sb.AppendFormat("Values('{0}', '{1}', '{2}','{3}','{4}')",
+                dayInShift.Id, dayInShift.Block_Id, dayInShift.Shift_Date.ToString("yyyy-MM-dd"), dayInShift.Requirement_Id,dayInShift.Iteration_Number);
+            String prefix = "INSERT INTO kkl_Day_In_Shift " + "([Id],[Block_Id], [Shift_Date],[Requirement_Id],[Iteration_Number])";
             command = prefix + sb.ToString();
 
             return command;
@@ -1215,7 +1215,7 @@ namespace Kal_Be_KKL.Models.DAL
         }
 
 
-        public int InsertEmployeeToShift(string id, int blockId, DateTime shift_Date, int Requirement_Id)
+        public int InsertEmployeeToShift(string id, int blockId, DateTime shift_Date, int Requirement_Id,int iteration_Number)
         {
 
             SqlConnection con;
@@ -1231,7 +1231,7 @@ namespace Kal_Be_KKL.Models.DAL
                 throw (ex);
             }
 
-            String cStr = BuildInsertCommand(id, blockId, shift_Date, Requirement_Id);      // helper method to build the insert string
+            String cStr = BuildInsertCommand(id, blockId, shift_Date, Requirement_Id, iteration_Number);      // helper method to build the insert string
 
             cmd = CreateCommand(cStr, con);             // create the command
 
@@ -1257,15 +1257,15 @@ namespace Kal_Be_KKL.Models.DAL
 
         }
 
-        private String BuildInsertCommand(string id, int blockId, DateTime shift_Date, int Requirement_Id)
+        private String BuildInsertCommand(string id, int blockId, DateTime shift_Date, int Requirement_Id,int iteration_Number)
         {
             String command;
 
             StringBuilder sb = new StringBuilder();
             // use a string builder to create the dynamic string
-            sb.AppendFormat("Values('{0}', '{1}', '{2}', '{3}')",
-                 id, blockId, shift_Date.ToString("yyyy-MM-dd"), Requirement_Id);
-            String prefix = "INSERT INTO kkl_Day_In_Shift " + "([Id], [Block_Id], [Shift_Date], [Requirement_Id])";
+            sb.AppendFormat("Values('{0}', '{1}', '{2}', '{3}','{4}')",
+                 id, blockId, shift_Date.ToString("yyyy-MM-dd"), Requirement_Id,iteration_Number);
+            String prefix = "INSERT INTO kkl_Day_In_Shift " + "([Id], [Block_Id], [Shift_Date], [Requirement_Id],[Iteration_Number])";
             command = prefix + sb.ToString();
 
             return command;

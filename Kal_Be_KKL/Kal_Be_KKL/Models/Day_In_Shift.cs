@@ -12,22 +12,26 @@ namespace Kal_Be_KKL.Models
         int block_Id;
         DateTime shift_Date;
         int requirement_Id;
+        int iteration_Number;
 
 
         public Day_In_Shift() { }
 
-        public Day_In_Shift(string id, int block_Id, DateTime shift_Date, int requirement_Id)
+        public Day_In_Shift(string id, int block_Id, DateTime shift_Date, int requirement_Id,int iteration_Number)
         {
             Id = id;
             Block_Id = block_Id;
             Shift_Date = shift_Date;
             Requirement_Id = requirement_Id;
+            Iteration_Number = iteration_Number;
         }
 
         public string Id { get => id; set => id = value; }
         public int Block_Id { get => block_Id; set => block_Id = value; }
         public DateTime Shift_Date { get => shift_Date; set => shift_Date = value; }
         public int Requirement_Id { get => requirement_Id; set => requirement_Id = value; }
+        public int Iteration_Number { get => iteration_Number; set => iteration_Number = value; }
+
 
         public void InsertDayInShift()
         {
@@ -65,10 +69,10 @@ namespace Kal_Be_KKL.Models
             return matchEmployee;
         }
 
-        public void InsertEmployeeToShift (string id,int blockId,DateTime shift_Date,int Requirement_Id)
+        public void InsertEmployeeToShift (string id,int blockId,DateTime shift_Date,int Requirement_Id,int iteration_Number)
         {
             DBServices dbs = new DBServices();
-            dbs.InsertEmployeeToShift(id, blockId, shift_Date, Requirement_Id);
+            dbs.InsertEmployeeToShift(id, blockId, shift_Date, Requirement_Id, iteration_Number);
         }
 
         public void DeleteExistAssign(int areaId, DateTime startDate, DateTime endDate)
