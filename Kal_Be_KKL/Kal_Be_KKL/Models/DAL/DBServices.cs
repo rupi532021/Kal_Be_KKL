@@ -563,7 +563,7 @@ namespace Kal_Be_KKL.Models.DAL
             {
                 con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
 
-                String selectSTR = "select * from kkl_Courses_of_Duty where Id = "+id;
+                String selectSTR = "select * from kkl_Courses_of_Duty where Id = "+ id +"AND Is_Deleted = "+ 0;
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
 
                 // get a reader
@@ -595,13 +595,50 @@ namespace Kal_Be_KKL.Models.DAL
 
             }
 
+        } 
+        public bool Delete_Course_Of_Duty(Courses_Of_Duty cod)
+        {
+            SqlConnection con = null;
+            try
+            {
+                con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
+
+                //String selectSTR = "select * from kkl_Courses_of_Duty where Id = " + cod.Id + "AND Is_Deleted = " + 0 + "AND Course_Id = ";
+            
+               
+               
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = con;
+                cmd.Parameters.AddWithValue("@Id", cod.Id);
+                cmd.Parameters.AddWithValue("@Receipt_Course_Date", cod.Receipt_Course_Date);
+                cmd.Parameters.AddWithValue("@Course_Id", cod.Course_Id);
+                String selectSTR = "UPDATE kkl_Courses_of_Duty SET Is_Deleted = 1 WHERE Id = @Id AND Is_Deleted = 0 AND Course_Id = @Course_Id AND Receipt_Course_Date = @Receipt_Course_Date";
+                cmd.CommandText = selectSTR;
+                // get a reader
+                cmd.ExecuteNonQuery();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+
         }
 
-        public int insert_course_of_duty(DateTime Receipt_Course_Date, int Course_Id, string Id)
+        public bool insert_course_of_duty(Courses_Of_Duty [] cod)
         {
 
             SqlConnection con;
-            SqlCommand cmd;
+            SqlCommand cmd = new SqlCommand();
 
             try
             {
@@ -613,49 +650,44 @@ namespace Kal_Be_KKL.Models.DAL
                 throw (ex);
             }
 
-            String cStr = BuildInsertCommand(Receipt_Course_Date, Course_Id, Id);      // helper method to build the insert string
-
-            cmd = CreateCommand(cStr, con);             // create the command
-
-            try
+            cmd.Connection = con;
+            cmd.CommandText = "sp_Add_Courses_To_DB";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add("@Id", SqlDbType.NVarChar);
+            cmd.Parameters.Add("@Receipt_Course_Date",SqlDbType.NVarChar);
+            cmd.Parameters.Add("@Course_Id",SqlDbType.Int);
+            cmd.Parameters.Add("@RetVal", SqlDbType.Int);
+            cmd.Parameters["@RetVal"].Direction = ParameterDirection.ReturnValue;
+            for (int i = 0; i < cod.Length; i++)
             {
-                int numEffected = cmd.ExecuteNonQuery(); // execute the command
-                return numEffected;
+                cmd.Parameters["@Id"].Value = cod[i].Id;
+                cmd.Parameters["@Receipt_Course_Date"].Value = cod[i].Receipt_Course_Date.ToString("yyyy-MM-dd");
+                cmd.Parameters["@Course_Id"].Value = cod[i].Course_Id;
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                    int RetVal = (int)cmd.Parameters["@RetVal"].Value;
+
+                }
+                catch (Exception ex)
+                {
+                    // write to log
+                    con.Close();
+                    throw (ex);
+                }
             }
-            catch (Exception ex)
-            {
-                // write to log
-                throw (ex);
-            }
 
-            finally
-            {
                 if (con != null)
                 {
                     // close the db connection
                     con.Close();
                 }
-            }
-
+            return true;
         }
 
         //--------------------------------------------------------------------
         // Build the Insert command String
         //--------------------------------------------------------------------
-        private String BuildInsertCommand(DateTime Receipt_Course_Date, int Course_Id, string Id)
-        {
-            String command;
-
-            StringBuilder sb = new StringBuilder();
-            // use a string builder to create the dynamic string
-            sb.AppendFormat("Values('{0}', '{1}', '{2}')",
-                Receipt_Course_Date.ToString("yyyy-MM-dd"), Course_Id, Id);
-            String prefix = "INSERT INTO kkl_Courses_of_Duty " + "([Receipt_Course_Date],[Course_Id], [Id])";
-            command = prefix + sb.ToString();
-
-            return command;
-        }
-
         public List<ShiftRequirement> Read_Requirements()
         {
             SqlConnection con = null;

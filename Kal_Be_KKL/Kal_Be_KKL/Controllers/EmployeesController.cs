@@ -44,14 +44,14 @@ namespace Kal_Be_KKL.Controllers
         }
      
 
-        [Route("api/Employees/insert_course_of_duty/{Receipt_Course_Date}/{Course_Id}/{Id}")]
+        [Route("api/Employees/insert_course_of_duty")]
         [HttpPost]
-        public bool insert_course_of_duty(DateTime Receipt_Course_Date, int Course_Id, string Id)
+        public bool insert_course_of_duty(Courses_Of_Duty [] cod)
         {
             try
             {
                 Employee emp = new Employee();
-                emp.insert_course_of_duty(Receipt_Course_Date, Course_Id, Id);
+                emp.insert_course_of_duty(cod);
                 return true;
             }
             catch (SqlException ex)

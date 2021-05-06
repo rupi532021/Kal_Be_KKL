@@ -85,8 +85,8 @@
         }
     </style>
 
-    <script>
-        
+    <script type="text/javascript">
+        id_off_worker = "";
         workers_arr = [];
         courses_arr = [];
         chosen_courses = [];
@@ -94,18 +94,16 @@
             if (chosen_courses.length == 0)
                 alert("לא נבחרו הכשרות")
             else {
-                for (var i = 0; i < chosen_courses.length; i++) {
-                    api = "../api/Employees/insert_course_of_duty/" + moment(chosen_courses[i].Receipt_Course_Date).format("YYYY-MM-DD") + "/" + chosen_courses[i].Course_Id + "/" + chosen_courses[i].Id + "/"
-                    //api = "../api/Employees/insert_course_of_duty/" + "20210607" + "/" + chosen_courses[i].Course_Id + "/" + chosen_courses[i].Id + "/"
-                    ajaxCall("POST", api, "", postSuccess, postError)
-                }
+
+                api = "../api/Employees/insert_course_of_duty";
+                ajaxCall("POST", api, JSON.stringify(chosen_courses), postSuccess, postError)
             }
         }
         function postSuccess(data) {
             console.log(data)
             swal("Added Successfuly!", "Great Job", "success");
             setTimeout("", 5000)
-            window.location.replace("Requests.html")
+            //window.location.replace("Requests.html")
 
         }
         function postError(err) {
@@ -149,9 +147,6 @@
         $(document).ready(function () {
             loadworkers();
             loadcourses();
-            fullName = JSON.parse(localStorage["Employee"]).First_Name + " " + JSON.parse(localStorage["Employee"]).Last_Name;
-            str = "הקורסים של " + fullName + " הם:"
-            $("h2").html(str)
             var wWidth = $(window).width();
             if (wWidth > 768) {
                 $("ul.bts-nav li").hover(function () {
@@ -171,16 +166,33 @@
         });
 
 
-        function deletecourse(course_id) {
+                function deletecourse(course_id)
+                {
+            let i = chosen_courses.findIndex(c => c.Course_Id == course_id)
+            cod =
+            {
+                "Id": id_off_worker,
+                "Course_Id": course_id,
+                "Receipt_Course_Date": moment(chosen_courses[i].Receipt_Course_Date).format("YYYY-MM-DD")
+            }
             console.log("arr before")
             console.log(chosen_courses)
             $("#" + course_id).remove()
-            let i = chosen_courses.findIndex(c => c.Course_Id == course_id)
             chosen_courses.splice(i, 1);
             console.log("arr after")
             console.log(chosen_courses)
+            let api = "../api/Courses_Of_Dutys/Delete_Course_Of_Duty/";
+            ajaxCall("POST", api, JSON.stringify(cod), Delete_Course_Succsess, Delete_Course_Error);
+                }
 
-        }
+                function Delete_Course_Succsess(data)
+                {
+                    console.log(data)
+                }
+                function Delete_Course_Error(err)
+                {
+                    console.log(err)
+                }
         function addcourse() {
 
             date_of_start_course1 = $("#DateTB").val()
@@ -203,7 +215,7 @@
                                 "Name": c.Course_Name,
                                 "Course_Id": c.Course_Id,
                                 "Receipt_Course_Date": date_of_start_course,
-                                "Id": JSON.parse(localStorage["Employee"]).Id
+                                "Id": id_off_worker
                             }
                             chosen_courses.push(mycourses)
                             $("#courses").append(str)
@@ -229,6 +241,7 @@
                 $("#Course").prop("disabled", false);
                 $("#DateTB").prop("disabled", false);
                 $("#addcoursebtn").prop("disabled", false);
+                id_off_worker = res[1];
                 Show_Worker_Curses(res[1])
                 chosen_courses = [];
             }
@@ -258,7 +271,7 @@
                 mycourses = {
                     "Name": name_of_course,
                     "Course_Id": c.Course_Id,
-                    "Receipt_Course_Date": c.Receipt_Course_Date,
+                    "Receipt_Course_Date": moment(c.Receipt_Course_Date).format("YYYY-MM-DD"),
                     "Id": c.Id
                 }
                 chosen_courses.push(mycourses)

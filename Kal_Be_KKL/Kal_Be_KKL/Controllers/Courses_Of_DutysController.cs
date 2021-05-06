@@ -45,6 +45,28 @@ namespace Kal_Be_KKL.Controllers
         // DELETE api/<controller>/5
         public void Delete(int id)
         {
+
         }
+        [Route("api/Courses_Of_Dutys/Delete_Course_Of_Duty/")]
+        [HttpPost]
+        public HttpResponseMessage Delete_Course_Of_Duty(Courses_Of_Duty cod)
+        {
+            try
+            {
+                if (cod.Delete_Course_Of_Duty())
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, "קורס הוסר בהצלחה");//{fResult: 'True', message: 'קורס הוסר בהצלחה'}
+                }
+                else 
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, "קורס לא הוסר עקב תקלה");//{fResult: 'True', message: 'קורס הוסר בהצלחה'}
+                }
+            }
+            catch(Exception ex) 
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, "{fResult: 'False', message: 'Carta shgiya'}", System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json")); //Request.CreateErrorResponse(HttpStatusCode.OK, ex.Message);
+            }
+        }
+
     }
 }
