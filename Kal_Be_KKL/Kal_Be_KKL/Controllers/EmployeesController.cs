@@ -46,22 +46,24 @@ namespace Kal_Be_KKL.Controllers
 
         [Route("api/Employees/insert_course_of_duty")]
         [HttpPost]
-        public bool insert_course_of_duty(Courses_Of_Duty [] cod)
+        public string insert_course_of_duty(Courses_Of_Duty [] cod)
         {
             try
             {
                 Employee emp = new Employee();
-                emp.insert_course_of_duty(cod);
-                return true;
+                if (emp.insert_course_of_duty(cod))
+                    return "נתונים עודכנו בהצלחה";
+                else
+                    return "מצטערים יש תקלה נא לנסות שוב במועד מאוחר יותר";
             }
             catch (SqlException ex)
             {
-                return false;
+                return "קרתה שגיאה בבסיס הנתונים";
             }
 
             catch (Exception ex)
             {
-                return false;
+                return "מצטערים יש תקלה נא לנסות שוב במועד מאוחר יותר";
             }
         }
         // POST api/<controller>

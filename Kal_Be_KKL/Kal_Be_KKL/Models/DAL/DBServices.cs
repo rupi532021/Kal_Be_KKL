@@ -673,7 +673,8 @@ namespace Kal_Be_KKL.Models.DAL
                 {
                     // write to log
                     con.Close();
-                    throw (ex);
+                    return false;
+
                 }
             }
 

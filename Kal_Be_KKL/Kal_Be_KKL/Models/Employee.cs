@@ -65,10 +65,12 @@ namespace Kal_Be_KKL.Models
             dbl.Insert_Employee(this);
         }
 
-        public void insert_course_of_duty(Courses_Of_Duty [] cod) 
+        public bool insert_course_of_duty(Courses_Of_Duty [] cod) 
         {
             DBServices dbl = new DBServices();
-            dbl.insert_course_of_duty(cod);
+            return dbl.insert_course_of_duty(cod);
+                
+            
         }
 
         public Worker_In_Area getAreaAndJob(string id)
