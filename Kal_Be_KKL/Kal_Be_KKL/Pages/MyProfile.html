@@ -11,9 +11,9 @@
 
     <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <link href="../Scripts/StyleSheetNavBar.css" rel="stylesheet" />
-    <script src="../Scripts/ajaxCallsWithKey.js"></script>
-    <script src="../Scripts/jquery-3.4.1.js"></script>
+    <link href="../scripts/stylesheetnavbar.css" rel="stylesheet" />
+    <script src="../scripts/ajaxcallswithkey.js"></script>
+    <script src="../scripts/jquery-3.4.1.js"></script>
     <style type="text/css">
 
         body {
@@ -39,19 +39,19 @@
 
 
 
-        #pForm {
+/*        #pForm {
             left: 50%;
             top: 50%;
             position: absolute;
             transform: translate(-50%, -50%);
-        }
+        }*/
 
         label {
             font-size: 18px;
         }
 
         h2 {
-            text-align: center;
+            text-align: right;
         }
 
         .btn {
@@ -149,74 +149,131 @@
 <body>
 
     <div class="container">
-        <form id="pForm" method="put" enctype="multipart/form-data">
-            <h2>הפרופיל שלי </h2>
-            <div class="form-group">
-                <label for="FirstNameTB"><span class="red-star">★ </span>שם פרטי</label>
-                <input type="text" class="form-control" id="FirstNameTB" placeholder=" "
-                       pattern="[א-ת]{1,20}"
-                       oninvalid="this.setCustomValidity('רק עברית ועד 20 אותיות')"
-                       oninput="this.setCustomValidity('')" required>
+        <!-- NavBar -->
 
-            </div>
-            <div class="form-group">
-                <label for="LastNameTB"><span class="red-star">★ </span>שם משפחה</label>
-                <input type="text" class="form-control" id="LastNameTB" placeholder=" "
-                       pattern="[א-ת]{1,20}"
-                       oninvalid="this.setCustomValidity('רק עברית ועד 20 אותיות')"
-                       oninput="this.setCustomValidity('')" required>
-            </div>
-            <div class="form-group">
-                <label for="IDTB"><span class="red-star">★ </span>תעודת זהות</label>
-                <input type="text" class="form-control" id="IDTB" placeholder=" "
-                       pattern="[0-9]{9}"
-                       oninvalid="this.setCustomValidity('9 ספרות')"
-                       oninput="this.setCustomValidity('')" required>
-            </div>
-            <div class="form-group">
-                <label for="GenderRB"><span class="red-star">★ </span>מגדר</label>
-                <select class="form-control" id="Gender" style="width:310px" data-component="dropdown">
-                    <option value="Male"> זכר </option>
-                    <option value="Female"> נקבה </option>
+        <img id="imgKKL" src='../images/KKLLogo.png' />
+        <div id="phHello"></div>
 
-                </select>
-            </div>
+        <div class="body-wrap">
+            <nav class="navbar navbar-inverse">
+                <div class="container1">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarMenu" aria-expanded="false">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <!--<a class="navbar-brand" href="#">Brand</a>-->
+                    </div>
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="navbarMenu">
+                        <ul class="nav navbar-nav navbar-right  bts-nav">
+                            <li class="active"><a href="#">ראשי<span class="sr-only">(current)</span></a></li>
+                            <li class="dropdown">
+                                <a href="#">סידור עבודה<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="Requests.html">הגשת סידור</a></li>
+                                    <li><a href="My_Shifts.html">הסידור שלי</a></li>
+                                    <li><a href="AssignToShifts.html">שיבוץ בקשות</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#">נוכחות</a></li>
+                            <li><a href="#">אנשי קשר</a></li>
+                            <li class="dropdown">
+                                <a href="#">ניהול תורנות<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">דוח סוף תורנות</a></li>
+                                    <li><a href="#">טופס עליה לתורנות</a></li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#">הכשרות ואישורים<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">ההכשרות שלי</a></li>
+                                    <li><a href="#">בקשה להכשרה</a></li>
+                                    <li><a href="Insert_Courses.html">הכנסת הכשרות</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#">פרטים אישיים</a></li>
+                            <li><a href="Special_Requirements.html">דרישות משתנות</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <!--NavBar-->
 
-            <div class="form-group">
-                <label for="BirthDateTB"><span class="red-star">★ </span>תאריך לידה</label>
-                <input type="date" class="form-control" id="BirthDateTB" onchange="checkdate()"
-                       required>
-            </div>
-            <div class="form-group">
-                <label for="MailTB"><span class="red-star">★ </span>דואר אלקטרוני</label>
-                <input type="email" class="form-control" id="MailTB" placeholder=" "
-                       pattern=^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$
-                       oninvalid="this.setCustomValidity('הכנס מייל תקין')"
-                       oninput="this.setCustomValidity('')" required>
-            </div>
-            <div class="form-group">
-                <label for="PhoneTB"><span class="red-star">★ </span>נייד</label>
-                <input type="tel" class="form-control" id="PhoneTB" placeholder=" "
-                       pattern="[0-9]{10}"
-                       oninvalid="this.setCustomValidity('מספרים בלבד (10 ספרות)')"
-                       oninput="this.setCustomValidity('')" required>
-            </div>
+            <form id="pForm" method="put" enctype="multipart/form-data">
+                <h2>הפרופיל שלי </h2>
+                <div class="form-group">
+                    <label for="FirstNameTB"><span class="red-star">★ </span>שם פרטי</label>
+                    <input type="text" class="form-control" id="FirstNameTB" placeholder=" "
+                           pattern="[א-ת]{1,20}"
+                           oninvalid="this.setCustomValidity('רק עברית ועד 20 אותיות')"
+                           oninput="this.setCustomValidity('')" required>
+                </div>
 
-            <div class="form-group">
-                <label for="PasswordTB"><span class="red-star">★ </span>סיסמא</label>
-                <input type="text" class="form-control" style="width:310px" placeholder="8 תווים עם אות אחת גדולה ומספר אחד" id="PasswordTB"
-                       pattern="^(?=.*\d)(?=.*[A-Z]).{8,}$"
-                       oninvalid="this.setCustomValidity('8 תווים אות אחת גדולה ומספר')"
-                       oninput="this.setCustomValidity('')"
-                       required />
-            </div>
+                <div class="form-group">
+                    <label for="LastNameTB"><span class="red-star">★ </span>שם משפחה</label>
+                    <input type="text" class="form-control" id="LastNameTB" placeholder=" "
+                           pattern="[א-ת]{1,20}"
+                           oninvalid="this.setCustomValidity('רק עברית ועד 20 אותיות')"
+                           oninput="this.setCustomValidity('')" required>
+                </div>
 
+                <div class="form-group">
+                    <label for="IDTB"><span class="red-star">★ </span>תעודת זהות</label>
+                    <input type="text" class="form-control" id="IDTB" placeholder=" "
+                           pattern="[0-9]{9}"
+                           oninvalid="this.setCustomValidity('9 ספרות')"
+                           oninput="this.setCustomValidity('')" required>
+                </div>
 
-            <button type="submit" class="btn btn-primary" value="הוסף" href="Login.html">ערוך</button>
+                <div class="form-group">
+                    <label for="GenderRB"><span class="red-star">★ </span>מגדר</label>
+                    <select class="form-control" id="Gender" style="width:310px" data-component="dropdown">
+                        <option value="Male"> זכר </option>
+                        <option value="Female"> נקבה </option>
+                    </select>
+                </div>
 
-            <!--<button type="submit" class="btn btn-primary" value="הוסף" href="Login.html">הוסף</button>-->
-        </form>
-    </div>
+                <div class="form-group">
+                    <label for="BirthDateTB"><span class="red-star">★ </span>תאריך לידה</label>
+                    <input type="date" class="form-control" id="BirthDateTB" onchange="checkdate()"
+                           required>
+                </div>
+
+                <div class="form-group">
+                    <label for="MailTB"><span class="red-star">★ </span>דואר אלקטרוני</label>
+                    <input type="email" class="form-control" id="MailTB" placeholder=" "
+                           pattern=^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$
+                           oninvalid="this.setCustomValidity('הכנס מייל תקין')"
+                           oninput="this.setCustomValidity('')" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="PhoneTB"><span class="red-star">★ </span>נייד</label>
+                    <input type="tel" class="form-control" id="PhoneTB" placeholder=" "
+                           pattern="[0-9]{10}"
+                           oninvalid="this.setCustomValidity('מספרים בלבד (10 ספרות)')"
+                           oninput="this.setCustomValidity('')" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="PasswordTB"><span class="red-star">★ </span>סיסמא</label>
+                    <input type="text" class="form-control" style="width:310px" placeholder="8 תווים עם אות אחת גדולה ומספר אחד" id="PasswordTB"
+                           pattern="^(?=.*\d)(?=.*[A-Z]).{8,}$"
+                           oninvalid="this.setCustomValidity('8 תווים אות אחת גדולה ומספר')"
+                           oninput="this.setCustomValidity('')"
+                           required />
+                </div>
+
+                <button type="submit" class="btn btn-primary" value="הוסף" href="Login.html">ערוך</button>
+                <!--<button type="submit" class="btn btn-primary" value="הוסף" href="Login.html">הוסף</button>-->
+            </form>
+        </div>
 
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
