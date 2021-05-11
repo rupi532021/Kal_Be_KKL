@@ -60,12 +60,12 @@ namespace Kal_Be_KKL.Models
             return speciaelReqListForBlock;
         }
 
-        public Employee FindMatchEmployee(int areaId, DateTime Shift_Date,int Requirement_Id)
+        public Employee FindMatchEmployee(int areaId, DateTime Shift_Date,int Requirement_Id,int iteration_Number)
         {
             DBServices dbs = new DBServices();
-            Employee matchEmployee = dbs.FindMatchEmployee(areaId, "want", Shift_Date, Requirement_Id);
+            Employee matchEmployee = dbs.FindMatchEmployee(areaId, "want", Shift_Date, Requirement_Id, iteration_Number);
             if (matchEmployee.Id==null)
-                matchEmployee = dbs.FindMatchEmployee(areaId, "can", Shift_Date, Requirement_Id);
+                matchEmployee = dbs.FindMatchEmployee(areaId, "can", Shift_Date, Requirement_Id, iteration_Number);
             return matchEmployee;
         }
 
@@ -80,20 +80,20 @@ namespace Kal_Be_KKL.Models
             DBServices dbs = new DBServices();
             dbs.DeleteExistAssign(areaId, startDate.ToString("yyyy-MM-dd"), endDate.ToString("yyyy-MM-dd"));
         }
-        public int GetBestIteration(int month, int areaId,int iterationsNum,int satisfactionPrecent,int fairnessPrecent)
+        public int GetBestIteration(int month, int areaId,int iterationsNum,double satisfactionPrecent, double fairnessPrecent)
         {
             DBServices dbs = new DBServices();
 
-            List<int> satisfactionList = new List<int>();
-            List<int> fairnessList=new List<int>();
+            List<double> satisfactionList = new List<double>();
+            List<double> fairnessList=new List<double>();
             for (int i=0;i< iterationsNum;i++)
             {
-                List<int> arr = dbs.GetScoreHelper(areaId, month, i + 1);
+                List<double> arr = dbs.GetScoreHelper(areaId, month, i + 1);
                 satisfactionList.Add(arr[0]);
                 fairnessList.Add(arr[1]);
             }
-            List<int> sadas = satisfactionList;
-            List<int> asdas = fairnessList;
+            List<double> sadas = satisfactionList;
+            List<double> asdas = fairnessList;
             return 2;
         }
     }

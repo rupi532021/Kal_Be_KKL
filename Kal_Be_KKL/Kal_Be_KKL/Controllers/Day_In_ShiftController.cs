@@ -23,7 +23,7 @@ namespace Kal_Be_KKL.Controllers
         [HttpGet]
         public Dictionary<string, List<DutyInShift>> GetDutiesInShift(int areaId)
         {
-            DateTime date = DateTime.Today.AddMonths(0);
+            DateTime date = DateTime.Today.AddMonths(1);
             var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
             var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
             Area area = new Area();
@@ -91,7 +91,7 @@ namespace Kal_Be_KKL.Controllers
             {
                 for (int i = 0; i < req.Quantity; i++)
                 {
-                    Employee matchEmployee = shift.FindMatchEmployee(areaId, shift.Shift_Date, req.Requirement_Id);
+                    Employee matchEmployee = shift.FindMatchEmployee(areaId, shift.Shift_Date, req.Requirement_Id, iteration_Number);
                     if (matchEmployee.Id != null)
                         shift.InsertEmployeeToShift(matchEmployee.Id, block.Block_Id, shift.Shift_Date, req.Requirement_Id, iteration_Number);
                     else

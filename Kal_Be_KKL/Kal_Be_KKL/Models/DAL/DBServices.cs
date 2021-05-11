@@ -1181,7 +1181,7 @@ namespace Kal_Be_KKL.Models.DAL
 
         }
 
-        public Employee FindMatchEmployee(int Area_Id, string Request_Status, DateTime Request_Date, int Requirement_Id)
+        public Employee FindMatchEmployee(int Area_Id, string Request_Status, DateTime Request_Date, int Requirement_Id,int iteration_Number)
         {
 
             SqlConnection con = null;
@@ -1209,6 +1209,7 @@ namespace Kal_Be_KKL.Models.DAL
                 cmd.Parameters.AddWithValue("@Request_Status", Request_Status);
                 cmd.Parameters.AddWithValue("@Request_Date", Request_Date.ToString("yyyy-MM-dd"));
                 cmd.Parameters.AddWithValue("@Requirement_Id", Requirement_Id);
+                cmd.Parameters.AddWithValue("@Iteration_Number", iteration_Number);
 
                 // get a reader
                 try
@@ -1637,12 +1638,12 @@ namespace Kal_Be_KKL.Models.DAL
 
         }
 
-        public List<int> GetScoreHelper(int area_Id, int month, int iterationNumber)
+        public List<double> GetScoreHelper(int area_Id, int month, int iterationNumber)
         {
 
             SqlConnection con = null;
             SqlDataReader dr = null;
-            List<int> ans = new List<int>();
+            List<double> ans = new List<double>();
             try
             {
                 con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
@@ -1679,8 +1680,8 @@ namespace Kal_Be_KKL.Models.DAL
                 while (dr.Read())
                 {
                     // Read till the end of the data into a row
-                    ans.Add(Convert.ToInt32(dr["satisfaction"]));
-                    ans.Add(Convert.ToInt32(dr["fairness"]));
+                    ans.Add(Convert.ToDouble(dr["satisfaction"]));
+                    ans.Add(Convert.ToDouble(dr["fairness"]));
                 }
                 return ans;
             }
