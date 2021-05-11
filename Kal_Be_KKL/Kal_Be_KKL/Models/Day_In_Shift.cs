@@ -80,5 +80,21 @@ namespace Kal_Be_KKL.Models
             DBServices dbs = new DBServices();
             dbs.DeleteExistAssign(areaId, startDate.ToString("yyyy-MM-dd"), endDate.ToString("yyyy-MM-dd"));
         }
+        public int GetBestIteration(int month, int areaId,int iterationsNum,int satisfactionPrecent,int fairnessPrecent)
+        {
+            DBServices dbs = new DBServices();
+
+            List<int> satisfactionList = new List<int>();
+            List<int> fairnessList=new List<int>();
+            for (int i=0;i< iterationsNum;i++)
+            {
+                List<int> arr = dbs.GetScoreHelper(areaId, month, i + 1);
+                satisfactionList.Add(arr[0]);
+                fairnessList.Add(arr[1]);
+            }
+            List<int> sadas = satisfactionList;
+            List<int> asdas = fairnessList;
+            return 2;
+        }
     }
 }

@@ -1637,6 +1637,69 @@ namespace Kal_Be_KKL.Models.DAL
 
         }
 
+        public List<int> GetScoreHelper(int area_Id, int month, int iterationNumber)
+        {
+
+            SqlConnection con = null;
+            SqlDataReader dr = null;
+            List<int> ans = new List<int>();
+            try
+            {
+                con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
+                try
+                {
+                    if (con.State != ConnectionState.Open)
+                        con.Open();
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = con;
+                cmd.CommandText = "sp_Score_Helper";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Area_Id", area_Id);
+                cmd.Parameters.AddWithValue("@Month", month);
+                cmd.Parameters.AddWithValue("@Iteration_Number", iterationNumber);
+
+                // get a reader
+                try
+                {
+                    dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+
+
+                while (dr.Read())
+                {
+                    // Read till the end of the data into a row
+                    ans.Add(Convert.ToInt32(dr["satisfaction"]));
+                    ans.Add(Convert.ToInt32(dr["fairness"]));
+                }
+                return ans;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+
+        }
+
 
 
 

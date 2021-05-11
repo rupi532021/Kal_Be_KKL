@@ -48,9 +48,6 @@ namespace Kal_Be_KKL.Controllers
         public void SmartPost(int areaId)
         {
             const int ITERATIONS = 2;
-            int score = 0;
-            int maxScore = 0;
-            int bestIteration = 0;
             Day_In_Shift shift = new Day_In_Shift();
             DateTime date = DateTime.Today.AddMonths(0);
             var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
@@ -71,7 +68,7 @@ namespace Kal_Be_KKL.Controllers
                 List<DateTime> allDaysCopy = new List<DateTime>(allDays);
                 while (allDaysCopy.Count>0)
                 {
-                    int index = rnd.Next(allDays.Count);
+                    int index = rnd.Next(allDaysCopy.Count);
                     shift.Shift_Date = allDaysCopy[index];
                     foreach (Block block in blocks)
                     {
@@ -82,14 +79,10 @@ namespace Kal_Be_KKL.Controllers
                     }
                     allDaysCopy.RemoveAt(index);
                 }
-                //score = shift.GetScore();
-                //if (score > maxScore)
-                //{
-                //    maxScore = score;
-                //    bestIteration = i;
-                //}
+               
             }
-            //shift.DeleteAllAssignsExceptBest();
+            int bestIteration = shift.GetBestIteration(date.Month,areaId, ITERATIONS,0,0);
+            //shift.DeleteAllAssignsExceptBest(bestIteration);
         }
 
         private void AssignToShift(List<RequirementForSpecificShift> reqs, Day_In_Shift shift, int areaId, Block block, int iteration_Number)
