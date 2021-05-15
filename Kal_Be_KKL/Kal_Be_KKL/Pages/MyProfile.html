@@ -88,7 +88,7 @@
             let employee = JSON.parse(localStorage["Employee"]);
             $("#FirstNameTB").val(employee.First_Name);
             $("#LastNameTB").val(employee.Last_Name);
-            $("#BirthDateTB").val(employee.Birth_Date);
+            $("#BirthDateTB").val(employee.Birth_Date.split("T")[0]);
             $("#PhoneTB").val(employee.Phone_Number);
             $("#MailTB").val(employee.Mail);
             $("#PasswordTB").val(employee.Password);
