@@ -21,6 +21,11 @@
             direction: rtl;
         }
 
+        #weights {
+            direction: ltr;
+            width: auto;
+        }
+
         .blocks {
             width: 30%;
             float: right;
@@ -32,16 +37,17 @@
 
         #assignBTN {
             margin-top: 10px;
-            margin-right:auto ;
+            margin-right: auto;
             margin-bottom: 13px;
-/*            padding: 10px 26px;
-*/            font-size: 25px;
+            /*            padding: 10px 26px;
+        */ font-size: 25px;
         }
 
         @media only screen and (max-width: 768px) {
-             #loading  {
+            #loading {
                 width: 40% !important
             }
+
             .blocks {
                 width: 80%;
                 float: right;
@@ -52,17 +58,18 @@
             }
         }
 
-        h4{
-            margin-right:10px;
+        h4 {
+            margin-right: 10px;
         }
-
     </style>
     <script>
         var areaId = localStorage['Area_Id'];
         var blocks;
         var allAssigns;
-        
+
         $(document).ready(function () {
+            $('#fairness').text(50);
+            $('#satisfaction').text(50);
             var wWidth = $(window).width();
             if (wWidth > 768) {
                 $("ul.bts-nav li").hover(function () {
@@ -94,7 +101,9 @@
 
         function assignToShifts() {
             $('#loading').removeAttr('hidden')
-            let postApi = "../api/Day_In_Shift/SmartPost/" + areaId;
+            let fairness = parseFloat($('#fairness').text());
+            let satisfaction = parseFloat($('#satisfaction').text());
+            let postApi = "../api/Day_In_Shift/SmartPost/" + areaId + "/" + fairness + "/" + satisfaction;
             ajaxCall("POST", postApi, "", postSmartPostSuccess, postSmartPostError);
         }
 
@@ -128,6 +137,7 @@
                     $('.fc-daygrid-day').css("backgroundColor", "");
                     el.dayEl.style.backgroundColor = "rgba(221, 207, 46, 0.6)"
                     $('#ph').html("");
+                    console.log(el.dateStr)
                     if (allAssigns == undefined || allAssigns[el.dateStr].length == 0)
                         $('#ph').append("<h1>לא בוצע שיבוץ<h1>");
                     else {
@@ -194,12 +204,12 @@
                                     <li><a href="My_Shifts.html">הסידור שלי</a></li>
                                     <li><a href="AssignToShifts.html">שיבוץ בקשות</a></li>
                                     <!--<li class="dropdown">
-        <a href="#">Another Dropdown <span class="caret dropdown-caret"></span></a>
-        <ul class="dropdown-menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Action</a></li>
-        </ul>
-    </li>-->
+                                        <a href="#">Another Dropdown <span class="caret dropdown-caret"></span></a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#">Action</a></li>
+                                            <li><a href="#">Action</a></li>
+                                        </ul>
+                                    </li>-->
                                     <!--<li><a href="#">Action</a></li>-->
                                 </ul>
                             </li>
@@ -229,7 +239,14 @@
         </div>
         <!--NavBar-->
         <h2>שיבוץ בקשות</h2>
-        <button id="assignBTN" class="btn btn-primary" onclick="assignToShifts()" disabled>בצע שיבוץ</button>
+        <div>
+            <div style="display:flex">
+                <label>הוגנות<br /><label id="fairness" style="float:left"></label></label>
+                <input type="range" id="weights" min="0" max="100" oninput="$('#fairness').text(100-this.value);$('#satisfaction').text(this.value);" />
+                <label>שביעות רצון <br /><label id="satisfaction"></label></label>
+            </div>
+            <button id="assignBTN" class="btn btn-primary" onclick="assignToShifts()" disabled>בצע שיבוץ</button>
+        </div>
         <div hidden id="loading">
             <img height="100" width="100" src="../images/Spinner-0.8s-200px.gif" />
             <h4>מספר שניות...</h4>

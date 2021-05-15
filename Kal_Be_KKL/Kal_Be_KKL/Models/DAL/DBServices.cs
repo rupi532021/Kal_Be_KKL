@@ -1519,6 +1519,49 @@ namespace Kal_Be_KKL.Models.DAL
 
         }
 
+        public int DeleteAllAssignsExceptBest(int areaId, string startDate, string endDate,int iterationNumber)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            String cStr = @"DELETE FROM kkl_Day_In_Shift
+                            WHERE Iteration_Number <> "+iterationNumber+" and Shift_Date between '" + startDate + "' and '" + endDate + "' and Block_Id in (select Block_Id from kkl_Block where Area_Id =" + areaId + ")";
+
+            cmd = CreateCommand(cStr, con);             // create the command
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+
+        }
+
         public Worker_In_Area getAreaAndJob(string id)
         {
             SqlConnection con = null;

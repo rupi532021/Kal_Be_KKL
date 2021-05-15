@@ -43,9 +43,9 @@ namespace Kal_Be_KKL.Controllers
         {
             dayinshift.InsertDayInShift();
         }
-        [Route("api/Day_In_Shift/SmartPost/{areaId}")]
+        [Route("api/Day_In_Shift/SmartPost/{areaId}/{fairness}/{satisfaction}")]
         [HttpPost]
-        public void SmartPost(int areaId)
+        public void SmartPost(int areaId,double fairness, double satisfaction)
         {
             const int ITERATIONS = 2;
             Day_In_Shift shift = new Day_In_Shift();
@@ -81,8 +81,8 @@ namespace Kal_Be_KKL.Controllers
                 }
                
             }
-            int bestIteration = shift.GetBestIteration(date.Month,areaId, ITERATIONS,0,0);
-            //shift.DeleteAllAssignsExceptBest(bestIteration);
+            int bestIteration = shift.GetBestIteration(date.Month,areaId, ITERATIONS,satisfaction/100,fairness/100);
+            shift.DeleteAllAssignsExceptBest(areaId, firstDayOfMonth, lastDayOfMonth, bestIteration);
         }
 
         private void AssignToShift(List<RequirementForSpecificShift> reqs, Day_In_Shift shift, int areaId, Block block, int iteration_Number)

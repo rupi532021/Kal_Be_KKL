@@ -80,6 +80,12 @@ namespace Kal_Be_KKL.Models
             DBServices dbs = new DBServices();
             dbs.DeleteExistAssign(areaId, startDate.ToString("yyyy-MM-dd"), endDate.ToString("yyyy-MM-dd"));
         }
+        public void DeleteAllAssignsExceptBest(int areaId, DateTime startDate, DateTime endDate,int bestIteration)
+        {
+            DBServices dbs = new DBServices();
+            dbs.DeleteAllAssignsExceptBest(areaId, startDate.ToString("yyyy-MM-dd"), endDate.ToString("yyyy-MM-dd"), bestIteration);
+        }
+        
         public int GetBestIteration(int month, int areaId,int iterationsNum,double satisfactionPrecent, double fairnessPrecent)
         {
             DBServices dbs = new DBServices();
@@ -92,9 +98,27 @@ namespace Kal_Be_KKL.Models
                 satisfactionList.Add(arr[0]);
                 fairnessList.Add(arr[1]);
             }
-            List<double> sadas = satisfactionList;
-            List<double> asdas = fairnessList;
-            return 2;
+            double maxSatis = satisfactionList.Max();
+            double minSatis = satisfactionList.Min();
+            double maxFair = fairnessList.Max();
+            double minFair = fairnessList.Min();
+            double maxScore = 0;
+            int bestIteration = 1;
+            List<double> temp = new List<double>();
+
+            for (int i = 0; i < iterationsNum; i++)
+            {
+                double satsifNormalize = (satisfactionList[i] - minSatis) / (maxSatis - minSatis);
+                double fairNormalize = (fairnessList[i] - minFair) / (maxFair - minFair);
+                double fs = satisfactionPrecent * satsifNormalize + (fairnessPrecent * (1-fairNormalize));
+                temp.Add(fs);
+                if (fs>maxScore)
+                {
+                    maxScore = fs;
+                    bestIteration = i + 1;
+                }
+            }
+            return bestIteration;
         }
     }
 }
