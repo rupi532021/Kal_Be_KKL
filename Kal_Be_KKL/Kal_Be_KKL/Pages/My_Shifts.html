@@ -12,7 +12,29 @@
     <link href="../Scripts/main.css" rel="stylesheet" />
     <link href="../Scripts/StyleSheetNavBar.css" rel="stylesheet" />
     <script src="../Scripts/main.js"></script>
+    <link href="../MyPlugins/fontawesome-free-5.15.3-web/css/all.css" rel="stylesheet" />
+    <link href="../MyPlugins/fontawesome-free-5.15.3-web/css/fontawesome.min.css" rel="stylesheet" />
+    <script src="../MyPlugins/moments/moment.js"></script>
+
     <style>
+
+
+        .fc-daygrid-block-event .fc-event-time, .fc-daygrid-block-event .fc-event-title {
+            float: right
+        }
+
+        .fa-recycle {
+            color: white
+        }
+
+        .fc-event-title fc-sticky {
+            text-align: right;
+            float: right
+        }
+
+        .fc-event-title-container {
+        }
+
         h3 {
             text-align: right
         }
@@ -50,6 +72,48 @@
         h4 {
             margin-right: 10px;
         }
+    </style>
+    <style>
+
+
+        /* The Modal (background) */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            padding-top: 100px; /* Location of the box */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+
+        /* Modal Content */
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        /* The Close Button */
+        .close {
+            color: #aaaaaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+            .close:hover,
+            .close:focus {
+                color: #000;
+                text-decoration: none;
+                cursor: pointer;
+            }
     </style>
     <script>
         var areaId = localStorage['Area_Id'];
@@ -120,8 +184,10 @@
                 for (var i = 0; i < allAssigns[param].length; i++) {
                     JSON.parse(localStorage['Employee'])
                     if (curentUser.First_Name + ' ' + curentUser.Last_Name == allAssigns[param][i].First_Name + ' ' + allAssigns[param][i].Last_Name)
-                        allevent.push({ title: allAssigns[param][i].First_Name, start: param,end:param })
-                }                
+                        allevent.push({ title: allAssigns[param][i].Requirement_Name, start: param, end: param })
+                }
+                //<i class="fas fa- recycle" style="font - size: 20px;z - index: 1000000000;"></i>
+
             }
 
             var calendarEl = document.getElementById('calendar');
@@ -158,14 +224,31 @@
                 },
                 height: 700
             });
-            calendar.next();
+            //calendar.next();
             calendar.setOption('locale', 'he');
             calendar.render();
-            console.log(data)
+            console.log(data);
+
+            $(".fc-sticky").each(function (indx, elem) {
+                $(elem).append("<i onclick='AskForChange(this)' class='fas fa-recycle' style='margin-right:10px;cursor:pointer'></i>");
+            });
+
         }
 
         function getAssignsError(err) {
             console.log(err)
+        }
+        function AskForChange(elem) {
+            var mydate = $(elem).closest("td").data("date");
+            var myJob = $(elem).parent().text();//$(elem).closest(".fc-sticky").html();
+            var fixmydate = moment(mydate).format("DD/MM/YYYY")
+            if (confirm("האם אתה בטוח שברצונך למסור את המשמרת בתאריך " + fixmydate + " בתפקיד ה" + myJob)) {
+                $("#myModal").modal();
+            }
+            else
+            {
+                pass
+            }
         }
     </script>
 </head>
@@ -234,6 +317,42 @@
         <div id="ph"></div>
     </div>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header" style="padding:35px 50px;">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4><span class="glyphicon glyphicon-lock"></span> Login</h4>
+                </div>
+                <div class="modal-body" style="padding:40px 50px;">
+                    <form role="form">
+                        <div class="form-group">
+                            <label for="usrname"><span class="glyphicon glyphicon-user"></span> Username</label>
+                            <input type="text" class="form-control" id="usrname" placeholder="Enter email">
+                        </div>
+                        <div class="form-group">
+                            <label for="psw"><span class="glyphicon glyphicon-eye-open"></span> Password</label>
+                            <input type="text" class="form-control" id="psw" placeholder="Enter password">
+                        </div>
+                        <div class="checkbox">
+                            <label><input type="checkbox" value="" checked>Remember me</label>
+                        </div>
+                        <button type="submit" class="btn btn-success btn-block"><span class="glyphicon glyphicon-off"></span> Login</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
+                    <p>Not a member? <a href="#">Sign Up</a></p>
+                    <p>Forgot <a href="#">Password?</a></p>
+                </div>
+            </div>
+
+        </div>
+    </div>
 
 </body>
 </html>
