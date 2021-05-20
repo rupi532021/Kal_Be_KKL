@@ -31,5 +31,11 @@ namespace Kal_Be_KKL.Models
             List<ShiftRequirement> requirements_List = dbs.Read_Requirements();
             return requirements_List;
         }
+
+        public int GetJobId(string jobname) 
+        {
+            DBServices dbs = new DBServices();
+            return dbs.GetJobId(jobname);
+        }
     }
 }

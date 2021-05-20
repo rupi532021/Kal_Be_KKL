@@ -74,13 +74,14 @@
         }
     </style>
     <style>
-
-
+        .raviv-head{
+            text-align:center;
+        }
         /* The Modal (background) */
         .modal {
             display: none; /* Hidden by default */
             position: fixed; /* Stay in place */
-            z-index: 1; /* Sit on top */
+            z-index: 1041; /* Sit on top */
             padding-top: 100px; /* Location of the box */
             left: 0;
             top: 0;
@@ -90,7 +91,10 @@
             background-color: rgb(0,0,0); /* Fallback color */
             background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
         }
-
+        .btn-mdl
+        {
+            margin-right:11%;
+        }
         /* Modal Content */
         .modal-content {
             background-color: #fefefe;
@@ -116,6 +120,8 @@
             }
     </style>
     <script>
+        full_workers_arr = [];
+        workers_arr = [];
         var areaId = localStorage['Area_Id'];
         var blocks;
         var allAssigns;
@@ -240,15 +246,39 @@
         }
         function AskForChange(elem) {
             var mydate = $(elem).closest("td").data("date");
-            var myJob = $(elem).parent().text();//$(elem).closest(".fc-sticky").html();
+            var myJob = $(elem).parent().text();
             var fixmydate = moment(mydate).format("DD/MM/YYYY")
             if (confirm("האם אתה בטוח שברצונך למסור את המשמרת בתאריך " + fixmydate + " בתפקיד ה" + myJob)) {
+                let api = "../api/Employees/GetAllPossibleEmployees";
+                data = {
+                    exdate: mydate,
+                    myjob: myJob,
+                    area_id: localStorage["Area_Id"]
+                }
+                ajaxCall("GET", api, data, GetAllEmployeesSuccess, GetAllEmployeesError);
                 $("#myModal").modal();
             }
-            else
-            {
-                pass
-            }
+        }
+
+        function GetAllEmployeesSuccess(data) {
+            full_workers_arr = data;
+            data.forEach(c => {
+                worker = c.First_Name + " " + c.Last_Name + " - " + c.Id;
+                workers_arr.push(worker)
+            })
+            $("#WorkerNum").autocomplete({ source: workers_arr });
+            console.log(workers_arr);
+        }
+        function GetAllEmployeesError(err) {
+            alert("in err")
+            console.log(err)
+        }
+
+        function close_window()
+        {
+            $("#myModal").modal("hide");
+            //alert(" בוטל בהצלחה")
+            //location.reload();
         }
     </script>
 </head>
@@ -326,28 +356,15 @@
             <div class="modal-content">
                 <div class="modal-header" style="padding:35px 50px;">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4><span class="glyphicon glyphicon-lock"></span> Login</h4>
+                    <h2 class="raviv-head">החלפת משמרת</h2>
                 </div>
                 <div class="modal-body" style="padding:40px 50px;">
-                    <form role="form">
                         <div class="form-group">
-                            <label for="usrname"><span class="glyphicon glyphicon-user"></span> Username</label>
-                            <input type="text" class="form-control" id="usrname" placeholder="Enter email">
+                            <label for="WorkerNum"><span class="glyphicon glyphicon-user"></span> בחר עובד:</label>
+                            <input class="form-control" id="WorkerNum" onchange="Show_Worker_Details()">
                         </div>
-                        <div class="form-group">
-                            <label for="psw"><span class="glyphicon glyphicon-eye-open"></span> Password</label>
-                            <input type="text" class="form-control" id="psw" placeholder="Enter password">
-                        </div>
-                        <div class="checkbox">
-                            <label><input type="checkbox" value="" checked>Remember me</label>
-                        </div>
-                        <button type="submit" class="btn btn-success btn-block"><span class="glyphicon glyphicon-off"></span> Login</button>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
-                    <p>Not a member? <a href="#">Sign Up</a></p>
-                    <p>Forgot <a href="#">Password?</a></p>
+                        <button type="button" class="btn btn-success btn-mdl">אישור</button>
+                        <button onclick="close_window()" type="button" class="btn btn-danger btn-mdl">בטל</button>
                 </div>
             </div>
 

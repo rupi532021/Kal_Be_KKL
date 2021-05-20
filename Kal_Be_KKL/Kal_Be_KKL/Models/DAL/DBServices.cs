@@ -234,7 +234,89 @@ namespace Kal_Be_KKL.Models.DAL
             }
 
         }
+        public List<Employee> GetAllPossibleEmployees(DateTime exdate, int myJob, int area_id)
+        {
+            SqlConnection con = null;
+            
+            List<Employee> empList = new List<Employee>();
+            try
+            {
+                con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
 
+                String selectSTR = "select * from kkl_Employee";
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+                    Employee e = new Employee();
+                    e.Id = (string)(dr["Id"]);
+                    e.First_Name = (string)dr["First_Name"];
+                    e.Last_Name = (string)dr["Last_Name"];
+                    e.Gender = (string)dr["Gender"];
+                    e.Birth_Date = Convert.ToDateTime(dr["Birth_Date"]);
+                    e.Phone_Number = (string)dr["Phone_Number"];
+                    e.Mail = (string)dr["Mail"];
+                    e.Password = (string)dr["Password"];
+                    e.Deleted = Convert.ToBoolean(dr["Deleted"]);
+                    empList.Add(e);
+                }
+                return empList;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+
+        }
+
+        public int GetJobId(string jobname)
+        {
+            SqlConnection con = null;
+            object dbJobId = new object();
+            int JobId=-1;
+            try
+            {
+                con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
+
+                String selectSTR = "SELECT Requirement_Id FROM kkl_Shift_Requirements WHERE Requirement_Name = @Requirement_Name";
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+                cmd.Parameters.AddWithValue("@Requirement_Name", jobname);
+
+                // get a reader
+                dbJobId = cmd.ExecuteScalar(); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                if (dbJobId == null || !int.TryParse(dbJobId.ToString(), out JobId)) {
+                    return 0;
+                }
+
+                return JobId;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+        }
 
         public int Insert_Employee(Employee emp)
         {

@@ -41,6 +41,16 @@ namespace Kal_Be_KKL.Controllers
             List<Employee> emps = e.GetAllEmployee();
                 return Request.CreateResponse(HttpStatusCode.OK, emps);
             
+        }  
+        [Route("api/Employees/GetAllPossibleEmployees")]
+        [HttpGet]
+        public HttpResponseMessage GetAllPossibleEmployees(DateTime exdate, string myJob, int area_id)
+        {
+            Employee e = new Employee();
+            ShiftRequirement s = new ShiftRequirement();
+            int myJobId = s.GetJobId(myJob);
+            List<Employee> emps = e.GetAllPossibleEmployees( exdate, myJobId,  area_id);
+                return Request.CreateResponse(HttpStatusCode.OK, emps);
         }
      
 
