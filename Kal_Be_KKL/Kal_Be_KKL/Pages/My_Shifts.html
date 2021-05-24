@@ -15,6 +15,7 @@
     <link href="../MyPlugins/fontawesome-free-5.15.3-web/css/all.css" rel="stylesheet" />
     <link href="../MyPlugins/fontawesome-free-5.15.3-web/css/fontawesome.min.css" rel="stylesheet" />
     <script src="../MyPlugins/moments/moment.js"></script>
+    <script src="../MyPlugins/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
 
     <style>
 
@@ -74,8 +75,8 @@
         }
     </style>
     <style>
-        .raviv-head{
-            text-align:center;
+        .raviv-head {
+            text-align: center;
         }
         /* The Modal (background) */
         .modal {
@@ -91,9 +92,9 @@
             background-color: rgb(0,0,0); /* Fallback color */
             background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
         }
-        .btn-mdl
-        {
-            margin-right:11%;
+
+        .btn-mdl {
+            margin-right: 11%;
         }
         /* Modal Content */
         .modal-content {
@@ -118,6 +119,49 @@
                 text-decoration: none;
                 cursor: pointer;
             }
+    </style>
+    <style>
+       .ui-autocomplete-input {
+            border: none;
+            width: 300px;
+            margin-bottom: 5px;
+            padding-top: 2px;
+            z-index: 1511;
+            position: relative;
+        }
+        .ui-autocomplete {
+            position: fixed;
+            top: 100%;
+            left: 0;
+            z-index: 1051 !important;
+            float: left;
+            display: none;
+            min-width: 160px;
+            width: 160px;
+            padding: 2px 0;
+            margin: 2px 0 0 0;
+            list-style: none;
+            background-color: #ffffff;
+            border-color: #ccc;
+            border-color: rgba(0, 0, 0, 0.2);
+            border-style: solid;
+            border-width: 1px;
+            -webkit-border-radius: 2px;
+            -moz-border-radius: 2px;
+            border-radius: 2px;
+            -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            -webkit-background-clip: padding-box;
+            -moz-background-clip: padding;
+            background-clip: padding-box;
+            *border-right-width: 2px;
+            *border-bottom-width: 2px;
+        }
+        .ui-menu-item {
+            padding-right:5px;
+        }
+
     </style>
     <script>
         full_workers_arr = [];
@@ -255,31 +299,54 @@
                     myjob: myJob,
                     area_id: localStorage["Area_Id"]
                 }
-                ajaxCall("GET", api, data, GetAllEmployeesSuccess, GetAllEmployeesError);
-                $("#myModal").modal();
+                ajaxCall("GET", api, data, GetAllPossibleEmployeesSuccess, GetAllPossibleEmployeesError);
+                
             }
         }
 
-        function GetAllEmployeesSuccess(data) {
+        function GetAllPossibleEmployeesSuccess(data) {
             full_workers_arr = data;
             data.forEach(c => {
                 worker = c.First_Name + " " + c.Last_Name + " - " + c.Id;
                 workers_arr.push(worker)
             })
+            $("#myModal").modal();
             $("#WorkerNum").autocomplete({ source: workers_arr });
+            
             console.log(workers_arr);
+           
         }
-        function GetAllEmployeesError(err) {
+        function GetAllPossibleEmployeesError(err) {
             alert("in err")
             console.log(err)
         }
 
-        function close_window()
-        {
+        function close_window() {
             $("#myModal").modal("hide");
             //alert(" בוטל בהצלחה")
             //location.reload();
         }
+        function Choose_Worker_To_Change(a) {
+
+            name = $("#WorkerNum").val();
+            console.log(name)
+            res = "";
+            if (workers_arr.includes(name)) {
+                var res = name.split(" - ");
+                console.log(res)
+                id_off_worker = res[1];
+            }
+            else {
+                alert("שם לא תקין")
+                $("#WorkerNum").val("");
+            }
+            return false;
+        }
+        function SendChangeRequest()
+        {
+            alert("in change")
+        }
+
     </script>
 </head>
 <body>
@@ -348,28 +415,30 @@
     </div>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-    <!-- Modal -->
-    <div class="modal fade" id="myModal" role="dialog">
-        <div class="modal-dialog">
+    
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog">
 
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header" style="padding:35px 50px;">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h2 class="raviv-head">החלפת משמרת</h2>
-                </div>
-                <div class="modal-body" style="padding:40px 50px;">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header" style="padding:35px 50px;">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h2 class="raviv-head">החלפת משמרת</h2>
+                    </div>
+                    <div class="modal-body" style="padding:40px 50px;">
                         <div class="form-group">
                             <label for="WorkerNum"><span class="glyphicon glyphicon-user"></span> בחר עובד:</label>
-                            <input class="form-control" id="WorkerNum" onchange="Show_Worker_Details()">
+                            <input onchange="Choose_Worker_To_Change()" class="form-control" id="WorkerNum">
                         </div>
-                        <button type="button" class="btn btn-success btn-mdl">אישור</button>
+                        <button onclick="SendChangeRequest()" type="button" class="btn btn-success btn-mdl">אישור</button>
                         <button onclick="close_window()" type="button" class="btn btn-danger btn-mdl">בטל</button>
+                    </div>
                 </div>
-            </div>
 
+            </div>
         </div>
-    </div>
+   
 
 </body>
 </html>

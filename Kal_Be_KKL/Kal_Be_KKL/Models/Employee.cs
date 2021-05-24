@@ -63,7 +63,7 @@ namespace Kal_Be_KKL.Models
         {
             DBServices dbs = new DBServices();
             List<Employee> emps = dbs.GetAllPossibleEmployees(exdate,myJob,area_id);
-            return null;
+            return emps;
         }
         public void Insert_Employee() 
         {

@@ -49,7 +49,7 @@ namespace Kal_Be_KKL.Controllers
             Employee e = new Employee();
             ShiftRequirement s = new ShiftRequirement();
             int myJobId = s.GetJobId(myJob);
-            List<Employee> emps = e.GetAllPossibleEmployees( exdate, myJobId,  area_id);
+            List<Employee> emps = e.GetAllPossibleEmployees(exdate,myJobId,area_id);
                 return Request.CreateResponse(HttpStatusCode.OK, emps);
         }
      
