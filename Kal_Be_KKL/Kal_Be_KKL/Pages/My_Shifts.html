@@ -263,7 +263,7 @@
                             str += "<div class='blocks'><h1>" + b.Block_Name + "</h1>";
                             allAssigns[el.dateStr].forEach(a => {
                                 if (b.Block_Name == a.Block_Name)
-                                    str += "<p>" + a.Requirement_Name + ": " + a.First_Name + " " + a.Last_Name;
+                                    str += "<p><b>" + a.Requirement_Name + "</b>: " + a.First_Name + " " + a.Last_Name + "</p>";
                             });
                             str += "</div>"
 
