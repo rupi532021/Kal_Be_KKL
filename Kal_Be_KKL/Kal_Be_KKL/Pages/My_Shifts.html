@@ -306,6 +306,7 @@
 
         function GetAllPossibleEmployeesSuccess(data) {
             full_workers_arr = data;
+            workers_arr = [];
             data.forEach(c => {
                 worker = c.First_Name + " " + c.Last_Name + " - " + c.Id;
                 workers_arr.push(worker)
