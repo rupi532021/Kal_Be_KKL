@@ -10,12 +10,12 @@
     <script src="../Scripts/ajaxCallsWithKey.js"></script>
     <script src="../Scripts/jquery-3.4.1.js"></script>
     <link href="../Scripts/main.css" rel="stylesheet" />
-    <link href="../Scripts/StyleSheetNavBar.css" rel="stylesheet" />
     <script src="../Scripts/main.js"></script>
     <link href="../MyPlugins/fontawesome-free-5.15.3-web/css/all.css" rel="stylesheet" />
     <link href="../MyPlugins/fontawesome-free-5.15.3-web/css/fontawesome.min.css" rel="stylesheet" />
     <script src="../MyPlugins/moments/moment.js"></script>
     <script src="../MyPlugins/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+    <link href="../Scripts/StyleSheetNavBar.css" rel="stylesheet" />
 
     <style>
 
@@ -121,7 +121,7 @@
             }
     </style>
     <style>
-       .ui-autocomplete-input {
+        .ui-autocomplete-input {
             border: none;
             width: 300px;
             margin-bottom: 5px;
@@ -129,6 +129,7 @@
             z-index: 1511;
             position: relative;
         }
+
         .ui-autocomplete {
             position: fixed;
             top: 100%;
@@ -158,10 +159,14 @@
             *border-right-width: 2px;
             *border-bottom-width: 2px;
         }
+
         .ui-menu-item {
-            padding-right:5px;
+            padding-right: 5px;
         }
 
+        .ui-helper-hidden-accessible {
+            display: none;
+        }
     </style>
     <script>
         full_workers_arr = [];
@@ -300,7 +305,7 @@
                     area_id: localStorage["Area_Id"]
                 }
                 ajaxCall("GET", api, data, GetAllPossibleEmployeesSuccess, GetAllPossibleEmployeesError);
-                
+
             }
         }
 
@@ -313,9 +318,9 @@
             })
             $("#myModal").modal();
             $("#WorkerNum").autocomplete({ source: workers_arr });
-            
+
             console.log(workers_arr);
-           
+
         }
         function GetAllPossibleEmployeesError(err) {
             alert("in err")
@@ -343,8 +348,7 @@
             }
             return false;
         }
-        function SendChangeRequest()
-        {
+        function SendChangeRequest() {
             alert("in change")
         }
 
