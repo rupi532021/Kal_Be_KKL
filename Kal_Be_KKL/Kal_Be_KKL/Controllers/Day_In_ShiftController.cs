@@ -19,11 +19,11 @@ namespace Kal_Be_KKL.Controllers
         }
 
         // GET api/<controller>/5
-        [Route("api/Day_In_Shift/GetDutiesInShift/{areaId}")]
+        [Route("api/Day_In_Shift/GetDutiesInShift/{areaId}/{isNextMonth}")]
         [HttpGet]
-        public Dictionary<string, List<DutyInShift>> GetDutiesInShift(int areaId)
+        public Dictionary<string, List<DutyInShift>> GetDutiesInShift(int areaId,bool isNextMonth)
         {
-            DateTime date = DateTime.Today.AddMonths(-1);
+            DateTime date = DateTime.Today.AddMonths(isNextMonth ? 1 : 0);
             var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
             var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
             Area area = new Area();
@@ -49,7 +49,7 @@ namespace Kal_Be_KKL.Controllers
         {
             const int ITERATIONS = 2;
             Day_In_Shift shift = new Day_In_Shift();
-            DateTime date = DateTime.Today.AddMonths(0);
+            DateTime date = DateTime.Today.AddMonths(1);
             var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
             var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
             shift.DeleteExistAssign(areaId, firstDayOfMonth, lastDayOfMonth);

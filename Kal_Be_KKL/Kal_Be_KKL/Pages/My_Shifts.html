@@ -220,7 +220,7 @@
         }
 
         function getAssigns() {
-            let getApi = "../api/Day_In_Shift/GetDutiesInShift/" + areaId;
+            let getApi = "../api/Day_In_Shift/GetDutiesInShift/" + areaId +"/false";
             ajaxCall("GET", getApi, "", getAssignsSuccess, getAssignsError);
         }
 
@@ -278,7 +278,6 @@
                 },
                 height: 700
             });
-            calendar.prev();
             calendar.setOption('locale', 'he');
             calendar.render();
             console.log(data);

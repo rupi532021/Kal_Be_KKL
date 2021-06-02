@@ -3,13 +3,15 @@
 <head>
     <meta charset="utf-8" />
     <title>בקשות לחילוף</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="../MyPlugins/moments/moment.js"></script>
-    <script src="../scripts/ajaxcallswithkey.js"></script>
-    <script src="../scripts/jquery-3.4.1.js"></script>
-
+    <script src="../Scripts/ajaxCallsWithKey.js"></script>
+    <link href="../Scripts/StyleSheetLogin.css" rel="stylesheet" />
     <script>
         $(document).ready(function () {
             if (localStorage['Area_Id'] != null) {
@@ -23,15 +25,9 @@
         });
 
         function GetAreaRequestsSuccess(sReqList) {
-            str= ""
-            sReqList.forEach(sReq => {
-                str += "<p id='" + sReq.Request_Number +"'>"
-                str += sReq.Name_From + " (תז-" + sReq.Id_From + ") רוצה למסור את המשמרת שלו ל" + sReq.Name_To + " (תז-" + sReq.Id_To + ") בתור " + sReq.Requirement_Name + " בתאריך " + moment(sReq.Request_date).format("YYYY-MM-DD")
-                str += "</p>"
-            }
-            )
-            $('#subRequests').append(str);
+
         }
+
 
         function GetRegionRequestsSuccess(sReqList) {
             //render requests
@@ -44,13 +40,25 @@
         function GetRegionRequestsError(err) {
             console.log(err.responseJSON.Message)
         }
+        function GetAreaRequestsSuccess(sReqList) {
+            str = "";
+            sReqList.forEach(sReq => {
+                str += "<div>"
+                str += "<p id='" + sReq.Request_Number + "'>"
+                str += sReq.Name_From + " (תז-" + sReq.Id_From + ") רוצה למסור את המשמרת שלו ל" + sReq.Name_To + " (תז-" + sReq.Id_To + ") בתור " + sReq.Requirement_Name + " בתאריך " + moment(sReq.Request_date).format("YYYY-MM-DD")
+                str += "</p>"
+                str += "<button > אשר</button > <button>דחה</button></div>"
+            }
+            )
+            $('#subRequests').append(str)
+        }
+
+
     </script>
 </head>
 <body>
     <div class="container">
         <div id="subRequests"></div>
-
     </div>
-
 </body>
 </html>

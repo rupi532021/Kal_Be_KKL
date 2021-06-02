@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <!--<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">-->
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-
+    <script src="../MyPlugins/moments/moment.js"></script>
     <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <link href="../scripts/stylesheetnavbar.css" rel="stylesheet" />
@@ -39,7 +39,7 @@
 
 
 
-/*        #pForm {
+        /*        #pForm {
             left: 50%;
             top: 50%;
             position: absolute;
@@ -57,6 +57,23 @@
         .btn {
             margin-right: 40%;
         }
+
+        .choose_cousre {
+            border: 3px double black;
+            background-color: lightgreen;
+            text-align: center;
+            width: 200px;
+            float: right;
+            box-shadow: 0 0 0 1px black;
+            margin-bottom: 10px;
+            margin-left: 25px;
+        }
+
+        #courses {
+            display: block;
+            flex-wrap: wrap;
+            float:left;
+        }
     </style>
 
 
@@ -64,7 +81,7 @@
         /* Toggle between adding and removing the "responsive" class to topnav when the user clicks on the icon */
 
 
-
+        courses_arr = [];
         $(document).ready(function () {
             $("#pForm").submit(Edit_Employee); // bind the submit event to a function called f1
             var wWidth = $(window).width();
@@ -78,7 +95,7 @@
                     $(this).next("ul").slideToggle(400);
                 });
             }
-
+            loadcourses()
             FillDetails()
 
             // activate a custom validation function when the element looses focus.
@@ -95,9 +112,8 @@
             $("#IDTB").val(employee.Id);
             $("#IDTB").val(employee.Id);
             $("#Gender").val(employee.Gender);
-
             $("#IDTB").prop('disabled', true);
-
+            Show_Worker_Curses();
         }
 
 
@@ -142,8 +158,43 @@
                 alert("יש לבחור תאריך תקין")
                 $("#BirthDateTB").val("");
             }
+        }
 
-        }</script>
+        function Show_Worker_Curses() {
+            let api = "../api/Courses_Of_Dutys/GetAllCoursesOfDuty/" + JSON.parse(localStorage["Employee"]).Id;
+            ajaxCall("GET", api, "", Show_Worker_Curses_Succsess, Show_Worker_Curses_Error);
+        }
+
+        function Show_Worker_Curses_Succsess(data) {
+            data.forEach(c => {
+                name_of_course = "";
+                str = "<div class='choose_cousre' id='" + c.Course_Id + "'>";
+                for (var i = 0; i < courses_arr.length; i++) {
+                    if (courses_arr[i].Course_Id == c.Course_Id) {
+                        str += "<p> שם הקורס: " + courses_arr[i].Course_Name + "</p>"
+                        name_of_course = courses_arr[i].Course_Name;
+                    }
+                }
+                str += "<p> תאריך ביצוע הקורס: " + moment(c.Receipt_Course_Date).format("DD/MM/YYYY") + "</p>";
+                $("#courses").append(str)
+            })
+        }
+
+        function Show_Worker_Curses_Error(err) {
+            console.log(err)
+        }
+
+        function loadcourses() {
+            let api = "../api/Course";
+            ajaxCall("GET", api, "", getCoursesSuccess, getError)
+        }
+        function getCoursesSuccess(data) {
+            courses_arr = data;
+        }
+        function getError(err) {
+            console.log(err)
+        }
+    </script>
 
 </head>
 <body>
@@ -204,76 +255,75 @@
             </nav>
         </div>
         <!--NavBar-->
+        <div id="courses"><h2>ההכשרות שלי </h2></div>
+        <form id="pForm" method="put" enctype="multipart/form-data">
+            <h2>הפרופיל שלי </h2>
+            <div class="form-group">
+                <label for="FirstNameTB"><span class="red-star">★ </span>שם פרטי</label>
+                <input type="text" class="form-control" id="FirstNameTB" placeholder=" "
+                       pattern="[א-ת]{1,20}"
+                       oninvalid="this.setCustomValidity('רק עברית ועד 20 אותיות')"
+                       oninput="this.setCustomValidity('')" required>
+            </div>
 
-            <form id="pForm" method="put" enctype="multipart/form-data">
-                <h2>הפרופיל שלי </h2>
-                <div class="form-group">
-                    <label for="FirstNameTB"><span class="red-star">★ </span>שם פרטי</label>
-                    <input type="text" class="form-control" id="FirstNameTB" placeholder=" "
-                           pattern="[א-ת]{1,20}"
-                           oninvalid="this.setCustomValidity('רק עברית ועד 20 אותיות')"
-                           oninput="this.setCustomValidity('')" required>
-                </div>
+            <div class="form-group">
+                <label for="LastNameTB"><span class="red-star">★ </span>שם משפחה</label>
+                <input type="text" class="form-control" id="LastNameTB" placeholder=" "
+                       pattern="[א-ת]{1,20}"
+                       oninvalid="this.setCustomValidity('רק עברית ועד 20 אותיות')"
+                       oninput="this.setCustomValidity('')" required>
+            </div>
 
-                <div class="form-group">
-                    <label for="LastNameTB"><span class="red-star">★ </span>שם משפחה</label>
-                    <input type="text" class="form-control" id="LastNameTB" placeholder=" "
-                           pattern="[א-ת]{1,20}"
-                           oninvalid="this.setCustomValidity('רק עברית ועד 20 אותיות')"
-                           oninput="this.setCustomValidity('')" required>
-                </div>
+            <div class="form-group">
+                <label for="IDTB"><span class="red-star">★ </span>תעודת זהות</label>
+                <input type="text" class="form-control" id="IDTB" placeholder=" "
+                       pattern="[0-9]{9}"
+                       oninvalid="this.setCustomValidity('9 ספרות')"
+                       oninput="this.setCustomValidity('')" required>
+            </div>
 
-                <div class="form-group">
-                    <label for="IDTB"><span class="red-star">★ </span>תעודת זהות</label>
-                    <input type="text" class="form-control" id="IDTB" placeholder=" "
-                           pattern="[0-9]{9}"
-                           oninvalid="this.setCustomValidity('9 ספרות')"
-                           oninput="this.setCustomValidity('')" required>
-                </div>
+            <div class="form-group">
+                <label for="GenderRB"><span class="red-star">★ </span>מגדר</label>
+                <select class="form-control" id="Gender" style="width:310px" data-component="dropdown">
+                    <option value="Male"> זכר </option>
+                    <option value="Female"> נקבה </option>
+                </select>
+            </div>
 
-                <div class="form-group">
-                    <label for="GenderRB"><span class="red-star">★ </span>מגדר</label>
-                    <select class="form-control" id="Gender" style="width:310px" data-component="dropdown">
-                        <option value="Male"> זכר </option>
-                        <option value="Female"> נקבה </option>
-                    </select>
-                </div>
+            <div class="form-group">
+                <label for="BirthDateTB"><span class="red-star">★ </span>תאריך לידה</label>
+                <input type="date" class="form-control" id="BirthDateTB" onchange="checkdate()"
+                       required>
+            </div>
 
-                <div class="form-group">
-                    <label for="BirthDateTB"><span class="red-star">★ </span>תאריך לידה</label>
-                    <input type="date" class="form-control" id="BirthDateTB" onchange="checkdate()"
-                           required>
-                </div>
+            <div class="form-group">
+                <label for="MailTB"><span class="red-star">★ </span>דואר אלקטרוני</label>
+                <input type="email" class="form-control" id="MailTB" placeholder=" "
+                       pattern=^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$
+                       oninvalid="this.setCustomValidity('הכנס מייל תקין')"
+                       oninput="this.setCustomValidity('')" required>
+            </div>
 
-                <div class="form-group">
-                    <label for="MailTB"><span class="red-star">★ </span>דואר אלקטרוני</label>
-                    <input type="email" class="form-control" id="MailTB" placeholder=" "
-                           pattern=^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$
-                           oninvalid="this.setCustomValidity('הכנס מייל תקין')"
-                           oninput="this.setCustomValidity('')" required>
-                </div>
+            <div class="form-group">
+                <label for="PhoneTB"><span class="red-star">★ </span>נייד</label>
+                <input type="tel" class="form-control" id="PhoneTB" placeholder=" "
+                       pattern="[0-9]{10}"
+                       oninvalid="this.setCustomValidity('מספרים בלבד (10 ספרות)')"
+                       oninput="this.setCustomValidity('')" required>
+            </div>
 
-                <div class="form-group">
-                    <label for="PhoneTB"><span class="red-star">★ </span>נייד</label>
-                    <input type="tel" class="form-control" id="PhoneTB" placeholder=" "
-                           pattern="[0-9]{10}"
-                           oninvalid="this.setCustomValidity('מספרים בלבד (10 ספרות)')"
-                           oninput="this.setCustomValidity('')" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="PasswordTB"><span class="red-star">★ </span>סיסמא</label>
-                    <input type="text" class="form-control" style="width:310px" placeholder="8 תווים עם אות אחת גדולה ומספר אחד" id="PasswordTB"
-                           pattern="^(?=.*\d)(?=.*[A-Z]).{8,}$"
-                           oninvalid="this.setCustomValidity('8 תווים אות אחת גדולה ומספר')"
-                           oninput="this.setCustomValidity('')"
-                           required />
-                </div>
-
-                <button type="submit" class="btn btn-primary" value="הוסף" href="Login.html">ערוך</button>
-                <!--<button type="submit" class="btn btn-primary" value="הוסף" href="Login.html">הוסף</button>-->
-            </form>
-        </div>
+            <div class="form-group">
+                <label for="PasswordTB"><span class="red-star">★ </span>סיסמא</label>
+                <input type="text" class="form-control" style="width:310px" placeholder="8 תווים עם אות אחת גדולה ומספר אחד" id="PasswordTB"
+                       pattern="^(?=.*\d)(?=.*[A-Z]).{8,}$"
+                       oninvalid="this.setCustomValidity('8 תווים אות אחת גדולה ומספר')"
+                       oninput="this.setCustomValidity('')"
+                       required />
+            </div>
+            <button type="submit" class="btn btn-primary" value="הוסף" href="Login.html">ערוך</button>
+            <!--<button type="submit" class="btn btn-primary" value="הוסף" href="Login.html">הוסף</button>-->
+        </form>
+    </div>
 
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 

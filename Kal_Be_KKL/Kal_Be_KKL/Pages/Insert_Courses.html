@@ -111,6 +111,7 @@
             console.log("error")
 
         }
+
         function loadcourses() {
             let api = "../api/Course";
             ajaxCall("GET", api, "", getCoursesSuccess, getError)
@@ -265,7 +266,6 @@
                     }
                 }                
                 str += "<p> תאריך ביצוע הקורס: " + moment(c.Receipt_Course_Date).format("DD/MM/YYYY") + "</p>";
-                str += "<input type = 'button' value = 'מחק'  onclick = 'deletecourse(" + c.Course_Id + ")'/></div>";
                 $("#courses").append(str)
 
                 mycourses = {
@@ -280,7 +280,7 @@
            
         }
         function Show_Worker_Curses_Error(err) {
-            alert(err)
+            console.log(err)
         }
     </script>
 </head>
