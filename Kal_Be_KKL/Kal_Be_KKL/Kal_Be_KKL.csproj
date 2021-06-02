@@ -170,6 +170,7 @@
     <Compile Include="Controllers\RequestsController.cs" />
     <Compile Include="Controllers\ShiftRequirementsController.cs" />
     <Compile Include="Controllers\SpecialRequirementsController.cs" />
+    <Compile Include="Controllers\SubstitutionRequestController.cs" />
     <Compile Include="Controllers\Workers_In_RegionController.cs" />
     <Compile Include="Controllers\Workers_In_AreaController.cs" />
     <Compile Include="Global.asax.cs">
@@ -188,6 +189,7 @@
     <Compile Include="Models\RequirementForSpecificShift.cs" />
     <Compile Include="Models\ShiftRequirement.cs" />
     <Compile Include="Models\SpecialRequirement.cs" />
+    <Compile Include="Models\Substitution_Request.cs" />
     <Compile Include="Models\Worker_In_Area.cs" />
     <Compile Include="Models\Worker_In_Region.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -1881,6 +1883,7 @@
     <Content Include="Pages\Requests.html" />
     <Content Include="Pages\SignUp_Page.html" />
     <Content Include="Pages\Special_Requirements.html" />
+    <Content Include="Pages\SubstitutionRequests.html" />
     <Content Include="Scripts\ajaxCallsWithKey.js" />
     <Content Include="Areas\HelpPage\Views\Web.config" />
     <Content Include="Areas\HelpPage\Views\Shared\_Layout.cshtml" />

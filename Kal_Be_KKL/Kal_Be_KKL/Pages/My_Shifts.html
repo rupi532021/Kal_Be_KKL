@@ -174,7 +174,6 @@
         var areaId = localStorage['Area_Id'];
         var blocks;
         var allAssigns;
-
         $(document).ready(function () {
             var wWidth = $(window).width();
             if (wWidth > 768) {
@@ -232,7 +231,7 @@
         function getAssignsSuccess(data) {
             allAssigns = data;
 
-            var curentUser = JSON.parse(localStorage['Employee'])
+            curentUser = JSON.parse(localStorage['Employee'])
             var allevent = [];
 
             for (var param in allAssigns) {
@@ -279,7 +278,7 @@
                 },
                 height: 700
             });
-            //calendar.next();
+            calendar.prev();
             calendar.setOption('locale', 'he');
             calendar.render();
             console.log(data);
@@ -296,8 +295,8 @@
         function AskForChange(elem) {
             var mydate = $(elem).closest("td").data("date");
             var myJob = $(elem).parent().text();
-            var fixmydate = moment(mydate).format("DD/MM/YYYY")
-            if (confirm("האם אתה בטוח שברצונך למסור את המשמרת בתאריך " + fixmydate + " בתפקיד ה" + myJob)) {
+            requestDate = moment(mydate).format("yyyy-MM-DD")
+            if (confirm("האם אתה בטוח שברצונך למסור את המשמרת בתאריך " + requestDate + " בתפקיד ה" + myJob)) {
                 let api = "../api/Employees/GetAllPossibleEmployees";
                 data = {
                     exdate: mydate,
@@ -349,7 +348,27 @@
             return false;
         }
         function SendChangeRequest() {
-            alert("in change")
+            if ($("#WorkerNum").val() == "")
+                alert("יש לבחור עובד שברצונף להחליף איתו את המשמרת")
+            else {
+                let api = "../api/SubstitutionRequest";
+                var sReq = {
+                    Id_From: curentUser.Id,
+                    Id_To: id_off_worker,
+                    Request_date: requestDate,
+                    Status:0
+                }
+                ajaxCall("POST", api, JSON.stringify(sReq), postSubstitutionRequestSuccess, postSubstitutionRequestError)
+                alert(curentUser.Id + " " + id_off_worker + " " + requestDate)
+            }
+        }
+
+        function postSubstitutionRequestSuccess() {
+            alert("בקשה נשלחה בהצלחה")
+        }
+
+        function postSubstitutionRequestError(err) {
+            err.responseJSON.Message
         }
 
     </script>
@@ -420,30 +439,30 @@
     </div>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-    
-        <!-- Modal -->
-        <div class="modal fade" id="myModal" role="dialog">
-            <div class="modal-dialog">
 
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header" style="padding:35px 50px;">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h2 class="raviv-head">החלפת משמרת</h2>
-                    </div>
-                    <div class="modal-body" style="padding:40px 50px;">
-                        <div class="form-group">
-                            <label for="WorkerNum"><span class="glyphicon glyphicon-user"></span> בחר עובד:</label>
-                            <input onchange="Choose_Worker_To_Change()" class="form-control" id="WorkerNum">
-                        </div>
-                        <button onclick="SendChangeRequest()" type="button" class="btn btn-success btn-mdl">אישור</button>
-                        <button onclick="close_window()" type="button" class="btn btn-danger btn-mdl">בטל</button>
-                    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header" style="padding:35px 50px;">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h2 class="raviv-head">החלפת משמרת</h2>
                 </div>
-
+                <div class="modal-body" style="padding:40px 50px;">
+                    <div class="form-group">
+                        <label for="WorkerNum"><span class="glyphicon glyphicon-user"></span> בחר עובד:</label>
+                        <input onchange="Choose_Worker_To_Change()" class="form-control" id="WorkerNum">
+                    </div>
+                    <button onclick="SendChangeRequest()" type="button" class="btn btn-success btn-mdl">אישור</button>
+                    <button onclick="close_window()" type="button" class="btn btn-danger btn-mdl">בטל</button>
+                </div>
             </div>
+
         </div>
-   
+    </div>
+
 
 </body>
 </html>

@@ -191,7 +191,7 @@ namespace Kal_Be_KKL.Models.DAL
         public List<Employee> GetAllEmployee()
         {
             SqlConnection con = null;
-            
+
             List<Employee> empList = new List<Employee>();
             try
             {
@@ -309,7 +309,7 @@ namespace Kal_Be_KKL.Models.DAL
         {
             SqlConnection con = null;
             object dbJobId = new object();
-            int JobId=-1;
+            int JobId = -1;
             try
             {
                 con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
@@ -321,7 +321,8 @@ namespace Kal_Be_KKL.Models.DAL
                 // get a reader
                 dbJobId = cmd.ExecuteScalar(); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
 
-                if (dbJobId == null || !int.TryParse(dbJobId.ToString(), out JobId)) {
+                if (dbJobId == null || !int.TryParse(dbJobId.ToString(), out JobId))
+                {
                     return 0;
                 }
 
@@ -511,7 +512,7 @@ namespace Kal_Be_KKL.Models.DAL
             sb.AppendFormat("SET[Block_Id] ={0}, [Shift_Date]='{1}', Requirement_Id ={2}, Quantity ={3}, Comments ='{4}'",
                  sr.Block_Id, sr.Shift_Date.ToString("yyyy-MM-dd"), sr.Requirement_Id, sr.Quantity, sr.Comments);
             String prefix = "UPDATE kkl_Special_requirements_for_a_day_in_a_shift_of_a_block ";
-            command = prefix + sb.ToString()+ " WHERE Block_Id =  " + sr.Block_Id + "and Shift_Date = '"+ sr.Shift_Date.ToString("yyyy-MM-dd") + "' and Requirement_Id = " + sr.Requirement_Id;
+            command = prefix + sb.ToString() + " WHERE Block_Id =  " + sr.Block_Id + "and Shift_Date = '" + sr.Shift_Date.ToString("yyyy-MM-dd") + "' and Requirement_Id = " + sr.Requirement_Id;
             return command;
 
         }
@@ -669,7 +670,7 @@ namespace Kal_Be_KKL.Models.DAL
             {
                 con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
 
-                String selectSTR = "select * from kkl_Courses_of_Duty where Id = "+ id +"AND Is_Deleted = "+ 0;
+                String selectSTR = "select * from kkl_Courses_of_Duty where Id = " + id + "AND Is_Deleted = " + 0;
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
 
                 // get a reader
@@ -701,7 +702,7 @@ namespace Kal_Be_KKL.Models.DAL
 
             }
 
-        } 
+        }
         public bool Delete_Course_Of_Duty(Courses_Of_Duty cod)
         {
             SqlConnection con = null;
@@ -710,9 +711,9 @@ namespace Kal_Be_KKL.Models.DAL
                 con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
 
                 //String selectSTR = "select * from kkl_Courses_of_Duty where Id = " + cod.Id + "AND Is_Deleted = " + 0 + "AND Course_Id = ";
-            
-               
-               
+
+
+
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = con;
                 cmd.Parameters.AddWithValue("@Id", cod.Id);
@@ -740,7 +741,7 @@ namespace Kal_Be_KKL.Models.DAL
 
         }
 
-        public bool insert_course_of_duty(Courses_Of_Duty [] cod)
+        public bool insert_course_of_duty(Courses_Of_Duty[] cod)
         {
 
             SqlConnection con;
@@ -760,8 +761,8 @@ namespace Kal_Be_KKL.Models.DAL
             cmd.CommandText = "sp_Add_Courses_To_DB";
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Add("@Id", SqlDbType.NVarChar);
-            cmd.Parameters.Add("@Receipt_Course_Date",SqlDbType.NVarChar);
-            cmd.Parameters.Add("@Course_Id",SqlDbType.Int);
+            cmd.Parameters.Add("@Receipt_Course_Date", SqlDbType.NVarChar);
+            cmd.Parameters.Add("@Course_Id", SqlDbType.Int);
             cmd.Parameters.Add("@RetVal", SqlDbType.Int);
             cmd.Parameters["@RetVal"].Direction = ParameterDirection.ReturnValue;
             for (int i = 0; i < cod.Length; i++)
@@ -784,11 +785,11 @@ namespace Kal_Be_KKL.Models.DAL
                 }
             }
 
-                if (con != null)
-                {
-                    // close the db connection
-                    con.Close();
-                }
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
             return true;
         }
 
@@ -1067,7 +1068,7 @@ namespace Kal_Be_KKL.Models.DAL
             StringBuilder sb = new StringBuilder();
             // use a string builder to create the dynamic string
             sb.AppendFormat("Values('{0}', '{1}', '{2}','{3}','{4}')",
-                dayInShift.Id, dayInShift.Block_Id, dayInShift.Shift_Date.ToString("yyyy-MM-dd"), dayInShift.Requirement_Id,dayInShift.Iteration_Number);
+                dayInShift.Id, dayInShift.Block_Id, dayInShift.Shift_Date.ToString("yyyy-MM-dd"), dayInShift.Requirement_Id, dayInShift.Iteration_Number);
             String prefix = "INSERT INTO kkl_Day_In_Shift " + "([Id],[Block_Id], [Shift_Date],[Requirement_Id],[Iteration_Number])";
             command = prefix + sb.ToString();
 
@@ -1161,7 +1162,7 @@ namespace Kal_Be_KKL.Models.DAL
         public int If_SpecialRequirement_Is_Exist(SpecialRequirement specialRequirement)
         {
             SqlConnection con = null;
-            RequirementForSpecificShift req = new RequirementForSpecificShift(); 
+            RequirementForSpecificShift req = new RequirementForSpecificShift();
             try
             {
                 con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
@@ -1198,8 +1199,8 @@ namespace Kal_Be_KKL.Models.DAL
 
         }
 
-        
-            public int Delete_SpecialRequirement(int blockId, DateTime Shift_Date, int Requirement_Id)
+
+        public int Delete_SpecialRequirement(int blockId, DateTime Shift_Date, int Requirement_Id)
         {
 
             SqlConnection con;
@@ -1216,7 +1217,7 @@ namespace Kal_Be_KKL.Models.DAL
             }
 
             String cStr = "Delete from kkl_Special_requirements_for_a_day_in_a_shift_of_a_block where [Block_Id] = '" + blockId + "' and [Shift_Date] =" +
-                " '"+Shift_Date.ToString("yyyy-MM-dd") + "' and [Requirement_Id] = '"+ Requirement_Id + "'";      // helper method to build the insert string
+                " '" + Shift_Date.ToString("yyyy-MM-dd") + "' and [Requirement_Id] = '" + Requirement_Id + "'";      // helper method to build the insert string
 
             cmd = CreateCommand(cStr, con);             // create the command
 
@@ -1287,7 +1288,7 @@ namespace Kal_Be_KKL.Models.DAL
 
         }
 
-        public Employee FindMatchEmployee(int Area_Id, string Request_Status, DateTime Request_Date, int Requirement_Id,int iteration_Number)
+        public Employee FindMatchEmployee(int Area_Id, string Request_Status, DateTime Request_Date, int Requirement_Id, int iteration_Number)
         {
 
             SqlConnection con = null;
@@ -1355,7 +1356,7 @@ namespace Kal_Be_KKL.Models.DAL
         }
 
 
-        public int InsertEmployeeToShift(string id, int blockId, DateTime shift_Date, int Requirement_Id,int iteration_Number)
+        public int InsertEmployeeToShift(string id, int blockId, DateTime shift_Date, int Requirement_Id, int iteration_Number)
         {
 
             SqlConnection con;
@@ -1397,14 +1398,14 @@ namespace Kal_Be_KKL.Models.DAL
 
         }
 
-        private String BuildInsertCommand(string id, int blockId, DateTime shift_Date, int Requirement_Id,int iteration_Number)
+        private String BuildInsertCommand(string id, int blockId, DateTime shift_Date, int Requirement_Id, int iteration_Number)
         {
             String command;
 
             StringBuilder sb = new StringBuilder();
             // use a string builder to create the dynamic string
             sb.AppendFormat("Values('{0}', '{1}', '{2}', '{3}','{4}')",
-                 id, blockId, shift_Date.ToString("yyyy-MM-dd"), Requirement_Id,iteration_Number);
+                 id, blockId, shift_Date.ToString("yyyy-MM-dd"), Requirement_Id, iteration_Number);
             String prefix = "INSERT INTO kkl_Day_In_Shift " + "([Id], [Block_Id], [Shift_Date], [Requirement_Id],[Iteration_Number])";
             command = prefix + sb.ToString();
 
@@ -1535,7 +1536,7 @@ namespace Kal_Be_KKL.Models.DAL
 
         }
 
-        public List<DutyInShift> ReadDutiesInShift(string date,int areaId)
+        public List<DutyInShift> ReadDutiesInShift(string date, int areaId)
         {
             SqlConnection con = null;
             List<DutyInShift> dutyInShifts = new List<DutyInShift>();
@@ -1549,7 +1550,7 @@ namespace Kal_Be_KKL.Models.DAL
                                         kkl_Block b on dis.Block_Id=b.Block_Id inner join
                                         kkl_Shift_Requirements sr on dis.Requirement_Id=sr.Requirement_Id inner join
                                         kkl_Area a on b.Area_Id=a.Area_Id
-                                        where Shift_Date='" + date + "' and a.Area_Id="+ areaId;
+                                        where Shift_Date='" + date + "' and a.Area_Id=" + areaId;
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
 
                 // get a reader
@@ -1582,7 +1583,7 @@ namespace Kal_Be_KKL.Models.DAL
 
         }
 
-        public int DeleteExistAssign(int areaId,string startDate, string endDate)
+        public int DeleteExistAssign(int areaId, string startDate, string endDate)
         {
 
             SqlConnection con;
@@ -1599,7 +1600,7 @@ namespace Kal_Be_KKL.Models.DAL
             }
 
             String cStr = @"DELETE FROM kkl_Day_In_Shift
-                            WHERE Shift_Date between '"+startDate+"' and '"+ endDate + "' and Block_Id in (select Block_Id from kkl_Block where Area_Id ="+areaId+")";
+                            WHERE Shift_Date between '" + startDate + "' and '" + endDate + "' and Block_Id in (select Block_Id from kkl_Block where Area_Id =" + areaId + ")";
 
             cmd = CreateCommand(cStr, con);             // create the command
 
@@ -1625,7 +1626,7 @@ namespace Kal_Be_KKL.Models.DAL
 
         }
 
-        public int DeleteAllAssignsExceptBest(int areaId, string startDate, string endDate,int iterationNumber)
+        public int DeleteAllAssignsExceptBest(int areaId, string startDate, string endDate, int iterationNumber)
         {
 
             SqlConnection con;
@@ -1642,7 +1643,7 @@ namespace Kal_Be_KKL.Models.DAL
             }
 
             String cStr = @"DELETE FROM kkl_Day_In_Shift
-                            WHERE Iteration_Number <> "+iterationNumber+" and Shift_Date between '" + startDate + "' and '" + endDate + "' and Block_Id in (select Block_Id from kkl_Block where Area_Id =" + areaId + ")";
+                            WHERE Iteration_Number <> " + iterationNumber + " and Shift_Date between '" + startDate + "' and '" + endDate + "' and Block_Id in (select Block_Id from kkl_Block where Area_Id =" + areaId + ")";
 
             cmd = CreateCommand(cStr, con);             // create the command
 
@@ -1850,7 +1851,163 @@ namespace Kal_Be_KKL.Models.DAL
 
         }
 
+        public int insertSubstitutionRequest(Substitution_Request sReq)
+        {
 
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            String cStr = BuildInsertCommand(sReq);      // helper method to build the insert string
+
+            cmd = CreateCommand(cStr, con);             // create the command
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+
+        }
+
+        private String BuildInsertCommand(Substitution_Request sReq)
+        {
+            String command;
+
+            StringBuilder sb = new StringBuilder();
+            // use a string builder to create the dynamic string
+            sb.AppendFormat("Values('{0}', '{1}', '{2}', '{3}')",
+                 sReq.Id_From, sReq.Id_To, sReq.Request_date.ToString("yyyy-MM-dd"), sReq.Status);
+            String prefix = "INSERT INTO kkl_Substitution_Request " + "([Id_From], [Id_To], [Request_Date], [Status])";
+            command = prefix + sb.ToString();
+
+            return command;
+        }
+
+        public List<Substitution_Request> Read_Area_Substitution_Request(int areaId)
+        {
+            SqlConnection con = null;
+            List<Substitution_Request> sReqList = new List<Substitution_Request>();
+            try
+            {
+                con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
+
+                String selectSTR = @"select sr.Request_Number,e.First_Name + ' '+ e.Last_Name as 'Name_From',e.Id as'Id_From',
+                                    e1.First_Name + ' '+ e1.Last_Name as 'Name_To',e1.Id as'Id_To',sr.Request_Date,srs.Requirement_Name
+                                    from kkl_Substitution_Request sr
+                                    left join kkl_Employee e on e.Id=sr.Id_From
+                                    left join kkl_Employee e1 on e1.Id=sr.Id_To
+                                    left join kkl_Day_In_Shift din on din.Id=e.Id
+                                    inner join kkl_Shift_Requirements srs on din.Requirement_Id=srs.Requirement_Id
+                                    where din.Shift_Date=sr.Request_Date and sr.Status=0
+                                    and din.Block_Id in (select Block_Id from kkl_Block where Area_Id = "+areaId+")";
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+                    Substitution_Request sReq = new Substitution_Request();
+                    sReq.Request_Number= Convert.ToInt32(dr["Request_Number"]);
+                    sReq.Id_From = (string)(dr["Id_From"]);
+                    sReq.Name_From = (string)(dr["Name_From"]);
+                    sReq.Id_To = (string)(dr["Id_To"]);
+                    sReq.Name_To = (string)(dr["Name_To"]);
+                    sReq.Request_date = Convert.ToDateTime(dr["Request_date"]);
+                    sReq.Requirement_Name = (string)(dr["Requirement_Name"]);
+                    sReqList.Add(sReq);
+                }
+                return sReqList;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+        }
+        
+        public List<Substitution_Request> Read_Region_Substitution_Request(int regionId)
+        {
+            SqlConnection con = null;
+            List<Substitution_Request> sReqList = new List<Substitution_Request>();
+            try
+            {
+                con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
+
+                String selectSTR = @"select sr.Request_Number,e.First_Name + ' '+ e.Last_Name as 'Name_From',e.Id as'Id_From',
+                                    e1.First_Name + ' '+ e1.Last_Name as 'Name_To',e1.Id as'Id_To',sr.Request_Date,srs.Requirement_Name
+                                    from kkl_Substitution_Request sr
+                                    left join kkl_Employee e on e.Id=sr.Id_From
+                                    left join kkl_Employee e1 on e1.Id=sr.Id_To
+                                    left join kkl_Day_In_Shift din on din.Id=e.Id
+                                    inner join kkl_Shift_Requirements srs on din.Requirement_Id=srs.Requirement_Id
+                                    where din.Shift_Date=sr.Request_Date and sr.Status=0
+                                    and din.Block_Id in (select Block_Id  from kkl_Block where Area_Id in (select Area_Id from kkl_Area where Region_Id="+regionId+")";
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+                    Substitution_Request sReq = new Substitution_Request();
+                    sReq.Request_Number= Convert.ToInt32(dr["Request_Number"]);
+                    sReq.Id_From = (string)(dr["Id_From"]);
+                    sReq.Name_From = (string)(dr["Name_From"]);
+                    sReq.Id_To = (string)(dr["Id_To"]);
+                    sReq.Name_To = (string)(dr["Name_To"]);
+                    sReq.Request_date = Convert.ToDateTime(dr["Request_date"]);
+                    sReq.Requirement_Name = (string)(dr["Requirement_Name"]);
+                    sReqList.Add(sReq);
+                }
+                return sReqList;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+        }
 
 
 

@@ -1,0 +1,56 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>בקשות לחילוף</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="../MyPlugins/moments/moment.js"></script>
+    <script src="../scripts/ajaxcallswithkey.js"></script>
+    <script src="../scripts/jquery-3.4.1.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            if (localStorage['Area_Id'] != null) {
+                let getApi = "../api/SubstitutionRequest/GetAreaRequests/" + localStorage['Area_Id'];
+                ajaxCall("GET", getApi, "", GetAreaRequestsSuccess, GetAreaRequestsError);
+            }
+            else {
+                let getApi = "../api/SubstitutionRequest/GetRegionRequests/" + localStorage['Region_Id'];
+                ajaxCall("GET", getApi, "", GetRegionRequestsSuccess, GetRegionRequestsError);
+            }
+        });
+
+        function GetAreaRequestsSuccess(sReqList) {
+            str= ""
+            sReqList.forEach(sReq => {
+                str += "<p id='" + sReq.Request_Number +"'>"
+                str += sReq.Name_From + " (תז-" + sReq.Id_From + ") רוצה למסור את המשמרת שלו ל" + sReq.Name_To + " (תז-" + sReq.Id_To + ") בתור " + sReq.Requirement_Name + " בתאריך " + moment(sReq.Request_date).format("YYYY-MM-DD")
+                str += "</p>"
+            }
+            )
+            $('#subRequests').append(str);
+        }
+
+        function GetRegionRequestsSuccess(sReqList) {
+            //render requests
+        }
+
+        function GetAreaRequestsError(err) {
+            console.log(err.responseJSON.Message)
+        }
+
+        function GetRegionRequestsError(err) {
+            console.log(err.responseJSON.Message)
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div id="subRequests"></div>
+
+    </div>
+
+</body>
+</html>
