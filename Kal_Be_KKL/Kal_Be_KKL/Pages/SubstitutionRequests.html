@@ -139,6 +139,7 @@
     </style>
 
     <script>
+        allRequests = [];
         $(document).ready(function () {
             if (localStorage['Area_Id'] != null) {
                 let getApi = "../api/SubstitutionRequest/GetAreaRequests/" + localStorage['Area_Id'];
@@ -165,12 +166,9 @@
             $("#phHello").append(str1);
         });
 
-        function GetAreaRequestsSuccess(sReqList) {
-        }
-
-
         function GetRegionRequestsSuccess(sReqList) {
-            //render requests
+            allRequests = sReqList
+            renderRequests(sReqList);
         }
 
         function GetAreaRequestsError(err) {
@@ -182,14 +180,32 @@
         }
 
         function GetAreaRequestsSuccess(sReqList) {
+            allRequests=sReqList
+            renderRequests(sReqList);
+        }
+
+        function renderRequests(sReqList) {
             str = "";
-            sReqList.forEach(sReq => {
+            sReqList.forEach((sReq, i) => {
+                sReq.Request_date=moment(sReq.Request_date).format("YYYY-MM-DD")
                 str += "<div style='display: flex; text - align: center;'>"
                 str += "<img id='exclam' src='../images/ExclamationMark.png'/><p id='" + sReq.Request_Number + "'><b>  "
-                str += sReq.Name_From + "</b> (תז-" + sReq.Id_From + ") רוצה למסור את המשמרת שלו ל<b>" + sReq.Name_To + "</b> (תז-" + sReq.Id_To + ") בתור " + sReq.Requirement_Name + " בתאריך " + moment(sReq.Request_date).format("YYYY-MM-DD")
+                str += sReq.Name_From + "</b> (תז-" + sReq.Id_From + ") רוצה למסור את המשמרת שלו ל<b>" + sReq.Name_To + "</b> (תז-" + sReq.Id_To + ") </br> בתור " + sReq.Requirement_Name + " בתאריך " + sReq.Request_date
                 str += "</p>"
-                str += "<button class='buttonGreen'> אשר</button ><button class='buttonRed'>דחה</button></div></br>"
-            }); $('#subRequests').append(str)
+                str += "<button onclick='approveRequest(allRequests["+i+"])' class='buttonGreen'> אשר</button ><button class='buttonRed'>דחה</button></div></br>"
+            });
+            $('#subRequests').append(str)
+        }
+
+        function approveRequest(sReq) {
+            ajaxCall("PUT", "../api/SubstitutionRequest/ApproveRequest", JSON.stringify(sReq), approveRequestSuccess, approveRequestError)
+        }
+
+        function approveRequestSuccess() {
+
+        }
+
+        function approveRequestError() {
 
         }
     </script>

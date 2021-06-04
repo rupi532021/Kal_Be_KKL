@@ -1923,7 +1923,7 @@ namespace Kal_Be_KKL.Models.DAL
                                     left join kkl_Day_In_Shift din on din.Id=e.Id
                                     inner join kkl_Shift_Requirements srs on din.Requirement_Id=srs.Requirement_Id
                                     where din.Shift_Date=sr.Request_Date and sr.Status=0
-                                    and din.Block_Id in (select Block_Id from kkl_Block where Area_Id = "+areaId+") and month(sr.Request_Date)="+(DateTime.Now.Month);
+                                    and din.Block_Id in (select Block_Id from kkl_Block where Area_Id = "+areaId+") and sr.Request_Date >= '"+DateTime.Now.ToString("yyyy-MM-dd")+"'";
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
 
                 // get a reader
@@ -1974,7 +1974,7 @@ namespace Kal_Be_KKL.Models.DAL
                                     left join kkl_Day_In_Shift din on din.Id=e.Id
                                     inner join kkl_Shift_Requirements srs on din.Requirement_Id=srs.Requirement_Id
                                     where din.Shift_Date=sr.Request_Date and sr.Status=0
-                                    and din.Block_Id in (select Block_Id  from kkl_Block where Area_Id in (select Area_Id from kkl_Area where Region_Id="+regionId+ ") and month(sr.Request_Date)=" + (DateTime.Now.Month);
+                                    and din.Block_Id in (select Block_Id  from kkl_Block where Area_Id in (select Area_Id from kkl_Area where Region_Id="+regionId+ ") and sr.Request_Date >= '" + DateTime.Now.ToString("yyyy-MM-dd")+"'";
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
 
                 // get a reader

@@ -16,7 +16,7 @@ namespace Kal_Be_KKL.Models
         string requirement_Name;
         DateTime request_date;
         int status;
-        public Substitution_Request(int request_Number, string id_From, string name_From, string id_To, string name_To, string requirement_Name, DateTime request_date,int status)
+        public Substitution_Request(int request_Number, string id_From, string name_From, string id_To, string name_To, string requirement_Name, DateTime request_date, int status)
         {
             Request_Number = request_Number;
             Id_From = id_From;
@@ -59,6 +59,11 @@ namespace Kal_Be_KKL.Models
             DBServices dbs = new DBServices();
             List<Substitution_Request> sReqList = dbs.Read_Region_Substitution_Request(regionId);
             return sReqList;
+        }
+
+        public void ApproveRequest()
+        {
+            DateTime x = Request_date;
         }
     }
 }

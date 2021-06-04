@@ -264,7 +264,8 @@
                         name_of_course = courses_arr[i].Course_Name;
                     }
                 }                
-                str += "<p> תאריך ביצוע הקורס: " + moment(c.Receipt_Course_Date).format("DD/MM/YYYY") + "</p>";
+                str += "<p> תאריך ביצוע הקורס: " + moment(c.Receipt_Course_Date).format("YYYY-MM-DD") + "</p>";
+                str += "<input type = 'button' value = 'מחק'  onclick = 'deletecourse(" + c.Course_Id + ")'/></div>";
                 $("#courses").append(str)
 
                 mycourses = {

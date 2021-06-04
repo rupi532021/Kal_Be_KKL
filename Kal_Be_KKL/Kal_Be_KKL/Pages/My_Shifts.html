@@ -167,6 +167,10 @@
         .ui-helper-hidden-accessible {
             display: none;
         }
+
+        .swal-text {
+            text-align: right;
+        }
     </style>
     <script>
         full_workers_arr = [];
@@ -220,7 +224,7 @@
         }
 
         function getAssigns() {
-            let getApi = "../api/Day_In_Shift/GetDutiesInShift/" + areaId +"/false";
+            let getApi = "../api/Day_In_Shift/GetDutiesInShift/" + areaId + "/false";
             ajaxCall("GET", getApi, "", getAssignsSuccess, getAssignsError);
         }
 
@@ -292,18 +296,21 @@
             console.log(err)
         }
         function AskForChange(elem) {
-            var mydate = $(elem).closest("td").data("date");
-            var myJob = $(elem).parent().text();
-            requestDate = moment(mydate).format("yyyy-MM-DD")
-            if (confirm("האם אתה בטוח שברצונך למסור את המשמרת בתאריך " + requestDate + " בתפקיד ה" + myJob)) {
+            let today = moment();
+            let mydate = moment($(elem).closest("td").data("date"));
+            if (mydate.diff(today) < 0)
+                alert("התאריך עבר לא ניתן לשלוח בקשה לחילוף");
+            else {
+                $('#WorkerNum').val("");
+                var myJob = $(elem).parent().text();
+                requestDate = mydate.format("yyyy-MM-DD")
                 let api = "../api/Employees/GetAllPossibleEmployees";
                 data = {
-                    exdate: mydate,
+                    exdate: requestDate,
                     myjob: myJob,
                     area_id: localStorage["Area_Id"]
                 }
                 ajaxCall("GET", api, data, GetAllPossibleEmployeesSuccess, GetAllPossibleEmployeesError);
-
             }
         }
 
@@ -331,7 +338,6 @@
             //location.reload();
         }
         function Choose_Worker_To_Change(a) {
-
             name = $("#WorkerNum").val();
             console.log(name)
             res = "";
@@ -350,20 +356,28 @@
             if ($("#WorkerNum").val() == "")
                 alert("יש לבחור עובד שברצונף להחליף איתו את המשמרת")
             else {
-                let api = "../api/SubstitutionRequest";
-                var sReq = {
-                    Id_From: curentUser.Id,
-                    Id_To: id_off_worker,
-                    Request_date: requestDate,
-                    Status:0
-                }
-                ajaxCall("POST", api, JSON.stringify(sReq), postSubstitutionRequestSuccess, postSubstitutionRequestError)
-                alert(curentUser.Id + " " + id_off_worker + " " + requestDate)
+                swal({
+                    title: "", text: "האם אתה בטוח שברצונך למסור את המשמרת בתאריך " + requestDate + "\nל" + $("#WorkerNum").val(), buttons: { confirm: "כן", cancel: "לא" }
+                })
+                    .then((isConfirm) => {
+                        if (isConfirm) {
+                            let api = "../api/SubstitutionRequest";
+                            var sReq = {
+                                Id_From: curentUser.Id,
+                                Id_To: id_off_worker,
+                                Request_date: requestDate,
+                                Status: 0
+                            }
+                            ajaxCall("POST", api, JSON.stringify(sReq), postSubstitutionRequestSuccess, postSubstitutionRequestError)
+                        }
+                    });
+
             }
         }
 
         function postSubstitutionRequestSuccess() {
-            alert("בקשה נשלחה בהצלחה")
+            swal({title: "בקשה נשלחה בהצלחה",text: "",type: "success",buttons: {confirm: "אישור"}})
+            close_window();
         }
 
         function postSubstitutionRequestError(err) {

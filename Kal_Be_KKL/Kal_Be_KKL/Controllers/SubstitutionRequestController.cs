@@ -48,8 +48,10 @@ namespace Kal_Be_KKL.Controllers
         }
 
         // PUT api/<controller>/5
-        public void Put(int id, [FromBody] string value)
+        [Route("api/SubstitutionRequest/approveRequest")]
+        public void PutApproveRequest([FromBody] Substitution_Request sReq)
         {
+            Console.WriteLine();
         }
 
         // DELETE api/<controller>/5
