@@ -63,7 +63,15 @@ namespace Kal_Be_KKL.Models
 
         public void ApproveRequest()
         {
-            DateTime x = Request_date;
+            DBServices dbs = new DBServices();
+            dbs.UpdateSubstitution(Id_From, Id_To, Request_date);
+            dbs.UpdateStatus(Request_Number, 1);
+        }  
+        
+        public void RejectRequest()
+        {
+            DBServices dbs = new DBServices();
+            dbs.UpdateStatus(Request_Number, 2);
         }
     }
 }
