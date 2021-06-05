@@ -43,6 +43,12 @@ namespace Kal_Be_KKL.Models
             DBServices dbs = new DBServices();
             List<Block> block_list = dbs.Read_Blocks_With_Area_Id(areaId);
             return block_list;
+        } 
+        public List<Area> GetAreasOfRegion(int region_id)
+        {
+            DBServices dbs = new DBServices();
+            List<Area> area_list = dbs.GetAreasOfRegion(region_id);
+            return area_list;
         }
 
         public Area Read_Area_By_Emp_Id (string id)

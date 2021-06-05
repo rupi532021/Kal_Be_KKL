@@ -42,6 +42,14 @@ namespace Kal_Be_KKL.Controllers
             Area area = new Area();
             List<Block> blocks = area.GetBlocksOfArea(id);
             return blocks;
+        }    
+        [Route("api/Area/AreaWithDistrict/{region_id}")]
+        [HttpGet]
+        public List<Area> AreaWithDistrict(int region_id)
+        {
+            Area area = new Area();
+            List<Area> blocks = area.GetAreasOfRegion(region_id);
+            return blocks;
         }
 
         // POST api/<controller>

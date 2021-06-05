@@ -1,0 +1,245 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="../MyPlugins/jquery-ui-1.12.1.custom/jquery-ui.min.css" rel="stylesheet" />
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" > </script >-->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="../Scripts/ajaxCallsWithKey.js"></script>
+    <script src="../Scripts/jquery-3.4.1.js"></script>
+    <script src="../MyPlugins/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+    <script src="../MyPlugins/moments/moment.js"></script>
+    <link href="../Scripts/StyleSheetNavBar.css" rel="stylesheet" />
+    <script src="../Scripts/jquery-3.4.1.min.js"></script>
+
+    <script src="../Scripts/jquery.vticker-min.js"></script>
+
+
+    <style type="text/css">
+        .form-control{
+            margin-right:10px;
+        }
+        label{margin-right:15px;}
+        h3 {
+            font-size: 30px;
+            font-weight: 600;
+            text-align: right;
+        }
+
+        h2 {
+            font-size: 30px;
+            font-weight: 600;
+        }
+
+        h1 {
+            text-align:center;
+            font-size: 37px;
+            font-weight: 600;
+        }
+
+        .form-control {
+            width: 310px
+        }
+
+        * {
+            direction: rtl
+        }
+
+        #ph {
+            float: left;
+        }
+
+        #ph1 {
+            /*margin-right: 300px;*/
+            padding: 5px
+        }
+        #p{float:right}
+
+
+        div#work_now {
+            float: left;
+        }
+        #work_now>div{
+            float:right;
+        }
+
+        #ph2 {
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+            height: 55px;
+            float: right;
+            margin-left: 5px;
+        }
+
+
+        #head_msg {
+            text-align: center;
+            border-bottom: 3px solid black;
+            color: black
+        }
+
+        #p {
+            margin-top: 35px;
+            text-align: right;
+            position: relative;
+            width: 30%;
+            border: 3px solid black;
+        }
+
+    </style>
+
+    <script type="text/javascript">
+    </script>
+    <script>
+        function Choose_Area(val)
+        {
+            if (parseInt(val) == 0) {
+                alert("יש לבחור מרחב");
+                $("#Choose_Area").val(0)
+                $("#Choose_Area").prop("disabled", true);
+            }
+            else
+            {
+                $("#Choose_Area").prop("disabled", false);
+                let api = "../api/Area/AreaWithDistrict/" + parseInt(val);
+                ajaxCall("GET", api,"" , getAreaSuccess, getAreaError)
+            }
+
+            
+        }
+        function getAreaSuccess(area_arr) {
+            areas = '';
+            area_arr.forEach(a => {
+                areas += '<option value="' + a.Area_Id + '">' + a.Area_Name + '</option>';
+            })
+            $("#areaTB").append(areas)
+        }
+        function getAreaError(err) {
+            console.log(err)
+        }
+        msgs = ["Raviv Lankry", "Ido Fadida", "Busel Medina", "Tal Tzoref"]
+        $(document).ready(function () {
+            str = "";
+            for (var i = 0; i < msgs.length; i++) {
+                str += "<li style='height:130px'><div id='d1'><h2> " + msgs[i] + " </h2></div></li>";
+            }
+            $("#l").append(str);
+            $('#ph2').vTicker({
+                speed: 500,
+                pause: 5000,
+                showItems: 3,
+                animation: 'fade',
+                mousePause: true,
+                height: 0,
+                direction: 'up'
+            });
+
+
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+
+        <!-- NavBar -->
+
+        <img id="imgKKL" src='../images/KKLLogo.png' />
+        <div id="phHello"></div>
+
+        <div class="body-wrap">
+            <nav class="navbar navbar-inverse">
+                <div class="container1">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarMenu" aria-expanded="false">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <!--<a class="navbar-brand" href="#">Brand</a>-->
+                    </div>
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="navbarMenu">
+                        <ul class="nav navbar-nav navbar-right  bts-nav">
+                            <li class="active"><a href="#">ראשי<span class="sr-only">(current)</span></a></li>
+                            <li class="dropdown">
+                                <a href="#">סידור עבודה<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="Requests.html">הגשת סידור</a></li>
+                                    <li><a href="My_Shifts.html">הסידור שלי</a></li>
+                                    <li><a href="AssignToShifts.html">שיבוץ בקשות</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#">נוכחות</a></li>
+                            <li><a href="#">אנשי קשר</a></li>
+                            <li class="dropdown">
+                                <a href="#">ניהול תורנות<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">דוח סוף תורנות</a></li>
+                                    <li><a href="#">טופס עליה לתורנות</a></li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#">הכשרות ואישורים<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">ההכשרות שלי</a></li>
+                                    <li><a href="#">בקשה להכשרה</a></li>
+                                    <li><a href="Insert_Courses.html">הכנסת הכשרות</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#">פרטים אישיים</a></li>
+                            <li><a href="Special_Requirements.html">דרישות משתנות</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <!--NavBar-->
+
+
+        <div id="container">
+
+            <div id="p">
+                <h1 id="head_msg">לוח הודעות</h1>
+                <div id="ph2">
+                    <ul id="l">
+                    </ul>
+                </div>
+            </div>
+            <div class="form-group" id="work_now">
+                <h1>מי עובד עכשיו</h1>
+                <div>
+                    <label for="ChooseDistrictRB">בחר מרחב</label>
+                    <select class="form-control" id="ChooseDistrict" data-component="dropdown" onchange="Choose_Area(this.value)" >
+                        <option value="0">בחר מרחב</option>
+                        <option value="2">צפון</option>
+                        <option value="1">מרכז</option>
+                        <option value="3">דרום</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="AreaRB">בחר אזור</label>
+                    <select class="form-control" id="Choose_Area" data-component="dropdown" disabled >
+                        <option value="0">בחר אזור</option>
+                        <option value="1">בחר 1</option>
+                    </select>
+                </div>
+
+
+                
+            </div>
+
+
+        </div>
+    </div>
+   
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</body>
+</html>
