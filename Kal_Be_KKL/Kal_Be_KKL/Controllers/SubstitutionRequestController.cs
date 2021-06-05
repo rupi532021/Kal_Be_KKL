@@ -51,7 +51,13 @@ namespace Kal_Be_KKL.Controllers
         [Route("api/SubstitutionRequest/approveRequest")]
         public void PutApproveRequest([FromBody] Substitution_Request sReq)
         {
-            Console.WriteLine();
+            sReq.ApproveRequest();
+        }
+
+        [Route("api/SubstitutionRequest/RejectRequest")]
+        public void PutRejectRequest([FromBody] Substitution_Request sReq)
+        {
+            sReq.RejectRequest();
         }
 
         // DELETE api/<controller>/5

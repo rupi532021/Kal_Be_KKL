@@ -2009,6 +2009,90 @@ namespace Kal_Be_KKL.Models.DAL
             }
         }
 
+        public int UpdateStatus (int request_Number,int status)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            String cStr = @"UPDATE kkl_Substitution_Request
+                            SET Status = "+status + @"
+                            WHERE Request_Number = "+request_Number;
+
+            cmd = CreateCommand(cStr, con);             // create the command
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+        } 
+        
+        public int UpdateSubstitution(string Id_From,string Id_To,DateTime Request_date)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            String cStr = @"UPDATE kkl_Day_In_Shift
+                           SET id= "+Id_To +@"
+                           WHERE Shift_Date='"+Request_date.ToString("yyyy-MM-dd") + "' and id= '" + Id_From +"'";
+
+            cmd = CreateCommand(cStr, con);             // create the command
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+        }
+
 
 
     }
