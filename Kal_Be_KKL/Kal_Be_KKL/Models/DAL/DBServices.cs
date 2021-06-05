@@ -1588,7 +1588,7 @@ namespace Kal_Be_KKL.Models.DAL
             {
                 con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
 
-                String selectSTR = @" select e.First_Name,e.Last_Name,sr.Requirement_Name,b.Block_Name
+                String selectSTR = @" select e.First_Name,e.Last_Name,sr.Requirement_Name,b.Block_Name,e.Phone_Number
                                         from kkl_Day_In_Shift dis inner join
                                         kkl_Employee e on e.Id=dis.Id inner join
                                         kkl_Block b on dis.Block_Id=b.Block_Id inner join
@@ -1607,6 +1607,7 @@ namespace Kal_Be_KKL.Models.DAL
                     dis.Last_Name = (string)dr["Last_Name"];
                     dis.Requirement_Name = (string)dr["Requirement_Name"];
                     dis.Block_Name = (string)dr["Block_Name"];
+                    dis.Phone = (string)dr["Phone_Number"];
                     dutyInShifts.Add(dis);
                 }
                 return dutyInShifts;
