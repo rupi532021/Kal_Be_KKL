@@ -60,7 +60,8 @@
         button {
             height: 40px;
             width: 50px;
-            margin-right: 10px;
+            margin-right: 20px;
+            margin-top:12px;
         }
 
         .buttonRed {
@@ -188,7 +189,7 @@
             str = "";
             sReqList.forEach((sReq, i) => {
                 sReq.Request_date=moment(sReq.Request_date).format("YYYY-MM-DD")
-                str += "<div style='display: flex; text - align: center;'>"
+                str += "<div style='display: flex; text - align: center;' >"
                 str += "<img id='exclam' src='../images/ExclamationMark.png'/><p id='" + sReq.Request_Number + "'><b>  "
                 str += sReq.Name_From + "</b> (תז-" + sReq.Id_From + ") רוצה למסור את המשמרת שלו ל<b>" + sReq.Name_To + "</b> (תז-" + sReq.Id_To + ") </br> בתור " + sReq.Requirement_Name + " בתאריך " + sReq.Request_date
                 str += "</p>"
