@@ -1492,6 +1492,50 @@ namespace Kal_Be_KKL.Models.DAL
             }
 
         }
+        public List<Area> GetAreasOfRegion(int region_id)
+        {
+            SqlConnection con = null;
+            List<Area> area_list = new List<Area>();
+            try
+            {
+                con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
+
+                String selectSTR = @"select *
+                                     from kkl_Area
+                                     where Region_Id=" + region_id;
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+                    Area a = new Area();
+                    a.Area_Id = Convert.ToInt32(dr["Area_Id"]);
+                    a.Area_Name = (string)dr["Area_Name"];
+                    a.Manager_Id = (string)dr["Manager_Id"];
+                    a.Patrol_Id = (string)dr["Patrolman_Id"];
+                    a.Forester_Id = (string)dr["Forester_Id"];
+
+                    area_list.Add(a);
+                }
+                return area_list;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+
+        }
 
         public Area Read_Area_By_Emp_Id(string id)
         {
