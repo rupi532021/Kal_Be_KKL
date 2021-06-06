@@ -19,8 +19,9 @@
 
 
     <style type="text/css">
-        .form-control{
-            margin-right:10px;
+        .form-control {
+            margin-right: 10px;
+            width: 310px
         }
         label{margin-right:15px;}
         h3 {
@@ -38,10 +39,6 @@
             text-align:center;
             font-size: 37px;
             font-weight: 600;
-        }
-
-        .form-control {
-            width: 310px
         }
 
         * {
@@ -98,7 +95,7 @@
         function Choose_Area(val)
         {
             if (parseInt(val) == 0) {
-                alert("יש לבחור מרחב");
+                swal('יש לבחור מרחב', '', 'error')
                 $("#Choose_Area").val(0)
                 $("#Choose_Area").prop("disabled", true);
             }

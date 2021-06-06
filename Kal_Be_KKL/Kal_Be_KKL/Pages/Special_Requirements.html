@@ -48,6 +48,13 @@
             display: flex;
             flex-wrap: wrap;
         }
+        .swal-text {
+            text-align: right;
+        }
+
+        .swal-footer {
+            text-align: center;
+        }
     </style>
 
     <script>
@@ -84,14 +91,10 @@
             ajaxCall("DELETE", apiSr, "", deleteSpecialRequirementsSuccess, deleteSpecialRequirementsError)
         }
         function deleteSpecialRequirementsSuccess(data) {
-
-            getSpecialRequirementsSuccess(data);
-           
-
-            
-            alert("דרישה נמחקה")
-
+            getSpecialRequirementsSuccess(data); 
+            swal('דרישה נמחקה', '', 'warning')
         }
+
         function deleteSpecialRequirementsError(err) {
             console.log(err)
         }
@@ -178,7 +181,7 @@
                 $("#commentTB").val("");
             }
             else {
-                alert("יש לבחור תאריך שחל מהחודש הבא")
+                swal('יש לבחור תאריך שחל מהחודש הבא', '', 'info')
                 $("#dateTB").val("");
                 $("#permanent_Requirements_Title").html("")
                 $("#permanent_Requirements").html("")
@@ -233,15 +236,15 @@
             //ואז שולח את הדירשה המיוחדת שאנו רוצים להוסיף לשרת ולאחר מכן מרוקן את התיבת טקסט של הכמות, העערות ומחזיר את הדרישה לברירת מחדל
             
             if ($("#dateTB").val() == "") {
-                alert("יש לבחור תאריך")
+                swal('יש לבחור תאריך', '', 'info')
                 return false
             }
             if ($("#requirementTB").val() == "0") {
-                alert("יש לבחור דרישה")
+                swal('יש לבחור דרישה', '', 'info')
                 return false
             }
             if (parseInt($("#amountTB").val()) <= 0 || $("#amountTB").val() == "") {
-                alert("יש לבחור כמות הגדולה מ - 0")
+                swal('יש לבחור כמות הגדולה מ - 0', '', 'info')
                 return false
             }
 
@@ -280,7 +283,7 @@
             if (Area_Id == "0") {
                 $("#blockTB").html("");
                 $("#blockTB").prop('disabled', true);
-                alert("נא לבחור אזור");
+                swal('נא לבחור אזור', '', 'info')
                 return false;
             }
             $("#blockTB").prop('disabled', false);

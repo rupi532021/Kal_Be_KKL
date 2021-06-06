@@ -45,8 +45,16 @@
         label {
             font-size: 18px;
         }
+
         h3 {
             text-align: right
+        }
+        .swal-text {
+            text-align: right;
+        }
+
+        .swal-footer {
+            text-align: center;
         }
     </style>
 
@@ -141,15 +149,13 @@
         // This function is called in case of an error
         function postError(err) {
             alert(err.responseJSON.Message)
-           
+
         }
 
-        function postEmployee_in_areaSuccess(data)
-        {
+        function postEmployee_in_areaSuccess(data) {
             window.location.replace("Insert_Courses.html");
         }
-        function postEmployee_in_regionSuccess(data)
-        {
+        function postEmployee_in_regionSuccess(data) {
             window.location.replace("Insert_Courses.html");
         }
 
@@ -196,17 +202,14 @@
 
         }
 
-        function checkdate()
-        {
+        function checkdate() {
             Birth_Date = $("#BirthDateTB").val();
             Birth_Date = new Date(Birth_Date)
             Current_Date = new Date()
-            if (Birth_Date > Current_Date)
-            {
-                alert("יש לבחור תאריך תקין")
+            if (Birth_Date > Current_Date) {
+                swal('יש לבחור תאריך תקין','','error')
                 $("#BirthDateTB").val("");
             }
-
         }
 
     </script>

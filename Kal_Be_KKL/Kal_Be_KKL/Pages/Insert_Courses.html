@@ -70,8 +70,6 @@
             flex-wrap: wrap;
         }
 
-
-
         p {
             font-size: 20px;
             margin-top: 5px;
@@ -82,6 +80,13 @@
             width: 30px;
             float: unset
         }
+        .swal-text {
+            text-align: right;
+        }
+
+        .swal-footer {
+            text-align: center;
+        }
     </style>
 
     <script type="text/javascript">
@@ -91,7 +96,7 @@
         chosen_courses = [];
         function Add_Course_To_DB() {
             if (chosen_courses.length == 0)
-                alert("לא נבחרו הכשרות")
+                swal('לא נבחרו הכשרות', '', 'error')
             else {
 
                 api = "../api/Employees/insert_course_of_duty";
@@ -200,8 +205,7 @@
             Current_Date = new Date()
             date_of_start_course = new Date(date_of_start_course1)
             if (date_of_start_course > Current_Date) {
-                alert("בחרת תאריך גדול יותר מהיום הנוכחי יש להזין תאריך מחדש ")
-
+                swal('בחרת תאריך גדול יותר מהיום הנוכחי יש להזין תאריך מחדש', '', 'error')
                 return;
 
             }
@@ -222,13 +226,13 @@
 
                         }
                         else
-                            alert("הקורס כבר נבחר, אם תרצה לשנות תאריך יש למחוק ולהוסיף")
+                            swal('הקורס כבר נבחר, אם תרצה לשנות תאריך יש למחוק ולהוסיף', '', 'error')
                     }
 
                 })
             }
             else
-                alert("אחד מהפרטים שהוכנסו שגויים")
+                swal('אחד מהפרטים שהוכנסו שגויים', '', 'error')
         }
 
         function Show_Worker_Details() {
@@ -246,7 +250,7 @@
                 chosen_courses = [];
             }
             else
-                alert("שם לא תקין")
+                swal('שם לא תקין', '', 'error')
             return false;
         }
 

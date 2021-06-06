@@ -36,9 +36,6 @@
         #ph {
             float: left;
         }
-
-
-
         /*        #pForm {
             left: 50%;
             top: 50%;
@@ -73,6 +70,13 @@
             display: block;
             flex-wrap: wrap;
             float:left;
+        }
+        .swal-text {
+            text-align: right;
+        }
+
+        .swal-footer {
+            text-align: center;
         }
     </style>
 
@@ -128,7 +132,6 @@
         // This function is called in case of an error
         function EditError(err) {
             alert(err.responseJSON.Message)
-
         }
 
         function Edit_Employee() {
@@ -155,7 +158,7 @@
             Birth_Date = new Date(Birth_Date)
             Current_Date = new Date()
             if (Birth_Date > Current_Date) {
-                alert("יש לבחור תאריך תקין")
+                swal('יש לבחור תאריך תקין', '', 'error')
                 $("#BirthDateTB").val("");
             }
         }
