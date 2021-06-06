@@ -92,6 +92,18 @@
     <script type="text/javascript">
     </script>
     <script>
+        function Show_Workers_In_Area(val)
+        {
+            if (parseInt(val) == 0) {
+                swal('יש לבחור אזור', '', 'error')
+                $("#Choose_Area").val(0)
+              
+            }
+            else {
+                let api = "../api/Area/AreaWithDistrict/" + parseInt(val);
+                ajaxCall("GET", api, "", getAreaSuccess, getAreaError)
+            }
+        }
         function Choose_Area(val)
         {
             if (parseInt(val) == 0) {
@@ -109,11 +121,12 @@
             
         }
         function getAreaSuccess(area_arr) {
-            areas = '';
+            areas = '<option value="0"> בחר איזור </option>';
+            $("#Choose_Area").html("")
             area_arr.forEach(a => {
                 areas += '<option value="' + a.Area_Id + '">' + a.Area_Name + '</option>';
             })
-            $("#areaTB").append(areas)
+            $("#Choose_Area").append(areas)
         }
         function getAreaError(err) {
             console.log(err)
@@ -221,9 +234,8 @@
                 </div>
                 <div>
                     <label for="AreaRB">בחר אזור</label>
-                    <select class="form-control" id="Choose_Area" data-component="dropdown" disabled >
+                    <select class="form-control" id="Choose_Area" data-component="dropdown" onchange="Show_Workers_In_Area(this.value)" disabled >
                         <option value="0">בחר אזור</option>
-                        <option value="1">בחר 1</option>
                     </select>
                 </div>
 
