@@ -1885,7 +1885,6 @@
     <Content Include="Pages\SignUp_Page.html" />
     <Content Include="Pages\Special_Requirements.html" />
     <Content Include="Pages\SubstitutionRequests.html" />
-    <Content Include="Pages\Ticker.html" />
     <Content Include="Scripts\ajaxCallsWithKey.js" />
     <Content Include="Areas\HelpPage\Views\Web.config" />
     <Content Include="Areas\HelpPage\Views\Shared\_Layout.cshtml" />

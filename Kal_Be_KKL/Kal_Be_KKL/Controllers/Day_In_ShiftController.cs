@@ -18,6 +18,16 @@ namespace Kal_Be_KKL.Controllers
             return DayInShiftList;
         }
 
+        [Route("api/Day_In_Shift/GetDutiesInShiftToday/{areaId}/")]
+        [HttpGet]
+        public List<DutyInShift> GetDutiesInShiftToday(int areaId)
+        {
+            Area area = new Area();
+            string dayS = DateTime.Today.ToString("yyyy-MM-dd");
+            List<DutyInShift> dutiesInShift = area.ReadDutiesInShift(dayS, areaId);
+            return dutiesInShift;
+        }
+
         // GET api/<controller>/5
         [Route("api/Day_In_Shift/GetDutiesInShift/{areaId}/{isNextMonth}")]
         [HttpGet]
@@ -84,6 +94,9 @@ namespace Kal_Be_KKL.Controllers
             int bestIteration = shift.GetBestIteration(date.Month,areaId, ITERATIONS,satisfaction/100,fairness/100);
             shift.DeleteAllAssignsExceptBest(areaId, firstDayOfMonth, lastDayOfMonth, bestIteration);
         }
+
+
+
 
         private void AssignToShift(List<RequirementForSpecificShift> reqs, Day_In_Shift shift, int areaId, Block block, int iteration_Number)
         {

@@ -19,6 +19,15 @@
 
 
     <style type="text/css">
+        .blocks {
+            width: 30%;
+            float: right;
+            padding-right: 20px;
+            margin-right: 30px;
+            margin-top: 20px;
+            background-color: rgba(235, 237, 235, 0.4);
+        }
+
         .form-control {
             margin-right: 10px;
             width: 310px
@@ -92,6 +101,8 @@
     <script type="text/javascript">
     </script>
     <script>
+        blocks = [];
+
         function Show_Workers_In_Area(val)
         {
             if (parseInt(val) == 0) {
@@ -100,9 +111,30 @@
               
             }
             else {
-                let api = "../api/Area/AreaWithDistrict/" + parseInt(val);
-                ajaxCall("GET", api, "", getAreaSuccess, getAreaError)
+                let getApi = "../api/Area/GetAreaBlcoks/" + parseInt(val);;
+                ajaxCall("GET", getApi, "", getAreaBlcoksSuccess, getAreaBlcoksError);
+                let api = "../api/Day_In_Shift/GetDutiesInShiftToday/" + parseInt(val);
+                ajaxCall("GET", api, "", GetDutiesInShiftTodaySuccess, GetDutiesInShiftTodayError)
             }
+        }
+
+        function getAreaBlcoksSuccess(blocksData) {
+            console.log(blocksData)
+            blocks = blocksData;
+        }
+
+        function getAreaBlcoksError(err) {
+            console.log(err)
+        }
+        function GetDutiesInShiftTodaySuccess(data)
+        {
+            alert("in success")
+            console.log(data)
+        }
+        function GetDutiesInShiftTodayError(err)
+        {
+            alert("in err")
+            console.log(err)
         }
         function Choose_Area(val)
         {
@@ -237,13 +269,11 @@
                     <select class="form-control" id="Choose_Area" data-component="dropdown" onchange="Show_Workers_In_Area(this.value)" disabled >
                         <option value="0">בחר אזור</option>
                     </select>
-                </div>
-
-
-                
+                </div>     
             </div>
+            <div id="show_work_now">
 
-
+            </div>
         </div>
     </div>
    
