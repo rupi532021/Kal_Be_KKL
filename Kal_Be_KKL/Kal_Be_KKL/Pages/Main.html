@@ -20,7 +20,7 @@
 
     <style type="text/css">
         .blocks {
-            width: 30%;
+            width: 20%;
             float: right;
             padding-right: 20px;
             margin-right: 30px;
@@ -126,11 +126,20 @@
         function getAreaBlcoksError(err) {
             console.log(err)
         }
-        function GetDutiesInShiftTodaySuccess(data)
-        {
-            alert("in success")
-            console.log(data)
-        }
+        function GetDutiesInShiftTodaySuccess(data) {
+            blocks.forEach(b => {
+                str = "";
+                str += "<div class='blocks'><h1>" + b.Block_Name + "</h1>";
+                data.forEach(a => {
+                    if (b.Block_Name == a.Block_Name)
+                        str += "<p><b>" + a.Requirement_Name + "</b>: " + a.First_Name + " " + a.Last_Name + " " + a.Phone + "</p>";
+                });
+                str += "</div>"
+
+                $('#show_work_now').append(str);
+            });
+            }
+                
         function GetDutiesInShiftTodayError(err)
         {
             alert("in err")
