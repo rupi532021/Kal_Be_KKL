@@ -2138,6 +2138,60 @@ namespace Kal_Be_KKL.Models.DAL
             }
         }
 
+        public int Insert_Message (Message msg)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("DBConnectionString"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            String cStr = BuildInsertCommand(msg);      // helper method to build the insert string
+
+            cmd = CreateCommand(cStr, con);             // create the command
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+        }
+
+        private String BuildInsertCommand(Message msg)
+        {
+            String command;
+
+            StringBuilder sb = new StringBuilder();
+            // use a string builder to create the dynamic string
+            sb.AppendFormat("Values('{0}', '{1}', '{2}', '{3}')",
+                 msg.Creator_Id, msg.Creation_Date.ToString("yyyy-MM-dd"), msg.Title, msg.Content);
+            String prefix = "INSERT INTO kkl_Message " + "([Creator_Id], [Creation_Date], [Title], [Content])";
+            command = prefix + sb.ToString();
+
+            return command;
+        }
+
 
 
     }
