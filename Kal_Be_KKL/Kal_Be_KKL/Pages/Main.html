@@ -106,9 +106,9 @@
         function Show_Workers_In_Area(val)
         {
             if (parseInt(val) == 0) {
-                swal('יש לבחור אזור', '', 'error')
+                //swal('יש לבחור אזור', '', 'error')
                 $("#Choose_Area").val(0)
-              
+                $('#show_work_now').empty();
             }
             else {
                 let getApi = "../api/Area/GetAreaBlcoks/" + parseInt(val);;
@@ -127,12 +127,13 @@
             console.log(err)
         }
         function GetDutiesInShiftTodaySuccess(data) {
+            $('#show_work_now').empty();
             blocks.forEach(b => {
                 str = "";
                 str += "<div class='blocks'><h1>" + b.Block_Name + "</h1>";
                 data.forEach(a => {
                     if (b.Block_Name == a.Block_Name)
-                        str += "<p><b>" + a.Requirement_Name + "</b>: " + a.First_Name + " " + a.Last_Name + " " + a.Phone + "</p>";
+                        str += "<p><b>" + a.Requirement_Name + "</b>: " + a.First_Name + " " + a.Last_Name + "</br>טל' - " + a.Phone + "</p>";
                 });
                 str += "</div>"
 
@@ -148,9 +149,10 @@
         function Choose_Area(val)
         {
             if (parseInt(val) == 0) {
-                swal('יש לבחור מרחב', '', 'error')
+                //swal('יש לבחור מרחב', '', 'error')
                 $("#Choose_Area").val(0)
                 $("#Choose_Area").prop("disabled", true);
+                $('#show_work_now').empty();
             }
             else
             {
