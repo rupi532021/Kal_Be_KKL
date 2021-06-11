@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!--<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">-->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="../Scripts/navBars.js"></script>
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="../MyPlugins/moments/moment.js"></script>
+    <link href="../Scripts/StyleSheetNavBar.css" rel="stylesheet" />
+    <script src="../Scripts/ajaxCallsWithKey.js"></script>
+    <script src="../Scripts/jquery-3.4.1.js"></script>
+    <style>
+        h2 {
+            font-size: 30px;
+            font-weight: 600;
+        }
+
+        * {
+            direction: rtl;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            var wWidth = $(window).width();
+            if (wWidth > 768) {
+                $("ul.bts-nav li").hover(function () {
+                    $(this).children("ul").slideToggle(400);
+                });
+            }
+            else {
+                $("ul.bts-nav li a").click(function () {
+                    $(this).next("ul").slideToggle(400);
+                });
+            }
+            let employee = JSON.parse(localStorage["Employee"]);
+            str1 = "<h3>שלום " + employee.First_Name + " " + employee.Last_Name + "</h3>";
+            $("#phHello").append(str1);
+            $("#SendDateTB").val(moment().format('YYYY-MM-DD'));
+        });
+
+    </script>
+</head>
+<body>
+    <div class="container">
+        <!-- NavBar -->
+
+        <img id="imgKKL" src='../images/KKLLogo.png' />
+        <div id="phHello"></div>
+
+        <div class="body-wrap">
+            <nav class="navbar navbar-inverse">
+                <div class="container1">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarMenu" aria-expanded="false">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <!--<a class="navbar-brand" href="#">Brand</a>-->
+                    </div>
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="navbarMenu">
+                        <ul class="nav navbar-nav navbar-right  bts-nav" id="navBarItems">
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <!--NavBar-->
+        <form id="pForm" method="post" enctype="multipart/form-data">
+            <h2>הכנסת הודעות</h2><br>
+            <!--<div class="pict" id="ph"> <img src="../images/jerusalem_forest_flowers_big.jpg" alt="קק'ל"> </div>-->
+            <div class="form-group">
+                <label for="TitleTB"><span class="red-star">★ </span>כותרת ההודעה</label>
+                <input type="text" class="form-control" id="TitleTB" placeholder="כותרת ההודעה" required>
+            </div>
+            <div class="form-group">
+                <label for="ContentTB"><span class="red-star">★ </span>תוכן ההודעה</label>
+                <input type="text" class="form-control" id="ContentTB" placeholder="תוכן ההודעה" required>
+            </div>
+            <div class="form-group">
+                <label for="SendDateTB"><span class="red-star">★ </span>תאריך שליחה</label>
+                <input type="date" class="form-control" id="SendDateTB" required disabled>
+            </div>
+            <button type="submit" class="btn btn-primary" onclick="saveMessage()">שמירה</button>
+
+        </form>
+    </div>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</body>
+</html>
