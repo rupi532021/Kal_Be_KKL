@@ -75,7 +75,7 @@
 
 
         div#work_now {
-            float: left;
+            margin-right:37%;
         }
 
         #work_now > div {
@@ -91,7 +91,10 @@
             margin-left: 5px;
         }
 
-
+        body {
+            line-height: 1.42857143;
+            color: #333;
+        }
         #head_msg {
             text-align: center;
             border-bottom: 3px solid black;
@@ -105,10 +108,40 @@
             width: 30%;
             border: 2px solid black;
         }
-
-            #p li {
-                border-bottom: 2px double black;
+        #p li {
+            border-bottom: 2px black;
             }
+
+        #work_now h1 {
+            margin-right: -37%;
+        }
+
+        @media only screen and (max-width: 768px) {
+            div#work_now {
+                margin-right: 0%;
+                width: 100%;
+            }
+            #p{
+                width:100%;
+            }
+            .container {
+                padding-right: 0px;
+                padding-left: 0px;
+                margin-right: 10px;
+                margin-left: 10px;
+            }
+            .blocks {
+                width: 90%;
+                margin-right: 10px;
+                margin-left: 10px;
+            }
+            body {
+                line-height: 1.42857143;
+                color: #333;
+                background-color: #555;
+            }
+        }
+
     </style>
 
     <script type="text/javascript">
