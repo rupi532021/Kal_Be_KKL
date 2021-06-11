@@ -14,6 +14,8 @@
     <link href="../scripts/stylesheetnavbar.css" rel="stylesheet" />
     <script src="../scripts/ajaxcallswithkey.js"></script>
     <script src="../scripts/jquery-3.4.1.js"></script>
+    <script src="../Scripts/navBars.js"></script>
+
     <style type="text/css">
 
         body {
@@ -69,8 +71,14 @@
         #courses {
             display: block;
             flex-wrap: wrap;
-            float:left;
+            float: left;
         }
+
+        #coursesTitle {
+            display: block;
+            flex-wrap: wrap;
+        }
+
         .swal-text {
             text-align: right;
         }
@@ -87,6 +95,7 @@
 
         courses_arr = [];
         $(document).ready(function () {
+            $('#navBarItems').html(chooseNavBar);
             $("#pForm").submit(Edit_Employee); // bind the submit event to a function called f1
             var wWidth = $(window).width();
             if (wWidth > 768) {
@@ -99,6 +108,9 @@
                     $(this).next("ul").slideToggle(400);
                 });
             }
+            let employee = JSON.parse(localStorage["Employee"]);
+            str1 = "<h3>שלום " + employee.First_Name + " " + employee.Last_Name + "</h3>";
+            $("#phHello").append(str1);
             loadcourses()
             FillDetails()
 
@@ -117,7 +129,11 @@
             $("#IDTB").val(employee.Id);
             $("#Gender").val(employee.Gender);
             $("#IDTB").prop('disabled', true);
-            Show_Worker_Curses();
+            if (localStorage["Job_Id"] != null) {
+                if (JSON.parse(localStorage["Job_Id"]) == 1) {
+                    Show_Worker_Curses();
+                }
+            }
         }
 
 
@@ -169,16 +185,19 @@
         }
 
         function Show_Worker_Curses_Succsess(data) {
+            $("#courses").empty();
+            $("#courses").append("<h2>ההכשרות שלי</h2>")
             data.forEach(c => {
                 name_of_course = "";
                 str = "<div class='choose_cousre' id='" + c.Course_Id + "'>";
                 for (var i = 0; i < courses_arr.length; i++) {
                     if (courses_arr[i].Course_Id == c.Course_Id) {
                         str += "<p> שם הקורס: " + courses_arr[i].Course_Name + "</p>"
+                        str += "<p>תוקף: "+courses_arr[i].Validity+" חודשים</p>"
                         name_of_course = courses_arr[i].Course_Name;
                     }
                 }
-                str += "<p> תאריך ביצוע הקורס: " + moment(c.Receipt_Course_Date).format("DD/MM/YYYY") + "</p></div>";
+                str += "<p> תאריך ביצוע הקורס: " + moment(c.Receipt_Course_Date).format("DD/MM/YYYY") + "</p>"
                 $("#courses").append(str)
             })
         }
@@ -223,42 +242,15 @@
                     </div>
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse" id="navbarMenu">
-                        <ul class="nav navbar-nav navbar-right  bts-nav">
-                            <li class="active"><a href="#">ראשי<span class="sr-only">(current)</span></a></li>
-                            <li class="dropdown">
-                                <a href="#">סידור עבודה<span class="caret"></span></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="Requests.html">הגשת סידור</a></li>
-                                    <li><a href="My_Shifts.html">הסידור שלי</a></li>
-                                    <li><a href="AssignToShifts.html">שיבוץ בקשות</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="#">נוכחות</a></li>
-                            <li><a href="#">אנשי קשר</a></li>
-                            <li class="dropdown">
-                                <a href="#">ניהול תורנות<span class="caret"></span></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">דוח סוף תורנות</a></li>
-                                    <li><a href="#">טופס עליה לתורנות</a></li>
-                                </ul>
-                            </li>
-                            <li class="dropdown">
-                                <a href="#">הכשרות ואישורים<span class="caret"></span></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">ההכשרות שלי</a></li>
-                                    <li><a href="#">בקשה להכשרה</a></li>
-                                    <li><a href="Insert_Courses.html">הכנסת הכשרות</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="#">פרטים אישיים</a></li>
-                            <li><a href="Special_Requirements.html">דרישות משתנות</a></li>
+                        <ul class="nav navbar-nav navbar-right  bts-nav" id="navBarItems">
                         </ul>
                     </div>
                 </div>
             </nav>
         </div>
         <!--NavBar-->
-        <div id="courses"><h2>ההכשרות שלי </h2></div>
+        <div id="courses">
+        </div>
         <form id="pForm" method="put" enctype="multipart/form-data">
             <h2>הפרופיל שלי </h2>
             <div class="form-group">

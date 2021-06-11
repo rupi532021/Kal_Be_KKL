@@ -22,6 +22,7 @@
     <link href="../Scripts/main.css" rel="stylesheet" />
     <script src="../Scripts/main.js"></script>
     <link href="../Scripts/StyleSheetNavBar.css" rel="stylesheet" />
+    <script src="../Scripts/navBars.js"></script>
 
     <style type="text/css">
 
@@ -150,6 +151,7 @@
     <script>
         allRequests = [];
         $(document).ready(function () {
+            $('#navBarItems').html(chooseNavBar);
             getRequests();
             var wWidth = $(window).width();
             if (wWidth > 768) {
@@ -253,8 +255,9 @@
 <body>
     <div class="container">
         <!-- NavBar -->
+
         <img id="imgKKL" src='../images/KKLLogo.png' />
-        <div id="phHello"> </div>
+        <div id="phHello"></div>
 
         <div class="body-wrap">
             <nav class="navbar navbar-inverse">
@@ -262,50 +265,22 @@
                     <!-- Brand and toggle get grouped for better mobile display -->
                     <div class="navbar-header">
                         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarMenu" aria-expanded="false">
-                            <span class="sr-only"> Toggle navigation</span>
-                            <span class="icon-bar"> </span>
-                            <span class="icon-bar"> </span>
-                            <span class="icon-bar"> </span>
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
                         </button>
-                        <!-- <a class="navbar-brand" href="#" > Brand</a >-->
+                        <!--<a class="navbar-brand" href="#">Brand</a>-->
                     </div>
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse" id="navbarMenu">
-                        <ul class="nav navbar-nav navbar-right  bts-nav">
-                            <li class="active"> <a href="#"> ראשי<span class="sr-only"> (current)</span> </a> </li>
-                            <li class="dropdown">
-                                <a href="#"> סידור עבודה<span class="caret"> </span> </a>
-                                <ul class="dropdown-menu">
-                                    <li> <a href="Requests.html"> הגשת סידור</a> </li>
-                                    <li> <a href="My_Shifts.html"> הסידור שלי</a> </li>
-                                    <li> <a href="AssignToShifts.html"> שיבוץ בקשות</a> </li>
-                                </ul>
-                            </li>
-                            <li> <a href="#"> נוכחות</a> </li>
-                            <li> <a href="#"> אנשי קשר</a> </li>
-                            <li class="dropdown">
-                                <a href="#"> ניהול תורנות<span class="caret"> </span> </a>
-                                <ul class="dropdown-menu">
-                                    <li> <a href="#"> דוח סוף תורנות</a> </li>
-                                    <li> <a href="#"> טופס עליה לתורנות</a> </li>
-                                </ul>
-                            </li>
-                            <li class="dropdown">
-                                <a href="#"> הכשרות ואישורים<span class="caret"> </span> </a>
-                                <ul class="dropdown-menu">
-                                    <li> <a href="#"> ההכשרות שלי</a> </li>
-                                    <li> <a href="#"> בקשה להכשרה</a> </li>
-                                    <li> <a href="Insert_Courses.html"> הכנסת הכשרות</a> </li>
-                                </ul>
-                            </li>
-                            <li> <a href="#">פרטים אישיים</a> </li>
-                            <li> <a href="Special_Requirements.html"> דרישות משתנות</a> </li>
+                        <ul class="nav navbar-nav navbar-right  bts-nav" id="navBarItems">
                         </ul>
                     </div>
                 </div>
             </nav>
         </div>
-        <!--NavBar-- !>-->
+        <!--NavBar-->
         <h2>בקשות לחילוף</h2><br>
         <div id="subRequests"></div>
     </div>

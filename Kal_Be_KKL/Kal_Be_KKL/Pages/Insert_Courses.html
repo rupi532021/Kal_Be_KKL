@@ -13,6 +13,8 @@
     <script src="../MyPlugins/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
     <script src="../MyPlugins/moments/moment.js"></script>
     <link href="../Scripts/StyleSheetNavBar.css" rel="stylesheet" />
+    <script src="../Scripts/navBars.js"></script>
+
     <style type="text/css">
 
         h3 {
@@ -80,6 +82,7 @@
             width: 30px;
             float: unset
         }
+
         .swal-text {
             text-align: right;
         }
@@ -105,9 +108,9 @@
         }
         function postSuccess(data) {
             console.log(data)
-            swal(data,"תודה", "success");
+            swal(data, "תודה", "success");
             setTimeout("", 5000)
-            
+
 
         }
         function postError(err) {
@@ -150,6 +153,7 @@
             console.log(err)
         }
         $(document).ready(function () {
+            $('#navBarItems').html(chooseNavBar);
             loadworkers();
             loadcourses();
             var wWidth = $(window).width();
@@ -171,8 +175,7 @@
         });
 
 
-                function deletecourse(course_id)
-                {
+        function deletecourse(course_id) {
             let i = chosen_courses.findIndex(c => c.Course_Id == course_id)
             cod =
             {
@@ -188,16 +191,14 @@
             console.log(chosen_courses)
             let api = "../api/Courses_Of_Dutys/Delete_Course_Of_Duty/";
             ajaxCall("POST", api, JSON.stringify(cod), Delete_Course_Succsess, Delete_Course_Error);
-                }
+        }
 
-                function Delete_Course_Succsess(data)
-                {
-                    console.log(data)
-                }
-                function Delete_Course_Error(err)
-                {
-                    console.log(err)
-                }
+        function Delete_Course_Succsess(data) {
+            console.log(data)
+        }
+        function Delete_Course_Error(err) {
+            console.log(err)
+        }
         function addcourse() {
 
             date_of_start_course1 = $("#DateTB").val()
@@ -209,12 +210,13 @@
                 return;
 
             }
+
             date_of_start_course = $("#DateTB").val()
             if (course_id != "0" && $("#DateTB").val() != "") {
                 courses_arr.forEach(c => {
                     if (c.Course_Id == parseInt(course_id)) {
-                        if (chosen_courses.some(c => c.Course_Id == course_id) == false) {                                                                                                                                                      
-                            str = "<div class='choose_cousre' id='" + c.Course_Id + "'> <p>שם הקורס:  " + c.Course_Name + "</p><p> תאריך ביצוע הקורס: " + date_of_start_course + "</p><input type='button' value='מחק'  onclick='deletecourse(" + c.Course_Id + ")'/></div>";
+                        if (chosen_courses.some(c => c.Course_Id == course_id) == false) {
+                            str = "<div class='choose_cousre' id='" + c.Course_Id + "'> <p>שם הקורס:  " + c.Course_Name + "<p>תוקף: " + c.Validity + " חודשים</p></p><p> תאריך ביצוע הקורס: " + date_of_start_course + "</p><input type='button' value='מחק'  onclick='deletecourse(" + c.Course_Id + ")'/></div>";
                             mycourses = {
                                 "Name": c.Course_Name,
                                 "Course_Id": c.Course_Id,
@@ -258,16 +260,17 @@
             let api = "../api/Courses_Of_Dutys/GetAllCoursesOfDuty/" + id;
             ajaxCall("GET", api, "", Show_Worker_Curses_Succsess, Show_Worker_Curses_Error);
         }
-                function Show_Worker_Curses_Succsess(data) {
+        function Show_Worker_Curses_Succsess(data) {
             data.forEach(c => {
                 name_of_course = "";
                 str = "<div class='choose_cousre' id='" + c.Course_Id + "'>";
                 for (var i = 0; i < courses_arr.length; i++) {
                     if (courses_arr[i].Course_Id == c.Course_Id) {
                         str += "<p> שם הקורס: " + courses_arr[i].Course_Name + "</p>"
+                        str += "<p>תוקף: " + courses_arr[i].Validity + " חודשים</p>"
                         name_of_course = courses_arr[i].Course_Name;
                     }
-                }                
+                }
                 str += "<p> תאריך ביצוע הקורס: " + moment(c.Receipt_Course_Date).format("YYYY-MM-DD") + "</p>";
                 str += "<input type = 'button' value = 'מחק'  onclick = 'deletecourse(" + c.Course_Id + ")'/></div>";
                 $("#courses").append(str)
@@ -281,7 +284,7 @@
                 chosen_courses.push(mycourses)
 
             });
-           
+
         }
         function Show_Worker_Curses_Error(err) {
             console.log(err)
@@ -311,35 +314,7 @@
                     </div>
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse" id="navbarMenu">
-                        <ul class="nav navbar-nav navbar-right  bts-nav">
-                            <li class="active"><a href="#">ראשי<span class="sr-only">(current)</span></a></li>
-                            <li class="dropdown">
-                                <a href="#">סידור עבודה<span class="caret"></span></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="Requests.html">הגשת סידור</a></li>
-                                    <li><a href="My_Shifts.html">הסידור שלי</a></li>
-                                    <li><a href="AssignToShifts.html">שיבוץ בקשות</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="#">נוכחות</a></li>
-                            <li><a href="#">אנשי קשר</a></li>
-                            <li class="dropdown">
-                                <a href="#">ניהול תורנות<span class="caret"></span></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">דוח סוף תורנות</a></li>
-                                    <li><a href="#">טופס עליה לתורנות</a></li>
-                                </ul>
-                            </li>
-                            <li class="dropdown">
-                                <a href="#">הכשרות ואישורים<span class="caret"></span></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">ההכשרות שלי</a></li>
-                                    <li><a href="#">בקשה להכשרה</a></li>
-                                    <li><a href="Insert_Courses.html">הכנסת הכשרות</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="#">פרטים אישיים</a></li>
-                            <li><a href="Special_Requirements.html">דרישות משתנות</a></li>
+                        <ul class="nav navbar-nav navbar-right  bts-nav" id="navBarItems">
                         </ul>
                     </div>
                 </div>

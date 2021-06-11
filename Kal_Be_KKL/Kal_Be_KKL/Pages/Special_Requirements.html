@@ -10,6 +10,8 @@
     <script src="../Scripts/ajaxCallsWithKey.js"></script>
     <script src="../Scripts/jquery-3.4.1.js"></script>
     <link href="../Scripts/StyleSheetNavBar.css" rel="stylesheet" />
+    <script src="../Scripts/navBars.js"></script>
+
     <style type="text/css">
         h3 {
             text-align: right
@@ -48,6 +50,7 @@
             display: flex;
             flex-wrap: wrap;
         }
+
         .swal-text {
             text-align: right;
         }
@@ -59,7 +62,8 @@
 
     <script>
         $(document).ready(function () {
-            $("#pForm").submit(addSpecialRequirement) //לחיצה על כפתור שמירה ששולח אותך לשמור על הדרישה המיוחדת 
+            $('#navBarItems').html(chooseNavBar);
+            $("#pForm").submit(addSpecialRequirement) //לחיצה על כפתור שמירה ששולח אותך לשמור על הדרישה המיוחדת
             getRequirements();                        // הפונקציה מביאה את הדרישות הקיימות שבמערכת
             create_Area_arr();                        //הפונקציה מביאה את האזורים הקיימים במערכת על מנת שנוכל להביא את הגושים
 
@@ -82,7 +86,7 @@
 
         function delete_special_requirement(Requirement_Id) {
             shiftDate = $("#dateTB").val();
-            blockId = $("#blockTB").val();            
+            blockId = $("#blockTB").val();
             deleteSpecialRequirements(blockId, shiftDate, Requirement_Id)
             $("#" + Requirement_Id).remove();
         }
@@ -91,7 +95,7 @@
             ajaxCall("DELETE", apiSr, "", deleteSpecialRequirementsSuccess, deleteSpecialRequirementsError)
         }
         function deleteSpecialRequirementsSuccess(data) {
-            getSpecialRequirementsSuccess(data); 
+            getSpecialRequirementsSuccess(data);
             swal('דרישה נמחקה', '', 'warning')
         }
 
@@ -210,7 +214,7 @@
             $("#special_Requirements").html("")
             data.forEach(sr => {
                 $("#special_Requirements").append("<div id='" + sr.Requirement_Id + "' class='row choose_requirement'><p>שם :" + sr.Requirement_Name + "</br>כמות: " + sr.Quantity + "</br>הערות: " + (sr.Comments == null ? 'אין הערות' : sr.Comments) +
-                    " </br></p><input type='button' value='מחק' title='" + sr.Requirement_Id+"' onclick='delete_special_requirement(this.title)' /></div>")
+                    " </br></p><input type='button' value='מחק' title='" + sr.Requirement_Id + "' onclick='delete_special_requirement(this.title)' /></div>")
             })
         }
 
@@ -232,9 +236,9 @@
         }
 
         function addSpecialRequirement() {
-            // בדיקה האם התאריך תקין, בדיקה אם קיימת דרישה, ובדיקה שהכמות מאותה דרישה גדולה מ-0 
+            // בדיקה האם התאריך תקין, בדיקה אם קיימת דרישה, ובדיקה שהכמות מאותה דרישה גדולה מ-0
             //ואז שולח את הדירשה המיוחדת שאנו רוצים להוסיף לשרת ולאחר מכן מרוקן את התיבת טקסט של הכמות, העערות ומחזיר את הדרישה לברירת מחדל
-            
+
             if ($("#dateTB").val() == "") {
                 swal('יש לבחור תאריך', '', 'info')
                 return false
@@ -275,9 +279,9 @@
         }
 
         function areachoose() {                         //מופעת כאשר בוחרים אזור להצגה
-                                                        //פעולות:
-                                                        //1) בודקת האם נבחר איזור נכון במידה ולא מחייבת אותך לבחור אזור ולא נותנת להמשיך
-                                                        //2)לאחר הבדיקה מביאה את כל הבלוקים הרלוונטים של אותו הגוש
+            //פעולות:
+            //1) בודקת האם נבחר איזור נכון במידה ולא מחייבת אותך לבחור אזור ולא נותנת להמשיך
+            //2)לאחר הבדיקה מביאה את כל הבלוקים הרלוונטים של אותו הגוש
             Area_Id = $("#areaTB").val();
             make_all_boxes_are_disable_or_enable(true)
             if (Area_Id == "0") {
@@ -330,43 +334,7 @@
                     </div>
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse" id="navbarMenu">
-                        <ul class="nav navbar-nav navbar-right  bts-nav">
-                            <li class="active"><a href="#">ראשי<span class="sr-only">(current)</span></a></li>
-                            <li class="dropdown">
-                                <a href="#">סידור עבודה<span class="caret"></span></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="Requests.html">הגשת סידור</a></li>
-                                    <li><a href="My_Shifts.html">הסידור שלי</a></li>
-                                    <li><a href="AssignToShifts.html">שיבוץ בקשות</a></li>
-                                    <!--<li class="dropdown">
-        <a href="#">Another Dropdown <span class="caret dropdown-caret"></span></a>
-        <ul class="dropdown-menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Action</a></li>
-        </ul>
-    </li>-->
-                                    <!--<li><a href="#">Action</a></li>-->
-                                </ul>
-                            </li>
-                            <li><a href="#">נוכחות</a></li>
-                            <li><a href="#">אנשי קשר</a></li>
-                            <li class="dropdown">
-                                <a href="#">ניהול תורנות<span class="caret"></span></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">דוח סוף תורנות</a></li>
-                                    <li><a href="#">טופס עליה לתורנות</a></li>
-                                </ul>
-                            </li>
-                            <li class="dropdown">
-                                <a href="#">הכשרות ואישורים<span class="caret"></span></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">ההכשרות שלי</a></li>
-                                    <li><a href="#">בקשה להכשרה</a></li>
-                                    <li><a href="Insert_Courses.html">הכנסת הכשרות</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="#">פרטים אישיים</a></li>
-                            <li><a href="Special_Requirements.html">דרישות משתנות</a></li>
+                        <ul class="nav navbar-nav navbar-right  bts-nav" id="navBarItems">
                         </ul>
                     </div>
                 </div>

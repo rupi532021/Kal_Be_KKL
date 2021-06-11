@@ -16,6 +16,8 @@
     <script src="../Scripts/jquery-3.4.1.min.js"></script>
 
     <script src="../Scripts/jquery.vticker-min.js"></script>
+    <script src="../Scripts/navBars.js"></script>
+
 
 
     <style type="text/css">
@@ -32,7 +34,11 @@
             margin-right: 10px;
             width: 310px
         }
-        label{margin-right:15px;}
+
+        label {
+            margin-right: 15px;
+        }
+
         h3 {
             font-size: 30px;
             font-weight: 600;
@@ -45,7 +51,7 @@
         }
 
         h1 {
-            text-align:center;
+            text-align: center;
             font-size: 37px;
             font-weight: 600;
         }
@@ -62,14 +68,18 @@
             /*margin-right: 300px;*/
             padding: 5px
         }
-        #p{float:right}
+
+        #p {
+            float: right
+        }
 
 
         div#work_now {
             float: left;
         }
-        #work_now>div{
-            float:right;
+
+        #work_now > div {
+            float: right;
         }
 
         #ph2 {
@@ -93,9 +103,12 @@
             text-align: right;
             position: relative;
             width: 30%;
-            border: 3px solid black;
+            border: 2px solid black;
         }
 
+            #p li {
+                border-bottom: 2px double black;
+            }
     </style>
 
     <script type="text/javascript">
@@ -104,6 +117,7 @@
         blocks = [];
 
         $(document).ready(function () {
+            $('#navBarItems').html(chooseNavBar);
             var wWidth = $(window).width();
             if (wWidth > 768) {
                 $("ul.bts-nav li").hover(function () {
@@ -118,10 +132,23 @@
             let employee = JSON.parse(localStorage["Employee"]);
             str1 = "<h3>שלום " + employee.First_Name + " " + employee.Last_Name + "</h3>";
             $("#phHello").append(str1);
+            getMessages();
         });
 
-        function Show_Workers_In_Area(val)
-        {
+        function getMessages() {
+            let api = "../api/messages";
+            ajaxCall("GET", api, "", getmessagesSuccess, getmessagesError)
+        }
+
+        function getmessagesSuccess(data) {
+            renderTicker(data)
+        }
+
+        function getmessagesError(err) {
+            err.responseJSON.Message
+        }
+
+        function Show_Workers_In_Area(val) {
             if (parseInt(val) == 0) {
                 //swal('יש לבחור אזור', '', 'error')
                 $("#Choose_Area").val(0)
@@ -156,29 +183,26 @@
 
                 $('#show_work_now').append(str);
             });
-            }
-                
-        function GetDutiesInShiftTodayError(err)
-        {
+        }
+
+        function GetDutiesInShiftTodayError(err) {
             alert("in err")
             console.log(err)
         }
-        function Choose_Area(val)
-        {
+        function Choose_Area(val) {
             if (parseInt(val) == 0) {
                 //swal('יש לבחור מרחב', '', 'error')
                 $("#Choose_Area").val(0)
                 $("#Choose_Area").prop("disabled", true);
                 $('#show_work_now').empty();
             }
-            else
-            {
+            else {
                 $("#Choose_Area").prop("disabled", false);
                 let api = "../api/Area/AreaWithDistrict/" + parseInt(val);
-                ajaxCall("GET", api,"" , getAreaSuccess, getAreaError)
+                ajaxCall("GET", api, "", getAreaSuccess, getAreaError)
             }
 
-            
+
         }
         function getAreaSuccess(area_arr) {
             areas = '<option value="0"> בחר איזור </option>';
@@ -191,11 +215,14 @@
         function getAreaError(err) {
             console.log(err)
         }
-        msgs = ["Raviv Lankry", "Ido Fadida", "Busel Medina", "Tal Tzoref"]
-        $(document).ready(function () {
+        function renderTicker(msgs) {
             str = "";
             for (var i = 0; i < msgs.length; i++) {
-                str += "<li style='height:130px'><div id='d1'><h2> " + msgs[i] + " </h2></div></li>";
+                str += "<li style='height:130px'><div>";
+                str += "<p id='dateMessage'> " + moment(msgs[i].Creation_Date).format('YYYY-MM-DD') + " </p>";
+                str += "<p id='titleMessage'> " + msgs[i].Title + " </p>";
+                str += "<p id='contentMessage'> " + msgs[i].Content + " </p></div>";
+                str += "</li>";
             }
             $("#l").append(str);
             $('#ph2').vTicker({
@@ -207,9 +234,7 @@
                 height: 0,
                 direction: 'up'
             });
-
-
-        });
+        }
     </script>
 </head>
 <body>
@@ -235,35 +260,7 @@
                     </div>
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse" id="navbarMenu">
-                        <ul class="nav navbar-nav navbar-right  bts-nav">
-                            <li class="active"><a href="#">ראשי<span class="sr-only">(current)</span></a></li>
-                            <li class="dropdown">
-                                <a href="#">סידור עבודה<span class="caret"></span></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="Requests.html">הגשת סידור</a></li>
-                                    <li><a href="My_Shifts.html">הסידור שלי</a></li>
-                                    <li><a href="AssignToShifts.html">שיבוץ בקשות</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="#">נוכחות</a></li>
-                            <li><a href="#">אנשי קשר</a></li>
-                            <li class="dropdown">
-                                <a href="#">ניהול תורנות<span class="caret"></span></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">דוח סוף תורנות</a></li>
-                                    <li><a href="#">טופס עליה לתורנות</a></li>
-                                </ul>
-                            </li>
-                            <li class="dropdown">
-                                <a href="#">הכשרות ואישורים<span class="caret"></span></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">ההכשרות שלי</a></li>
-                                    <li><a href="#">בקשה להכשרה</a></li>
-                                    <li><a href="Insert_Courses.html">הכנסת הכשרות</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="#">פרטים אישיים</a></li>
-                            <li><a href="Special_Requirements.html">דרישות משתנות</a></li>
+                        <ul class="nav navbar-nav navbar-right  bts-nav" id="navBarItems">
                         </ul>
                     </div>
                 </div>
@@ -285,7 +282,7 @@
                 <h1>מי עובד עכשיו</h1>
                 <div>
                     <label for="ChooseDistrictRB">בחר מרחב</label>
-                    <select class="form-control" id="ChooseDistrict" data-component="dropdown" onchange="Choose_Area(this.value)" >
+                    <select class="form-control" id="ChooseDistrict" data-component="dropdown" onchange="Choose_Area(this.value)">
                         <option value="0">בחר מרחב</option>
                         <option value="2">צפון</option>
                         <option value="1">מרכז</option>
@@ -294,10 +291,10 @@
                 </div>
                 <div>
                     <label for="AreaRB">בחר אזור</label>
-                    <select class="form-control" id="Choose_Area" data-component="dropdown" onchange="Show_Workers_In_Area(this.value)" disabled >
+                    <select class="form-control" id="Choose_Area" data-component="dropdown" onchange="Show_Workers_In_Area(this.value)" disabled>
                         <option value="0">בחר אזור</option>
                     </select>
-                </div>     
+                </div>
             </div>
             <div id="show_work_now">
 

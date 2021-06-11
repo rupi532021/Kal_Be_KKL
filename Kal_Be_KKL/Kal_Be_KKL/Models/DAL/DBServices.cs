@@ -2185,7 +2185,7 @@ namespace Kal_Be_KKL.Models.DAL
             StringBuilder sb = new StringBuilder();
             // use a string builder to create the dynamic string
             sb.AppendFormat("Values('{0}', '{1}', '{2}', '{3}')",
-                 msg.Creator_Id, msg.Creation_Date.ToString("yyyy-MM-dd"), msg.Title, msg.Content);
+                 msg.Creator_Id, msg.Creation_Date.ToString("yyyy-MM-dd"), msg.Title.Replace("'","''"), msg.Content.Replace("'", "''"));
             String prefix = "INSERT INTO kkl_Message " + "([Creator_Id], [Creation_Date], [Title], [Content])";
             command = prefix + sb.ToString();
 

@@ -12,6 +12,8 @@
     <link href="../Scripts/main.css" rel="stylesheet" />
     <link href="../Scripts/StyleSheetNavBar.css" rel="stylesheet" />
     <script src="../Scripts/main.js"></script>
+    <script src="../Scripts/navBars.js"></script>
+
     <style>
         h3 {
             text-align: right
@@ -24,8 +26,8 @@
         #weights {
             direction: ltr;
             width: auto;
-            background:none;
-            width:250px;
+            background: none;
+            width: 250px;
         }
 
         .blocks {
@@ -60,131 +62,129 @@
             }
 
             #weights {
-                padding-top:40px;
+                padding-top: 40px;
             }
 
             label#fairness {
                 padding-top: 28px;
             }
-
         }
 
         h4 {
             margin-right: 10px;
         }
 
-        label{
-            padding-left:3px
-
+        label {
+            padding-left: 3px
         }
 
-        label#satisfaction {
-            padding-left:29px;
-        }
-            /*Slider CSS*/
+            label#satisfaction {
+                padding-left: 29px;
+            }
+        /*Slider CSS*/
 
-            input[type=range] {
-                height: 26px;
-                -webkit-appearance: none;
-                margin: 30px 0;
-                width: 100%;
+        input[type=range] {
+            height: 26px;
+            -webkit-appearance: none;
+            margin: 30px 0;
+            width: 100%;
+        }
+
+            input[type=range]:focus {
+                outline: none;
             }
 
-                input[type=range]:focus {
-                    outline: none;
-                }
+            input[type=range]::-webkit-slider-runnable-track {
+                width: 100%;
+                height: 14px;
+                cursor: pointer;
+                animate: 0.2s;
+                box-shadow: 1px 1px 1px #FAFAFA;
+                background: #CBF5D8;
+                border-radius: 14px;
+                border: 0px solid #F2FFFA;
+            }
 
-                input[type=range]::-webkit-slider-runnable-track {
-                    width: 100%;
-                    height: 14px;
-                    cursor: pointer;
-                    animate: 0.2s;
-                    box-shadow: 1px 1px 1px #FAFAFA;
-                    background: #CBF5D8;
-                    border-radius: 14px;
-                    border: 0px solid #F2FFFA;
-                }
+            input[type=range]::-webkit-slider-thumb {
+                box-shadow: 0px 0px 0px #000000;
+                border: 0px solid #000000;
+                height: 20px;
+                width: 20px;
+                border-radius: 12px;
+                background: #233626;
+                cursor: pointer;
+                -webkit-appearance: none;
+                margin-top: -3px;
+            }
 
-                input[type=range]::-webkit-slider-thumb {
-                    box-shadow: 0px 0px 0px #000000;
-                    border: 0px solid #000000;
-                    height: 20px;
-                    width: 20px;
-                    border-radius: 12px;
-                    background: #233626;
-                    cursor: pointer;
-                    -webkit-appearance: none;
-                    margin-top: -3px;
-                }
+            input[type=range]:focus::-webkit-slider-runnable-track {
+                background: #CBF5D8;
+            }
 
-                input[type=range]:focus::-webkit-slider-runnable-track {
-                    background: #CBF5D8;
-                }
+            input[type=range]::-moz-range-track {
+                width: 100%;
+                height: 14px;
+                cursor: pointer;
+                animate: 0.2s;
+                box-shadow: 1px 1px 1px #FAFAFA;
+                background: #F0FFF1;
+                border-radius: 14px;
+                border: 0px solid #F2FFFA;
+            }
 
-                input[type=range]::-moz-range-track {
-                    width: 100%;
-                    height: 14px;
-                    cursor: pointer;
-                    animate: 0.2s;
-                    box-shadow: 1px 1px 1px #FAFAFA;
-                    background: #F0FFF1;
-                    border-radius: 14px;
-                    border: 0px solid #F2FFFA;
-                }
+            input[type=range]::-moz-range-thumb {
+                box-shadow: 0px 0px 0px #000000;
+                border: 0px solid #000000;
+                height: 20px;
+                width: 20px;
+                border-radius: 12px;
+                background: #233626;
+                cursor: pointer;
+            }
 
-                input[type=range]::-moz-range-thumb {
-                    box-shadow: 0px 0px 0px #000000;
-                    border: 0px solid #000000;
-                    height: 20px;
-                    width: 20px;
-                    border-radius: 12px;
-                    background: #233626;
-                    cursor: pointer;
-                }
+            input[type=range]::-ms-track {
+                width: 100%;
+                height: 14px;
+                cursor: pointer;
+                animate: 0.2s;
+                background: transparent;
+                border-color: transparent;
+                color: transparent;
+            }
 
-                input[type=range]::-ms-track {
-                    width: 100%;
-                    height: 14px;
-                    cursor: pointer;
-                    animate: 0.2s;
-                    background: transparent;
-                    border-color: transparent;
-                    color: transparent;
-                }
+            input[type=range]::-ms-fill-lower {
+                background: #CBF5D8;
+                border: 0px solid #F2FFFA;
+                border-radius: 28px;
+                box-shadow: 1px 1px 1px #FAFAFA;
+            }
 
-                input[type=range]::-ms-fill-lower {
-                    background: #CBF5D8;
-                    border: 0px solid #F2FFFA;
-                    border-radius: 28px;
-                    box-shadow: 1px 1px 1px #FAFAFA;
-                }
+            input[type=range]::-ms-fill-upper {
+                background: #CBF5D8;
+                border: 0px solid #F2FFFA;
+                border-radius: 28px;
+                box-shadow: 1px 1px 1px #FAFAFA;
+            }
 
-                input[type=range]::-ms-fill-upper {
-                    background: #CBF5D8;
-                    border: 0px solid #F2FFFA;
-                    border-radius: 28px;
-                    box-shadow: 1px 1px 1px #FAFAFA;
-                }
+            input[type=range]::-ms-thumb {
+                margin-top: 1px;
+                box-shadow: 0px 0px 0px #000000;
+                border: 0px solid #000000;
+                height: 20px;
+                width: 40px;
+                border-radius: 12px;
+                background: #233626;
+                cursor: pointer;
+            }
 
-                input[type=range]::-ms-thumb {
-                    margin-top: 1px;
-                    box-shadow: 0px 0px 0px #000000;
-                    border: 0px solid #000000;
-                    height: 20px;
-                    width: 40px;
-                    border-radius: 12px;
-                    background: #233626;
-                    cursor: pointer;
-                }
+            input[type=range]:focus::-ms-fill-lower {
+                background: #CBF5D8;
+            }
 
-                input[type=range]:focus::-ms-fill-lower {
-                    background: #CBF5D8;
-                }
-
-                input[type=range]:focus::-ms-fill-upper {
-                    background: #CBF5D8;
-                }
-            /*Slider CSS*/ 
+            input[type=range]:focus::-ms-fill-upper {
+                background: #CBF5D8;
+            }
+        /*Slider CSS*/
 
     </style>
     <script>
@@ -193,6 +193,7 @@
         var allAssigns;
 
         $(document).ready(function () {
+            $('#navBarItems').html(chooseNavBar);
             $('#fairness').text(50);
             $('#satisfaction').text(50);
             var wWidth = $(window).width();
@@ -243,7 +244,7 @@
         }
 
         function getAssigns() {
-            let getApi = "../api/Day_In_Shift/GetDutiesInShift/" + areaId +"/true";
+            let getApi = "../api/Day_In_Shift/GetDutiesInShift/" + areaId + "/true";
             ajaxCall("GET", getApi, "", getAssignsSuccess, getAssignsError);
         }
 
@@ -320,43 +321,7 @@
                     </div>
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse" id="navbarMenu">
-                        <ul class="nav navbar-nav navbar-right  bts-nav">
-                            <li class="active"><a href="#">ראשי<span class="sr-only">(current)</span></a></li>
-                            <li class="dropdown">
-                                <a href="#">סידור עבודה<span class="caret"></span></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="Requests.html">הגשת סידור</a></li>
-                                    <li><a href="My_Shifts.html">הסידור שלי</a></li>
-                                    <li><a href="AssignToShifts.html">שיבוץ בקשות</a></li>
-                                    <!--<li class="dropdown">
-                                        <a href="#">Another Dropdown <span class="caret dropdown-caret"></span></a>
-                                        <ul class="dropdown-menu">
-                                            <li><a href="#">Action</a></li>
-                                            <li><a href="#">Action</a></li>
-                                        </ul>
-                                    </li>-->
-                                    <!--<li><a href="#">Action</a></li>-->
-                                </ul>
-                            </li>
-                            <li><a href="#">נוכחות</a></li>
-                            <li><a href="#">אנשי קשר</a></li>
-                            <li class="dropdown">
-                                <a href="#">ניהול תורנות<span class="caret"></span></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">דוח סוף תורנות</a></li>
-                                    <li><a href="#">טופס עליה לתורנות</a></li>
-                                </ul>
-                            </li>
-                            <li class="dropdown">
-                                <a href="#">הכשרות ואישורים<span class="caret"></span></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">ההכשרות שלי</a></li>
-                                    <li><a href="#">בקשה להכשרה</a></li>
-                                    <li><a href="Insert_Courses.html">הכנסת הכשרות</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="#">פרטים אישיים</a></li>
-                            <li><a href="Special_Requirements.html">דרישות משתנות</a></li>
+                        <ul class="nav navbar-nav navbar-right  bts-nav" id="navBarItems">
                         </ul>
                     </div>
                 </div>

@@ -14,6 +14,8 @@
     <link href="../Scripts/StyleSheetNavBar.css" rel="stylesheet" />
     <script src="../Scripts/ajaxCallsWithKey.js"></script>
     <script src="../Scripts/jquery-3.4.1.js"></script>
+    <script src="../Scripts/navBars.js"></script>
+
     <style>
         h2 {
             font-size: 30px;
@@ -26,6 +28,7 @@
     </style>
     <script>
         $(document).ready(function () {
+            $('#navBarItems').html(chooseNavBar);
             var wWidth = $(window).width();
             if (wWidth > 768) {
                 $("ul.bts-nav li").hover(function () {
@@ -40,9 +43,31 @@
             let employee = JSON.parse(localStorage["Employee"]);
             str1 = "<h3>שלום " + employee.First_Name + " " + employee.Last_Name + "</h3>";
             $("#phHello").append(str1);
+            $("#pForm").submit(saveMessage);
             $("#SendDateTB").val(moment().format('YYYY-MM-DD'));
         });
 
+        function saveMessage() {
+            let api = "../api/messages";
+            var msg = {
+                Creator_Id: JSON.parse(localStorage["Employee"]).Id,
+                Creation_Date: $("#SendDateTB").val(),
+                Title: $("#TitleTB").val(),
+                Content: $("#ContentTB").val()
+            }
+            ajaxCall("POST", api, JSON.stringify(msg), postMessageSuccess, postMessageError)
+            return false;
+        }
+
+        function postMessageSuccess() {
+            $("#TitleTB").val('')
+            $("#ContentTB").val('')
+            alert('הודעה נוספה בהצלחה');
+        }
+
+        function postMessageError(err) {
+            err.responseJSON.Message
+        }
     </script>
 </head>
 <body>
@@ -78,19 +103,24 @@
             <h2>הכנסת הודעות</h2><br>
             <!--<div class="pict" id="ph"> <img src="../images/jerusalem_forest_flowers_big.jpg" alt="קק'ל"> </div>-->
             <div class="form-group">
-                <label for="TitleTB"><span class="red-star">★ </span>כותרת ההודעה</label>
-                <input type="text" class="form-control" id="TitleTB" placeholder="כותרת ההודעה" required>
-            </div>
-            <div class="form-group">
-                <label for="ContentTB"><span class="red-star">★ </span>תוכן ההודעה</label>
-                <input type="text" class="form-control" id="ContentTB" placeholder="תוכן ההודעה" required>
-            </div>
-            <div class="form-group">
                 <label for="SendDateTB"><span class="red-star">★ </span>תאריך שליחה</label>
                 <input type="date" class="form-control" id="SendDateTB" required disabled>
             </div>
-            <button type="submit" class="btn btn-primary" onclick="saveMessage()">שמירה</button>
-
+            <div class="form-group">
+                <label for="TitleTB"><span class="red-star">★ </span>כותרת ההודעה</label>
+                <input type="text" class="form-control" id="TitleTB" placeholder="כותרת ההודעה"
+                       pattern="^.{1,50}$"
+                       oninvalid="this.setCustomValidity('אין להכניס יותר מ50 תווים, ואין להשאיר ריק')"
+                       oninput="this.setCustomValidity('')" required>
+            </div>
+            <div class="form-group">
+                <label for="ContentTB"><span class="red-star">★ </span>תוכן ההודעה</label>
+                <input type="text" class="form-control" id="ContentTB" placeholder="תוכן ההודעה"
+                       pattern="^.{1,255}$"
+                       oninvalid="this.setCustomValidity('אין להכניס יותר מ255 תווים, ואין להשאיר ריק')"
+                       oninput="this.setCustomValidity('')" required>
+            </div>
+            <button type="submit" class="btn btn-primary">שמירה</button>
         </form>
     </div>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
