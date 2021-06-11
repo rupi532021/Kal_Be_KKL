@@ -43,7 +43,7 @@ namespace Kal_Be_KKL.Models
         public List<Message> Read_Messages()
         {
             DBServices dbs = new DBServices();
-            List<Message> messages = dbs.Read_Messages(this);
+            List<Message> messages = dbs.Read_Messages();
             return messages;
         }
     }

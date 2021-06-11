@@ -2192,7 +2192,47 @@ namespace Kal_Be_KKL.Models.DAL
             return command;
         }
 
+        public List<Message> Read_Messages()
+        {
+            SqlConnection con = null;
+            List<Message> messages = new List<Message>();
+            try
+            {
+                con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
 
+                String selectSTR = $"select * from kkl_Message";
+                SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+                    Message msg = new Message();
+                    msg.Message_Number = Convert.ToInt32(dr["Message_Number"]); 
+                    msg.Creator_Id= (string)dr["Creator_Id"];
+                    msg.Creation_Date= Convert.ToDateTime(dr["Creation_Date"]);
+                    msg.Title= (string)dr["Title"];
+                    msg.Content = (string)dr["Content"];
+                    messages.Add(msg);
+                }
+                return messages;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+
+        }
 
     }
 
