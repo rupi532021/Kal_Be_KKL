@@ -103,6 +103,23 @@
     <script>
         blocks = [];
 
+        $(document).ready(function () {
+            var wWidth = $(window).width();
+            if (wWidth > 768) {
+                $("ul.bts-nav li").hover(function () {
+                    $(this).children("ul").slideToggle(400);
+                });
+            }
+            else {
+                $("ul.bts-nav li a").click(function () {
+                    $(this).next("ul").slideToggle(400);
+                });
+            }
+            let employee = JSON.parse(localStorage["Employee"]);
+            str1 = "<h3>שלום " + employee.First_Name + " " + employee.Last_Name + "</h3>";
+            $("#phHello").append(str1);
+        });
+
         function Show_Workers_In_Area(val)
         {
             if (parseInt(val) == 0) {
