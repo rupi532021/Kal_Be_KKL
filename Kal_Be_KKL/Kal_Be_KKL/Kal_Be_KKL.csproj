@@ -1877,6 +1877,7 @@
     <Content Include="MyPlugins\jquery-ui-1.12.1.custom\jquery-ui.theme.min.css" />
     <Content Include="MyPlugins\jquery-ui-1.12.1.custom\LICENSE.txt" />
     <Content Include="MyPlugins\moments\moment.js" />
+    <Content Include="Pages\CurrentShifts.html" />
     <Content Include="Pages\AssignToShifts.html" />
     <Content Include="Pages\InsertMessages.html" />
     <Content Include="Pages\Main.html" />
