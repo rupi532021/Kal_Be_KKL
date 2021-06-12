@@ -80,9 +80,13 @@
                 });
             }
             let employee = JSON.parse(localStorage["Employee"]);
-            str1 = "<h3>שלום " + employee.First_Name + " " + employee.Last_Name + "</h3>";
+            str1 = "<h3>שלום " + employee.First_Name + " " + employee.Last_Name + "</br><a href ='Login.html' onclick='LogOut()'><h4>התנתק</h4></a></h3>";
             $("#phHello").append(str1);
         });
+
+        function LogOut() {
+            localStorage.clear();
+        }
 
         function delete_special_requirement(Requirement_Id) {
             shiftDate = $("#dateTB").val();

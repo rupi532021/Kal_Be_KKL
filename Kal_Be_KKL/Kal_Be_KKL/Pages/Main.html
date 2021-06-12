@@ -28,6 +28,7 @@
             margin-right: 30px;
             margin-top: 20px;
             background-color: rgba(235, 237, 235, 0.4);
+            margin-bottom: 10px;
         }
 
         .form-control {
@@ -69,11 +70,6 @@
             padding: 5px
         }
 
-        #p {
-            float: right
-        }
-
-
         div#work_now {
             margin-right:37%;
         }
@@ -97,23 +93,38 @@
         }
         #head_msg {
             text-align: center;
-            border-bottom: 3px solid black;
-            color: black
+            /*border-bottom: 3px solid black;*/
+            color: black;
+            background-color: rgba(62, 127, 215, 0.6);
+            border-bottom: 3px solid ;
+            border-bottom-color:rgba(109, 193, 131, 0.7);
         }
 
         #p {
-            margin-top: 35px;
+            margin-top: 30px;
             text-align: right;
             position: relative;
             width: 30%;
-            border: 2px solid black;
+            /*border: 2px solid black;*/ 
+            margin-right: 7px;
+            height: 40%;
+            float: right;
+            margin-bottom:10px;
         }
-        #p li {
-            border-bottom: 2px black;
+            #p li {
+                /*border-bottom: 2px black;*/
+                background-color: rgba(103, 163, 226, 0.4);
+                width: 342px;
+                padding-top:30px;
             }
 
         #work_now h1 {
             margin-right: -37%;
+        }
+
+        p{
+            margin: 5px 0 5px;
+            padding-right:7px;
         }
 
         @media only screen and (max-width: 768px) {
@@ -140,7 +151,9 @@
                 color: #333;
                 background-color: #555;
             }
-        }
+            #head_msg {
+                width: 342px;
+            }
 
     </style>
 
@@ -163,10 +176,14 @@
                 });
             }
             let employee = JSON.parse(localStorage["Employee"]);
-            str1 = "<h3>שלום " + employee.First_Name + " " + employee.Last_Name + "</h3>";
+            str1 = "<h3>שלום " + employee.First_Name + " " + employee.Last_Name + "</br><a href ='Login.html' onclick='LogOut()'><h4>התנתק</h4></a></h3>";
             $("#phHello").append(str1);
             getMessages();
         });
+
+        function LogOut() {
+            localStorage.clear();
+        }
 
         function getMessages() {
             let api = "../api/messages";
@@ -251,16 +268,16 @@
         function renderTicker(msgs) {
             str = "";
             for (var i = 0; i < msgs.length; i++) {
-                str += "<li style='height:130px'><div>";
-                str += "<p id='dateMessage'> " + moment(msgs[i].Creation_Date).format('YYYY-MM-DD') + " </p>";
-                str += "<p id='titleMessage'> " + msgs[i].Title + " </p>";
-                str += "<p id='contentMessage'> " + msgs[i].Content + " </p></div>";
+                str += "<li style='height:140px'><div>";
+                str += "<p id='dateMessage'><b> " + moment(msgs[i].Creation_Date).format('YYYY-MM-DD') + " </b></p>";
+                str += "<p id='titleMessage'><b> " + msgs[i].Title + " </b></p>";
+                str += "<p id='contentMessage'> " + msgs[i].Content + " </br></p></div>";
                 str += "</li>";
             }
             $("#l").append(str);
             $('#ph2').vTicker({
                 speed: 500,
-                pause: 5000,
+                pause: 4000,
                 showItems: 3,
                 animation: 'fade',
                 mousePause: true,

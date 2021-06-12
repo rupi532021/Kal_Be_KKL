@@ -109,13 +109,17 @@
                 });
             }
             let employee = JSON.parse(localStorage["Employee"]);
-            str1 = "<h3>שלום " + employee.First_Name + " " + employee.Last_Name + "</h3>";
+            str1 = "<h3>שלום " + employee.First_Name + " " + employee.Last_Name + "</br><a href ='Login.html' onclick='LogOut()'><h4>התנתק</h4></a></h3>";
             $("#phHello").append(str1);
             loadcourses()
             FillDetails()
 
             // activate a custom validation function when the element looses focus.
         });
+
+        function LogOut() {
+            localStorage.clear();
+        }
 
         function FillDetails() {
             let employee = JSON.parse(localStorage["Employee"]);
@@ -141,7 +145,7 @@
         // This function is called in case of a success
         function EditEmployeeSuccess(data) {
             localStorage["Employee"] = JSON.stringify(employee);
-            swal("Edited Successfuly!", "Great Job", "success");
+            swal("נשמר בהצלחה!", "", "success");
             setTimeout("", 5000)
         }
 

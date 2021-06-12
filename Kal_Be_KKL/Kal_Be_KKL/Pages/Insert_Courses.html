@@ -168,12 +168,15 @@
                 });
             }
             let employee = JSON.parse(localStorage["Employee"]);
-            str1 = "<h3>שלום " + employee.First_Name + " " + employee.Last_Name + "</h3>";
+            str1 = "<h3>שלום " + employee.First_Name + " " + employee.Last_Name + "</br><a href ='Login.html' onclick='LogOut()'><h4>התנתק</h4></a></h3>";
             $("#phHello").append(str1);
             $("#WorkerNum").autocomplete({ source: workers_arr });
 
         });
 
+        function LogOut() {
+            localStorage.clear();
+        }
 
         function deletecourse(course_id) {
             let i = chosen_courses.findIndex(c => c.Course_Id == course_id)

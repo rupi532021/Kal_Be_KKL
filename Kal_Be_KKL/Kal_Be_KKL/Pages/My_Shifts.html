@@ -198,11 +198,15 @@
                 });
             }
             let employee = JSON.parse(localStorage["Employee"]);
-            str1 = "<h3>שלום " + employee.First_Name + " " + employee.Last_Name + "</h3>";
+            str1 = "<h3>שלום " + employee.First_Name + " " + employee.Last_Name + "</br><a href ='Login.html' onclick='LogOut()'><h4>התנתק</h4></a></h3>";
             $("#phHello").append(str1);
             let getApi = "../api/Area/GetAreaBlcoks/" + areaId;
             ajaxCall("GET", getApi, "", getAreaBlcoksSuccess, getAreaBlcoksError);
         });
+
+        function LogOut() {
+            localStorage.clear();
+        }
 
         function getAreaBlcoksSuccess(blocksData) {
             console.log(blocksData)
