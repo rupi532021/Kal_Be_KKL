@@ -21,7 +21,6 @@
 
     <style>
 
-
         .fc-daygrid-block-event .fc-event-time, .fc-daygrid-block-event .fc-event-title {
             float: right
         }
@@ -55,13 +54,10 @@
             background-color: rgba(235, 237, 235, 0.4);
         }
 
-
-
         @media only screen and (max-width: 768px) {
             #loading {
                 width: 40% !important
             }
-
             .blocks {
                 width: 80%;
                 float: right;
@@ -70,13 +66,24 @@
                 margin-top: 20px;
                 background-color: rgba(235, 237, 235, 0.4);
             }
+            .ui-autocomplete-input {
+                border: none;
+                width: 200px;
+                margin-bottom: 5px;
+                padding-top: 2px;
+                z-index: 1511;
+                position: relative;
+            }
+            #WorkerNum {
+                width: 200px;
+                margin-right: -20px;
+            }
+
         }
 
         h4 {
             margin-right: 10px;
         }
-    </style>
-    <style>
         .raviv-head {
             text-align: center;
         }
@@ -114,15 +121,12 @@
             font-size: 28px;
             font-weight: bold;
         }
-
             .close:hover,
             .close:focus {
                 color: #000;
                 text-decoration: none;
                 cursor: pointer;
             }
-    </style>
-    <style>
         .ui-autocomplete-input {
             border: none;
             width: 300px;
@@ -161,7 +165,6 @@
             *border-right-width: 2px;
             *border-bottom-width: 2px;
         }
-
         .ui-menu-item {
             padding-right: 5px;
         }
@@ -310,7 +313,7 @@
             let today = moment();
             let mydate = moment($(elem).closest("td").data("date"));
             if (mydate.diff(today) < 0)
-                alert("התאריך עבר לא ניתן לשלוח בקשה לחילוף");
+                swal('התאריך עבר, לא ניתן לשלוח בקשה לחילוף', '', 'error')
             else {
                 $('#WorkerNum').val("");
                 var myJob = $(elem).parent().text();
@@ -358,14 +361,14 @@
                 id_off_worker = res[1];
             }
             else {
-                alert("שם לא תקין")
+                swal('שם לא תקין', '', 'error')
                 $("#WorkerNum").val("");
             }
             return false;
         }
         function SendChangeRequest() {
             if ($("#WorkerNum").val() == "")
-                alert("יש לבחור עובד שברצונף להחליף איתו את המשמרת")
+                swal('יש לבחור עובד שברצונף להחליף איתו את המשמרת', '', 'error')
             else {
                 swal({
                     title: "", text: "האם אתה בטוח שברצונך למסור את המשמרת בתאריך " + requestDate + "\nל" + $("#WorkerNum").val(), buttons: { confirm: "כן", cancel: "לא" }

@@ -87,12 +87,8 @@
             text-align: center;
         }
     </style>
-
-
     <script>
         /* Toggle between adding and removing the "responsive" class to topnav when the user clicks on the icon */
-
-
         courses_arr = [];
         $(document).ready(function () {
             $('#navBarItems').html(chooseNavBar);
@@ -140,8 +136,6 @@
             }
         }
 
-
-
         // This function is called in case of a success
         function EditEmployeeSuccess(data) {
             localStorage["Employee"] = JSON.stringify(employee);
@@ -170,7 +164,6 @@
             };
             ajaxCall("PUT", "../api/Employees/PutEmployee/", JSON.stringify(employee), EditEmployeeSuccess, EditError)
             return false;
-
         }
 
         function checkdate() {
@@ -190,7 +183,7 @@
 
         function Show_Worker_Curses_Succsess(data) {
             $("#courses").empty();
-            $("#courses").append("<h2>ההכשרות שלי</h2>")
+            $("#courses").append("<h3><b>ההכשרות שלי</b></h3>")
             data.forEach(c => {
                 name_of_course = "";
                 str = "<div class='choose_cousre' id='" + c.Course_Id + "'>";
@@ -221,13 +214,11 @@
             console.log(err)
         }
     </script>
-
 </head>
 <body>
 
     <div class="container">
         <!-- NavBar -->
-
         <img id="imgKKL" src='../images/KKLLogo.png' />
         <div id="phHello"></div>
 
@@ -253,10 +244,9 @@
             </nav>
         </div>
         <!--NavBar-->
-        <div id="courses">
-        </div>
+        <h2>הפרופיל שלי </h2>
+        <div id="courses"></div>
         <form id="pForm" method="put" enctype="multipart/form-data">
-            <h2>הפרופיל שלי </h2>
             <div class="form-group">
                 <label for="FirstNameTB"><span class="red-star">★ </span>שם פרטי</label>
                 <input type="text" class="form-control" id="FirstNameTB" placeholder=" "
@@ -325,6 +315,5 @@
     </div>
 
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
 </body>
 </html>
