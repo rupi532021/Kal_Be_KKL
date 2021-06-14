@@ -206,10 +206,14 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="images\ExclamationMark.png" />
+    <Content Include="images\InsertMessage.png" />
     <Content Include="images\jerusalem_forest_flowers_big.jpg" />
     <Content Include="images\KKL120.jpg" />
     <Content Include="images\KKLLogo.png" />
     <Content Include="images\recycle-solid.svg" />
+    <Content Include="images\Requests.png" />
+    <Content Include="images\Spinner-0.8s-200px.gif" />
     <Content Include="MyPlugins\fontawesome-free-5.15.3-web\attribution.js" />
     <Content Include="MyPlugins\fontawesome-free-5.15.3-web\css\all.css" />
     <Content Include="MyPlugins\fontawesome-free-5.15.3-web\css\all.min.css" />
@@ -1909,7 +1913,6 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
-    <Content Include="MyPlugins\jquery-ui-1.12.1.custom\package.json" />
     <Content Include="MyPlugins\fontawesome-free-5.15.3-web\less\brands.less" />
     <Content Include="MyPlugins\fontawesome-free-5.15.3-web\less\fontawesome.less" />
     <Content Include="MyPlugins\fontawesome-free-5.15.3-web\less\regular.less" />
@@ -1988,6 +1991,8 @@
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
+    <Content Include="Scripts\jquery.js" />
+    <Content Include="Scripts\jquery.vticker-min.js" />
     <Content Include="Scripts\navBars.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

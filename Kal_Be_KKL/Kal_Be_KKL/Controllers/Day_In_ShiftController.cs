@@ -57,7 +57,7 @@ namespace Kal_Be_KKL.Controllers
         [HttpPost]
         public void SmartPost(int areaId,double fairness, double satisfaction)
         {
-            const int ITERATIONS = 2;
+            const int ITERATIONS = 3;
             Day_In_Shift shift = new Day_In_Shift();
             DateTime date = DateTime.Today.AddMonths(1);
             var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);

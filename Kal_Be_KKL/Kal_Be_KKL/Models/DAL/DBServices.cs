@@ -2201,7 +2201,7 @@ namespace Kal_Be_KKL.Models.DAL
             {
                 con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
 
-                String selectSTR = $"select * from kkl_Message";
+                String selectSTR = $"select * from kkl_Message order by Creation_Date desc";
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
 
                 // get a reader

@@ -129,11 +129,6 @@
             $("#IDTB").val(employee.Id);
             $("#Gender").val(employee.Gender);
             $("#IDTB").prop('disabled', true);
-            if (localStorage["Job_Id"] != null) {
-                if (JSON.parse(localStorage["Job_Id"]) == 1) {
-                    Show_Worker_Curses();
-                }
-            }
         }
 
         // This function is called in case of a success
@@ -209,6 +204,11 @@
         }
         function getCoursesSuccess(data) {
             courses_arr = data;
+            if (localStorage["Job_Id"] != null) {
+                if (JSON.parse(localStorage["Job_Id"]) == 1) {
+                    Show_Worker_Curses();
+                }
+            }
         }
         function getError(err) {
             console.log(err)
