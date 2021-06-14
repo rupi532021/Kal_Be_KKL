@@ -61,8 +61,18 @@
         }
         img#messages{
             float:left;
-            margin-top:-370px;
             margin-left:180px;
+        }
+
+        @media only screen and (max-width: 768px) {
+            img#messages {
+                float: left;
+                margin-left: 80px;
+            }
+            .form-control{
+                width:310px;
+                margin-right:10px;
+            }
         }
     </style>
     <script>
@@ -144,7 +154,9 @@
         <!--NavBar-->
         <form id="pForm" method="post" enctype="multipart/form-data">
             <h2>הכנסת הודעות</h2><br>
-            <!--<div class="pict" id="ph"> <img src="../images/jerusalem_forest_flowers_big.jpg" alt="קק'ל"> </div>-->
+            <div>
+                <img id="messages" style="width:170px; height:170px" src="../images/Insertmessage.png" alt="קק'ל">
+            </div>
             <div class="form-group">
                 <label for="SendDateTB"><span class="red-star">★ </span>תאריך שליחה</label>
                 <input type="date" class="form-control" id="SendDateTB" required disabled>
@@ -166,9 +178,7 @@
 </textarea>
             </div>
             <button type="submit" class="btn btn-primary">שמירה</button>
-        </form>    
-        <img id="messages" style="width:270px; height:270px" src="../images/Insertmessage.png" alt="קק'ל">
-
+        </form>
     </div>
 
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
