@@ -1,0 +1,9 @@
+מנהל:
+
+Id: 204676545
+Password: Barni1234
+
+תורן:
+
+Id: 098765678
+Password: IdoFadida212

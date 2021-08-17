@@ -1,0 +1,319 @@
+﻿﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>הפרופיל שלי </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!--<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">-->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="../MyPlugins/moments/moment.js"></script>
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <link href="../scripts/stylesheetnavbar.css" rel="stylesheet" />
+    <script src="../scripts/ajaxcallswithkey.js"></script>
+    <script src="../scripts/jquery-3.4.1.js"></script>
+    <script src="../Scripts/navBars.js"></script>
+
+    <style type="text/css">
+
+        body {
+            align-items: center;
+            align-content: center
+        }
+
+        .form-control {
+            width: 310px
+        }
+
+        .red-star {
+            color: blue;
+        }
+
+        * {
+            direction: rtl
+        }
+
+        #ph {
+            float: left;
+        }
+        /*        #pForm {
+            left: 50%;
+            top: 50%;
+            position: absolute;
+            transform: translate(-50%, -50%);
+        }*/
+
+        label {
+            font-size: 18px;
+        }
+
+        h2 {
+            text-align: right;
+        }
+
+        .btn {
+            margin-right: 40%;
+        }
+
+        .choose_cousre {
+            border: 3px double black;
+            background-color: lightgreen;
+            text-align: center;
+            width: 200px;
+            float: right;
+            box-shadow: 0 0 0 1px black;
+            margin-bottom: 10px;
+            margin-left: 25px;
+        }
+
+        #courses {
+            display: block;
+            flex-wrap: wrap;
+            float: left;
+        }
+
+        #coursesTitle {
+            display: block;
+            flex-wrap: wrap;
+        }
+
+        .swal-text {
+            text-align: right;
+        }
+
+        .swal-footer {
+            text-align: center;
+        }
+    </style>
+    <script>
+        /* Toggle between adding and removing the "responsive" class to topnav when the user clicks on the icon */
+        courses_arr = [];
+        $(document).ready(function () {
+            $('#navBarItems').html(chooseNavBar);
+            $("#pForm").submit(Edit_Employee); // bind the submit event to a function called f1
+            var wWidth = $(window).width();
+            if (wWidth > 768) {
+                $("ul.bts-nav li").hover(function () {
+                    $(this).children("ul").slideToggle(400);
+                });
+            }
+            else {
+                $("ul.bts-nav li a").click(function () {
+                    $(this).next("ul").slideToggle(400);
+                });
+            }
+            let employee = JSON.parse(localStorage["Employee"]);
+            str1 = "<h3>שלום " + employee.First_Name + " " + employee.Last_Name + "</br><a href ='Login.html' onclick='LogOut()'><h4>התנתק</h4></a></h3>";
+            $("#phHello").append(str1);
+            loadcourses()
+            FillDetails()
+
+            // activate a custom validation function when the element looses focus.
+        });
+
+        function LogOut() {
+            localStorage.clear();
+        }
+
+        function FillDetails() {
+            let employee = JSON.parse(localStorage["Employee"]);
+            $("#FirstNameTB").val(employee.First_Name);
+            $("#LastNameTB").val(employee.Last_Name);
+            $("#BirthDateTB").val(employee.Birth_Date.split("T")[0]);
+            $("#PhoneTB").val(employee.Phone_Number);
+            $("#MailTB").val(employee.Mail);
+            $("#PasswordTB").val(employee.Password);
+            $("#IDTB").val(employee.Id);
+            $("#IDTB").val(employee.Id);
+            $("#Gender").val(employee.Gender);
+            $("#IDTB").prop('disabled', true);
+        }
+
+        // This function is called in case of a success
+        function EditEmployeeSuccess(data) {
+            localStorage["Employee"] = JSON.stringify(employee);
+            swal("נשמר בהצלחה!", "", "success");
+            setTimeout("", 5000)
+        }
+
+        // This function is called in case of an error
+        function EditError(err) {
+            alert(err.responseJSON.Message)
+        }
+
+        function Edit_Employee() {
+            id = $("#IDTB").val()
+            full_name = $("#FirstNameTB").val() + " " + $("#LastNameTB").val()
+            employee =
+            {
+                Id: id,
+                First_Name: $("#FirstNameTB").val(),
+                Last_Name: $("#LastNameTB").val(),
+                Gender: $("#Gender").val(),
+                Birth_Date: $("#BirthDateTB").val(),
+                Phone_Number: $("#PhoneTB").val(),
+                Mail: $("#MailTB").val(),
+                Password: $("#PasswordTB").val()
+            };
+            ajaxCall("PUT", "../api/Employees/PutEmployee/", JSON.stringify(employee), EditEmployeeSuccess, EditError)
+            return false;
+        }
+
+        function checkdate() {
+            Birth_Date = $("#BirthDateTB").val();
+            Birth_Date = new Date(Birth_Date)
+            Current_Date = new Date()
+            if (Birth_Date > Current_Date) {
+                swal('יש לבחור תאריך תקין', '', 'error')
+                $("#BirthDateTB").val("");
+            }
+        }
+
+        function Show_Worker_Curses() {
+            let api = "../api/Courses_Of_Dutys/GetAllCoursesOfDuty/" + JSON.parse(localStorage["Employee"]).Id;
+            ajaxCall("GET", api, "", Show_Worker_Curses_Succsess, Show_Worker_Curses_Error);
+        }
+
+        function Show_Worker_Curses_Succsess(data) {
+            $("#courses").empty();
+            $("#courses").append("<h3><b>ההכשרות שלי</b></h3>")
+            data.forEach(c => {
+                name_of_course = "";
+                str = "<div class='choose_cousre' id='" + c.Course_Id + "'>";
+                for (var i = 0; i < courses_arr.length; i++) {
+                    if (courses_arr[i].Course_Id == c.Course_Id) {
+                        str += "<p> שם הקורס: " + courses_arr[i].Course_Name + "</p>"
+                        str += "<p>תוקף: "+courses_arr[i].Validity+" חודשים</p>"
+                        name_of_course = courses_arr[i].Course_Name;
+                    }
+                }
+                str += "<p> תאריך ביצוע הקורס: " + moment(c.Receipt_Course_Date).format("DD/MM/YYYY") + "</p>"
+                $("#courses").append(str)
+            })
+        }
+
+        function Show_Worker_Curses_Error(err) {
+            console.log(err)
+        }
+
+        function loadcourses() {
+            let api = "../api/Course";
+            ajaxCall("GET", api, "", getCoursesSuccess, getError)
+        }
+        function getCoursesSuccess(data) {
+            courses_arr = data;
+            if (localStorage["Job_Id"] != null) {
+                if (JSON.parse(localStorage["Job_Id"]) == 1) {
+                    Show_Worker_Curses();
+                }
+            }
+        }
+        function getError(err) {
+            console.log(err)
+        }
+    </script>
+</head>
+<body>
+
+    <div class="container">
+        <!-- NavBar -->
+        <img id="imgKKL" src='../images/KKLLogo.png' />
+        <div id="phHello"></div>
+
+        <div class="body-wrap">
+            <nav class="navbar navbar-inverse">
+                <div class="container1">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarMenu" aria-expanded="false">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <!--<a class="navbar-brand" href="#">Brand</a>-->
+                    </div>
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="navbarMenu">
+                        <ul class="nav navbar-nav navbar-right  bts-nav" id="navBarItems">
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <!--NavBar-->
+        <h2>הפרופיל שלי </h2>
+        <div id="courses"></div>
+        <form id="pForm" method="put" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="FirstNameTB"><span class="red-star">★ </span>שם פרטי</label>
+                <input type="text" class="form-control" id="FirstNameTB" placeholder=" "
+                       pattern="[א-ת]{1,20}"
+                       oninvalid="this.setCustomValidity('רק עברית ועד 20 אותיות')"
+                       oninput="this.setCustomValidity('')" required>
+            </div>
+
+            <div class="form-group">
+                <label for="LastNameTB"><span class="red-star">★ </span>שם משפחה</label>
+                <input type="text" class="form-control" id="LastNameTB" placeholder=" "
+                       pattern="[א-ת]{1,20}"
+                       oninvalid="this.setCustomValidity('רק עברית ועד 20 אותיות')"
+                       oninput="this.setCustomValidity('')" required>
+            </div>
+
+            <div class="form-group">
+                <label for="IDTB"><span class="red-star">★ </span>תעודת זהות</label>
+                <input type="text" class="form-control" id="IDTB" placeholder=" "
+                       pattern="[0-9]{9}"
+                       oninvalid="this.setCustomValidity('9 ספרות')"
+                       oninput="this.setCustomValidity('')" required>
+            </div>
+
+            <div class="form-group">
+                <label for="GenderRB"><span class="red-star">★ </span>מגדר</label>
+                <select class="form-control" id="Gender" style="width:310px" data-component="dropdown">
+                    <option value="Male"> זכר </option>
+                    <option value="Female"> נקבה </option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="BirthDateTB"><span class="red-star">★ </span>תאריך לידה</label>
+                <input type="date" class="form-control" id="BirthDateTB" onchange="checkdate()"
+                       required>
+            </div>
+
+            <div class="form-group">
+                <label for="MailTB"><span class="red-star">★ </span>דואר אלקטרוני</label>
+                <input type="email" class="form-control" id="MailTB" placeholder=" "
+                       pattern=^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$
+                       oninvalid="this.setCustomValidity('הכנס מייל תקין')"
+                       oninput="this.setCustomValidity('')" required>
+            </div>
+
+            <div class="form-group">
+                <label for="PhoneTB"><span class="red-star">★ </span>נייד</label>
+                <input type="tel" class="form-control" id="PhoneTB" placeholder=" "
+                       pattern="[0-9]{10}"
+                       oninvalid="this.setCustomValidity('מספרים בלבד (10 ספרות)')"
+                       oninput="this.setCustomValidity('')" required>
+            </div>
+
+            <div class="form-group">
+                <label for="PasswordTB"><span class="red-star">★ </span>סיסמא</label>
+                <input type="text" class="form-control" style="width:310px" placeholder="8 תווים עם אות אחת גדולה ומספר אחד" id="PasswordTB"
+                       pattern="^(?=.*\d)(?=.*[A-Z]).{8,}$"
+                       oninvalid="this.setCustomValidity('8 תווים אות אחת גדולה ומספר')"
+                       oninput="this.setCustomValidity('')"
+                       required />
+            </div>
+            <button type="submit" class="btn btn-primary" value="הוסף" href="Login.html">ערוך</button>
+            <!--<button type="submit" class="btn btn-primary" value="הוסף" href="Login.html">הוסף</button>-->
+        </form>
+    </div>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+</html>

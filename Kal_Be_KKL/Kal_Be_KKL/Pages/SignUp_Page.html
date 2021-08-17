@@ -1,0 +1,310 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>רישום עובד חדש</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!--<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">-->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <link href="../Scripts/StyleSheetNavBar.css" rel="stylesheet" />
+    <script src="../Scripts/ajaxCallsWithKey.js"></script>
+    <script src="../Scripts/jquery-3.4.1.js"></script>
+    <style type="text/css">
+
+        #imgKKLCenter {
+            height: 50px;
+            width: 30px;
+            float: unset
+        }
+
+        .form-control {
+            width: 310px
+        }
+
+        .red-star {
+            color: blue;
+        }
+
+        * {
+            direction: rtl
+        }
+
+        #ph {
+            float: left;
+        }
+
+
+        #pForm {
+            margin-right: 20px;
+        }
+
+        label {
+            font-size: 18px;
+        }
+
+        h3 {
+            text-align: right
+        }
+        .swal-text {
+            text-align: right;
+        }
+
+        .swal-footer {
+            text-align: center;
+        }
+    </style>
+
+
+    <script>
+        /* Toggle between adding and removing the "responsive" class to topnav when the user clicks on the icon */
+
+        check = 1;
+        areas = "";
+        full_name = ""
+        id = 0
+        function create_Area_arr() {
+            let api = "../api/Area";
+            ajaxCall("GET", api, "", getAreaSuccess, getError)
+        }
+        function getAreaSuccess(area_arr) {
+            area_arr.forEach(a => {
+                areas += '<option value="' + a.Area_Id + '">' + a.Area_Name + '</option>';
+            })
+            $("#Area").html(areas)
+
+
+        }
+        function getError(err) {
+            console.log(err)
+        }
+        $(document).ready(function () {
+            $("#pForm").submit(Add_Employee); // bind the submit event to a function called f1
+            create_Area_arr()
+            var wWidth = $(window).width();
+            if (wWidth > 768) {
+                $("ul.bts-nav li").hover(function () {
+                    $(this).children("ul").slideToggle(400);
+                });
+            }
+            else {
+                $("ul.bts-nav li a").click(function () {
+                    $(this).next("ul").slideToggle(400);
+                });
+            }
+        });
+
+        // This function is called in case of a success
+        function postEmployeeSuccess(data) {
+            localStorage["Employee"] = JSON.stringify(employee);
+            localStorage["Id"] = id
+            localStorage["Full_Name"] = full_name
+            setTimeout("", 5000)
+
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+            var yyyy = today.getFullYear();
+
+            today = mm + '/' + dd + '/' + yyyy;
+            console.log(today)
+            if (check == 1) {
+                employee_in_area =
+                {
+                    Id: id,
+                    Area_Id: $("#Area").val(),
+                    Job_Id: $("#JOB").val(),
+                    Job_Start_Date: today
+
+                }
+                localStorage['Area_Id'] = employee_in_area.Area_Id;
+                localStorage['Job_Id'] = employee_in_area.Job_Id;
+                console.log(employee_in_area)
+                ajaxCall("POST", "../api/Workers_In_Area", JSON.stringify(employee_in_area), postEmployee_in_areaSuccess, postError)
+            }
+            else {
+                worker_in_region =
+                {
+                    Id: id,
+                    Region_Id: $("#Region").val(),
+                    Job_Id: $("#JOB").val(),
+                    Job_Start_Date: today
+
+                }
+                localStorage['Region_Id'] = JSON.stringify(worker_in_region.Region_Id);
+                localStorage['Job_Id'] = JSON.stringify(worker_in_region.Job_Id);
+                console.log(worker_in_region)
+                ajaxCall("POST", "../api/Workers_In_Region", JSON.stringify(worker_in_region), postEmployee_in_regionSuccess, postError)
+            }
+
+        }
+
+        // This function is called in case of an error
+        function postError(err) {
+            alert(err.responseJSON.Message)
+
+        }
+
+        function postEmployee_in_areaSuccess(data) {
+            swal({
+                title: "", text: "נרשמת בהצלחה!", buttons: { confirm: "אישור"}
+            }).then((isConfirm) => {
+                if (isConfirm)
+                    window.location.replace("Main.html")
+                });
+        }
+        function postEmployee_in_regionSuccess(data) {
+            swal({
+                title: "", text: "נרשמת בהצלחה!", buttons: { confirm: "אישור" }
+            }).then((isConfirm) => {
+                if (isConfirm)
+                    window.location.replace("Main.html")
+            });
+        }
+
+        function Add_Employee() {
+            id = $("#IDTB").val()
+            full_name = $("#FirstNameTB").val() + " " + $("#LastNameTB").val()
+            employee =
+            {
+                Id: id,
+                First_Name: $("#FirstNameTB").val(),
+                Last_Name: $("#LastNameTB").val(),
+                Gender: $("#Gender").val(),
+                Birth_Date: $("#BirthDateTB").val(),
+                Phone_Number: $("#PhoneTB").val(),
+                Mail: $("#MailTB").val(),
+                Password: $("#PasswordTB").val()
+            }
+            ajaxCall("POST", "../api/Employees", JSON.stringify(employee), postEmployeeSuccess, postError)
+
+            return false;
+        }
+        function AreaOrReligion(value) {
+            $("#AreaOrReligion").html("")
+            console.log(value)
+            str = "";
+            if (value == "5") {
+                check = 0;
+                str = '<label for="ReligionRB"><span class="red-star">★ </span>מרחב</label>';
+                str += '<select class="form-control" id="Region" style="width:310px" data-component="dropdown">';
+                str += '<option value="1"> מרכז </option>';
+                str += '<option value="2"> צפון </option>';
+                str += '<option value="3"> דרום </option>';
+                str += '</select >';
+
+            }
+            else {
+                check = 1;
+                str = '<label for="ReligionRB"><span class="red-star">★ </span>אזור</label>';
+                str += '<select class="form-control" id="Area" style="width:310px" data-component="dropdown">';
+                str += areas;
+                str += '</select >';
+            }
+            $("#AreaOrReligion").append(str)
+
+        }
+
+        function checkdate() {
+            Birth_Date = $("#BirthDateTB").val();
+            Birth_Date = new Date(Birth_Date)
+            Current_Date = new Date()
+            if (Birth_Date > Current_Date) {
+                swal('יש לבחור תאריך תקין','','error')
+                $("#BirthDateTB").val("");
+            }
+        }
+
+    </script>
+
+</head>
+<body>
+
+    <div class="container">
+        <form id="pForm" method="post" enctype="multipart/form-data">
+            <div class="pict" id="ph"> <img src="../images/jerusalem_forest_flowers_big.jpg" alt="קק'ל"> </div>
+            <h2>הכנסת עובד חדש</h2>
+            <div class="form-group">
+                <label for="FirstNameTB"><span class="red-star">★ </span>שם פרטי</label>
+                <input type="text" class="form-control" id="FirstNameTB" placeholder="הכנס שם פרטי"
+                       pattern="[א-ת]{1,20}"
+                       oninvalid="this.setCustomValidity('רק עברית ועד 20 אותיות')"
+                       oninput="this.setCustomValidity('')" required>
+
+            </div>
+            <div class="form-group">
+                <label for="LastNameTB"><span class="red-star">★ </span>שם משפחה</label>
+                <input type="text" class="form-control" id="LastNameTB" placeholder="הכנס שם משפחה"
+                       pattern="[א-ת]{1,20}"
+                       oninvalid="this.setCustomValidity('רק עברית ועד 20 אותיות')"
+                       oninput="this.setCustomValidity('')" required>
+            </div>
+            <div class="form-group">
+                <label for="IDTB"><span class="red-star">★ </span>תעודת זהות</label>
+                <input type="text" class="form-control" id="IDTB" placeholder="תעודת זהות"
+                       pattern="[0-9]{9}"
+                       oninvalid="this.setCustomValidity('9 ספרות')"
+                       oninput="this.setCustomValidity('')" required>
+            </div>
+            <div class="form-group">
+                <label for="GenderRB"><span class="red-star">★ </span>מגדר</label>
+                <select class="form-control" id="Gender" style="width:310px" data-component="dropdown">
+                    <option value="Male"> זכר </option>
+                    <option value="Female"> נקבה </option>
+
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="BirthDateTB"><span class="red-star">★ </span>תאריך לידה</label>
+                <input type="date" class="form-control" id="BirthDateTB" onchange="checkdate()"
+                       required>
+            </div>
+            <div class="form-group">
+                <label for="MailTB"><span class="red-star">★ </span>דואר אלקטרוני</label>
+                <input type="email" class="form-control" id="MailTB" placeholder="הכנס דואר אלקטרוני"
+                       pattern=^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$
+                       oninvalid="this.setCustomValidity('הכנס מייל תקין')"
+                       oninput="this.setCustomValidity('')" required>
+            </div>
+            <div class="form-group">
+                <label for="PhoneTB"><span class="red-star">★ </span>נייד</label>
+                <input type="tel" class="form-control" id="PhoneTB" placeholder="הכנס מספר נייד"
+                       pattern="[0-9]{10}"
+                       oninvalid="this.setCustomValidity('מספרים בלבד (10 ספרות)')"
+                       oninput="this.setCustomValidity('')" required>
+            </div>
+            <div class="form-group">
+                <label for="PasswordTB"><span class="red-star">★ </span>סיסמא</label>
+                <input type="password" class="form-control" style="width:310px" placeholder="8 תווים עם אות אחת גדולה ומספר אחד" id="PasswordTB"
+                       pattern="^(?=.*\d)(?=.*[A-Z]).{8,}$"
+                       oninvalid="this.setCustomValidity('8 תווים אות אחת גדולה ומספר')"
+                       oninput="this.setCustomValidity('')"
+                       required />
+            </div>
+            <div class="form-group">
+                <label for="JobRB"><span class="red-star">★ </span>תפקיד</label>
+                <select class="form-control" id="JOB" style="width:310px" data-component="dropdown" onchange="AreaOrReligion(this.value)">
+                    <option value="1"> תורן </option>
+                    <option value="2"> יערן </option>
+                    <option value="3"> סייר </option>
+                    <option value="4"> מנהל אזור </option>
+                    <option value="5"> מנהל מרחב </option>
+                </select>
+            </div>
+            <div class="form-group" id="AreaOrReligion">
+                <label for="Area"><span class="red-star">★ </span>בחר אזור</label>
+                <select class="form-control" id="Area" style="width:310px" data-component="dropdown"></select>
+
+            </div>
+            
+                <button type="submit" class="btn btn-primary" value="הוסף" href="Login.html">הוסף</button>
+        </form>
+    </div>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,122 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../Scripts/jquery-3.4.1.min.js"></script>
+    <script src="../Scripts/jquery.js"></script>
+    <script src="../Scripts/jquery.vticker-min.js"></script>
+    <style>
+        * {
+            
+            margin: auto;
+        }
+
+        #ph, #ph2 {
+            width: 100%;
+            
+        }
+
+        body {
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+            color: black;
+        }
+
+         #ph img {
+            width: 30%;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+            
+        }
+
+        li {
+            width: 100%;
+            height: 100%;
+            margin: auto;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        #p {
+            margin: auto;
+            text-align: right;
+            position: relative;
+            width: 30%;
+            border: 3px solid black;
+        }
+        h2 {
+            text-align: center;
+            width: 50%;
+            
+            color: black
+        }   
+        #ph2{background-color:lawngreen}
+        h1 {
+            text-align: center;
+            border-bottom: 3px solid black;
+            background-color: lawngreen;
+            color: black
+        }
+        #ph2 img h2 {
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+            width: 60px;
+            height: 55px;
+            float: right;
+            border: 1px solid red;
+            margin-left: 5px;
+           
+        }
+
+        .date {
+            color: red;
+            font-size: 12px;
+        }
+
+        #d1 {
+           
+            display: flex;
+            
+        }
+
+    </style>
+    <script>
+        msgs=["Raviv Lankry","Ido Fadida", "Busel Medina", "Tal Tzoref"]
+        $(document).ready(function () {
+            str = "";
+            for (var i = 0; i < msgs.length; i++) {
+                str += "<li style='height:130px'><div id='d1'><h2> " + msgs[i] + " </h2></div></li>";
+            }
+            $("#l").append(str);
+            $('#ph2').vTicker({
+                speed: 500,
+                pause: 1000,
+                showItems: 3,
+                animation: 'fade',
+                mousePause: true,
+                height: 0,
+                direction: 'up'
+            });
+
+        });
+    </script>
+</head>
+
+<body>
+
+    <div id="ph">
+    
+    </div>
+    <div id="p">
+        <h1>לוח הודעות</h1>
+        <div id="ph2">
+            <ul id="l">
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,172 @@
+﻿
+html, body {
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-image: linear-gradient(rgb(192, 250, 197), rgb(42, 105, 81));
+    background-position: center center;
+    background-attachment: fixed;
+    background-size: cover;
+    font-family: Calibri,'Segoe UI', sans-serif;
+    font-size: 20px;
+    font-weight: 300;
+}
+
+h4{
+    color:darkblue;
+}
+@media (min-width: 768px)  {
+  .navbar-nav>li  {
+    float:right!important;
+    }
+}
+
+#phHello{
+    padding-top:20px;
+    margin-bottom:-50px;
+}
+.btn {
+    margin-top: 10px;
+    margin-right: 44%;
+    margin-bottom: 13px;
+    padding: 10px 26px;
+    font-size: 25px;
+}
+
+    .form-control {
+        background-color: #ebfcf6;
+        border: 1px solid #9bc9b8;
+        color: #38403d;
+        font-size: 17px;
+    }
+
+    ::placeholder {
+        color: #38403d;
+        font-size: 17px;
+    }
+
+
+    .navbar-right {
+        float: right !important;
+        margin-right: -15px;
+        direction: ltr;
+    }
+
+    h2 {
+        font-weight: 600;
+        text-align: right;
+        font-size: 33px
+    }
+
+    #imgKKL {
+        float: left;
+        height: 85px;
+        width: 55px;
+        margin-left: 12px;
+        padding-top: 15px;
+    }
+
+    .navbar {
+        margin-top: 100px;
+    }
+
+    ul.bts-nav li > ul {
+        margin-bottom: 10px;
+    }
+
+    .navbar-inverse .navbar-nav > li:hover a {
+        color: #036643 !important;
+    }
+
+    .navbar-inverse .navbar-nav > .active > a:hover {
+        color: #f7faf9 !important;
+    }
+
+    .navbar-inverse .navbar-nav > li > a {
+        color: azure;
+    }
+
+    .navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:focus, .navbar-inverse .navbar-nav > .active > a:hover {
+        background-color: #c8ded6;
+        font-weight: 600;
+        font-size: 22px;
+        color: #154030;
+    }
+
+    .navbar-inverse {
+        border: none !important;
+        border-radius: 0 !important;
+        background-color: #5cc499;
+        text-align: right;
+        color: azure;
+    }
+
+    ul.bts-nav .dropdown-menu {
+        padding: 0px;
+        background: #d3e8e2;
+        border: none;
+        box-shadow: none;
+        border-radius: 0;
+        left: 0;
+        text-align: right;
+    }
+
+    ul.bts-nav li:hover {
+        background: #5cc499;
+    }
+
+    ul.bts-nav li > ul > li > ul.dropdown-menu {
+        left: 160px;
+        top: -3px;
+    }
+
+    ul.bts-nav .dropdown-menu > li > a {
+        padding: 10px 20px;
+        color: #0b402e;
+        font-size: 17px;
+    }
+
+    ul.bts-nav .dropdown-caret {
+        transform: rotate(-90deg);
+    }
+
+    @media only screen and (max-width: 768px) {
+        ul.bts-nav ul.dropdown-menu {
+            width: 100%;
+            position: relative;
+        }
+
+        ul.bts-nav li > ul > li > ul.dropdown-menu {
+            left: 0;
+            position: relative;
+        }
+
+        ul.bts-nav .dropdown-caret {
+            transform: rotate(0deg);
+        }
+
+        img {
+            width: 90%;
+        }
+
+        html, body {
+            background-size: 100%;
+            /*width: 100%;
+            height: 100%;*/
+            background-repeat: no-repeat;
+            background-image: linear-gradient(rgb(192, 250, 197), rgb(42, 105, 81));
+            font-family: Calibri,'Segoe UI', sans-serif;
+            font-size: 20px;
+            font-weight: 300;
+        }
+
+        .navbar-right {
+            float: right !important;
+            margin-right: -15px;
+            direction: ltr;
+        }
+    }
+
+
+
+

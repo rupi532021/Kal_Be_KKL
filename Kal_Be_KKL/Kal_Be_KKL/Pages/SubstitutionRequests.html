@@ -1,0 +1,304 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>בקשות לחילוף</title>
+    <!--<meta http-equiv="X-UA-Compatible" content="IE=Edge">-->
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="../Scripts/ajaxCallsWithKey.js"></script>
+    <link href="../Scripts/StyleSheetNavBar.css" rel="stylesheet" />-->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!--<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>-->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="../MyPlugins/moments/moment.js"></script>
+    <script src="../Scripts/jquery-3.4.1.js"></script>
+    <script src="../Scripts/ajaxCallsWithKey.js"></script>
+    <link href="../Scripts/main.css" rel="stylesheet" />
+    <script src="../Scripts/main.js"></script>
+    <link href="../Scripts/StyleSheetNavBar.css" rel="stylesheet" />
+    <script src="../Scripts/navBars.js"></script>
+
+    <style type="text/css">
+
+        h3 {
+            font-size: 30px;
+            font-weight: 600;
+            text-align: right;
+        }
+
+        h2 {
+            font-size: 30px;
+            font-weight: 600;
+        }
+
+        h1 {
+            font-size: 37px;
+            font-weight: 600;
+        }
+
+        p {
+            font-size: 21px;
+            margin-top: 5px;
+        }
+
+        * {
+            direction: rtl
+        }
+
+        #exclam {
+            height: 25px;
+            width: 25px;
+            margin-top: 7px;
+            margin-left: 8px;
+        }
+
+        button {
+            height: 40px;
+            width: 50px;
+            margin-right: 20px;
+            margin-top: 12px;
+        }
+
+        .buttonRed {
+            position: relative;
+            background-color: #ed4553;
+            border: none;
+            /*font-size: 28px;*/
+            color: #FFFFFF;
+            /*padding: 20px;
+            width: 200px;*/
+            text-align: center;
+            -webkit-transition-duration: 0.4s; /* Safari */
+            transition-duration: 0.4s;
+            text-decoration: none;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+            .buttonRed:after {
+                content: "";
+                background: #f7b7bc;
+                display: block;
+                position: absolute;
+                padding-top: 300%;
+                padding-left: 350%;
+                /*margin-left: -20px !important;*/
+                margin-top: -120%;
+                opacity: 0;
+                transition: all 0.8s;
+                margin-right: -200%;
+            }
+
+            .buttonRed:active:after {
+                padding: 0;
+                margin: 0;
+                opacity: 1;
+                transition: 0s
+            }
+
+        .buttonGreen {
+            position: relative;
+            background-color: #04AA6D;
+            border: none;
+            /*font-size: 28px;*/
+            color: #FFFFFF;
+            /*padding: 20px;
+            width: 200px;*/
+            text-align: center;
+            -webkit-transition-duration: 0.4s; /* Safari */
+            transition-duration: 0.4s;
+            text-decoration: none;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+            .buttonGreen:after {
+                content: "";
+                background: #90EE90;
+                display: block;
+                position: absolute;
+                padding-top: 300%;
+                padding-left: 350%;
+                /*margin-left: -20px !important;*/
+                margin-top: -120%;
+                opacity: 0;
+                transition: all 0.8s;
+                margin-right: -200%;
+            }
+
+            .buttonGreen:active:after {
+                padding: 0;
+                margin: 0;
+                opacity: 1;
+                transition: 0s
+            }
+
+        .swal-text {
+            text-align: right;
+        }
+
+        .swal-footer {
+            text-align: center;
+        }
+        @media only screen and (max-width: 768px) {
+            .buttonGreen{
+                margin-top:50px;
+                width:125px
+            }
+            .buttonRed {
+                margin-top: 50px;
+                width: 125px
+            }
+        }
+
+    </style>
+
+    <script>
+        allRequests = [];
+        $(document).ready(function () {
+            $('#navBarItems').html(chooseNavBar);
+            getRequests();
+            var wWidth = $(window).width();
+            if (wWidth > 768) {
+                $("ul.bts-nav li").hover(function () {
+                    $(this).children("ul").slideToggle(400);
+                });
+            }
+            else {
+                $("ul.bts-nav li a").click(function () {
+                    $(this).next("ul").slideToggle(400);
+                });
+            }
+            let employee = JSON.parse(localStorage["Employee"]);
+            str1 = "<h3>שלום " + employee.First_Name + " " + employee.Last_Name + "</br><a href ='Login.html' onclick='LogOut()'><h4>התנתק</h4></a></h3>";
+            $("#phHello").append(str1);
+        });
+
+        function LogOut() {
+            localStorage.clear();
+        }
+
+        function getRequests() {
+            if (localStorage['Area_Id'] != null) {
+                let getApi = "../api/SubstitutionRequest/GetAreaRequests/" + localStorage['Area_Id'];
+                ajaxCall("GET", getApi, "", GetAreaRequestsSuccess, GetAreaRequestsError);
+            }
+            else {
+                let getApi = "../api/SubstitutionRequest/GetRegionRequests/" + localStorage['Region_Id'];
+                ajaxCall("GET", getApi, "", GetRegionRequestsSuccess, GetRegionRequestsError);
+            }
+        }
+        function GetRegionRequestsSuccess(sReqList) {
+            allRequests = sReqList
+            renderRequests(allRequests);
+        }
+
+        function GetAreaRequestsError(err) {
+            console.log(err.responseJSON.Message)
+        }
+
+        function GetRegionRequestsError(err) {
+            console.log(err.responseJSON.Message)
+        }
+
+        function GetAreaRequestsSuccess(sReqList) {
+            allRequests = sReqList
+            renderRequests(allRequests);
+        }
+
+        function renderRequests(sReqList) {
+            $('#subRequests').empty();
+            str = "";
+            sReqList.forEach((sReq, i) => {
+                sReq.Request_date = moment(sReq.Request_date).format("YYYY-MM-DD")
+                str += "<div style='display: flex; text - align: center;' >"
+                str += "<img id='exclam' src='../images/ExclamationMark.png'/><p id='" + sReq.Request_Number + "'><b>  "
+                str += sReq.Name_From + "</b> (תז-" + sReq.Id_From + ") רוצה למסור את המשמרת שלו ל<b>" + sReq.Name_To + "</b> (תז-" + sReq.Id_To + ") </br> בתור " + sReq.Requirement_Name + " בתאריך " + sReq.Request_date
+                str += "</p>"
+                str += "<button onclick='approveRequest(allRequests[" + i + "])' class='buttonGreen'> אשר</button ><button onclick='rejectRequest(allRequests[" + i + "])' class='buttonRed'>דחה</button></div></br>"
+            });
+            $('#subRequests').append(str)
+        }
+
+        function approveRequest(sReq) {
+            swal({
+                title: "", text: "האם אתה בטוח שברצונך לאשר את החילוף? ", buttons: { confirm: "כן", cancel: "לא" }
+            })
+                .then((isConfirm) => {
+                    if (isConfirm) {
+                        ajaxCall("PUT", "../api/SubstitutionRequest/ApproveRequest", JSON.stringify(sReq), approveRequestSuccess, approveRequestError)
+                    }
+                });
+        }
+
+        function approveRequestSuccess() {
+            getRequests()
+        }
+
+        function approveRequestError(err) {
+            console.log(err.responseJSON.Message)
+        }
+
+        function rejectRequest(sReq) {
+
+            swal({
+                title: "", text: "האם אתה בטוח שברצונך לדחות את החילוף? ", buttons: { confirm: "כן", cancel: "לא" }
+            })
+                .then((isConfirm) => {
+                    if (isConfirm) {
+                        ajaxCall("PUT", "../api/SubstitutionRequest/RejectRequest", JSON.stringify(sReq), rejectRequesttSuccess, rejectRequestError)
+                    }
+                });
+        }
+
+        function rejectRequesttSuccess() {
+            getRequests()
+        }
+
+        function rejectRequestError(err) {
+            console.log(err.responseJSON.Message)
+        }
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <!-- NavBar -->
+
+        <img id="imgKKL" src='../images/KKLLogo.png' />
+        <div id="phHello"></div>
+
+        <div class="body-wrap">
+            <nav class="navbar navbar-inverse">
+                <div class="container1">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarMenu" aria-expanded="false">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <!--<a class="navbar-brand" href="#">Brand</a>-->
+                    </div>
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="navbarMenu">
+                        <ul class="nav navbar-nav navbar-right  bts-nav" id="navBarItems">
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <!--NavBar-->
+        <h2>בקשות לחילוף</h2><br>
+        <div id="subRequests"></div>
+    </div>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+</html>

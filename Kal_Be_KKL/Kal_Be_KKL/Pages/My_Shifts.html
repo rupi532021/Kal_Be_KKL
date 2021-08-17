@@ -1,0 +1,481 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!--<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>-->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="../Scripts/ajaxCallsWithKey.js"></script>
+    <script src="../Scripts/jquery-3.4.1.js"></script>
+    <link href="../Scripts/main.css" rel="stylesheet" />
+    <script src="../Scripts/main.js"></script>
+    <link href="../MyPlugins/fontawesome-free-5.15.3-web/css/all.css" rel="stylesheet" />
+    <link href="../MyPlugins/fontawesome-free-5.15.3-web/css/fontawesome.min.css" rel="stylesheet" />
+    <script src="../MyPlugins/moments/moment.js"></script>
+    <script src="../MyPlugins/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+    <link href="../Scripts/StyleSheetNavBar.css" rel="stylesheet" />
+    <script src="../Scripts/navBars.js"></script>
+
+
+    <style>
+
+        .fc-daygrid-block-event .fc-event-time, .fc-daygrid-block-event .fc-event-title {
+            float: right
+        }
+
+        .fa-recycle {
+            color: white
+        }
+
+        .fc-event-title fc-sticky {
+            text-align: right;
+            float: right
+        }
+
+        .fc-event-title-container {
+        }
+
+        h3 {
+            text-align: right
+        }
+
+        * {
+            direction: rtl;
+        }
+
+        .blocks {
+            width: 30%;
+            float: right;
+            padding-right: 20px;
+            margin-right: 30px;
+            margin-top: 20px;
+            background-color: rgba(235, 237, 235, 0.4);
+        }
+
+        @media only screen and (max-width: 768px) {
+            #loading {
+                width: 40% !important
+            }
+
+            .blocks {
+                width: 80%;
+                float: right;
+                padding-right: 20px;
+                margin-right: 30px;
+                margin-top: 20px;
+                background-color: rgba(235, 237, 235, 0.4);
+            }
+
+            .ui-autocomplete-input {
+                border: none;
+                width: 200px;
+                margin-bottom: 5px;
+                padding-top: 2px;
+                z-index: 1511;
+                position: relative;
+            }
+
+            #WorkerNum {
+                width: 200px;
+                margin-right: -20px;
+            }
+
+            .fa-recycle {
+                content: "\f1b8";
+                display: flex;
+                font-size: 16px;
+            }
+
+            .fc-event-title {
+                font-size:11px;
+            }
+        }
+
+        h4 {
+            margin-right: 10px;
+        }
+        .raviv-head {
+            text-align: center;
+        }
+        /* The Modal (background) */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1041; /* Sit on top */
+            padding-top: 100px; /* Location of the box */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+
+        .btn-mdl {
+            margin-right: 11%;
+        }
+        /* Modal Content */
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        /* The Close Button */
+        .close {
+            color: #aaaaaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+            .close:hover,
+            .close:focus {
+                color: #000;
+                text-decoration: none;
+                cursor: pointer;
+            }
+        .ui-autocomplete-input {
+            border: none;
+            width: 300px;
+            margin-bottom: 5px;
+            padding-top: 2px;
+            z-index: 1511;
+            position: relative;
+        }
+
+        .ui-autocomplete {
+            position: fixed;
+            top: 100%;
+            left: 0;
+            z-index: 1051 !important;
+            float: left;
+            display: none;
+            min-width: 160px;
+            width: 160px;
+            padding: 2px 0;
+            margin: 2px 0 0 0;
+            list-style: none;
+            background-color: #ffffff;
+            border-color: #ccc;
+            border-color: rgba(0, 0, 0, 0.2);
+            border-style: solid;
+            border-width: 1px;
+            -webkit-border-radius: 2px;
+            -moz-border-radius: 2px;
+            border-radius: 2px;
+            -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            -webkit-background-clip: padding-box;
+            -moz-background-clip: padding;
+            background-clip: padding-box;
+            *border-right-width: 2px;
+            *border-bottom-width: 2px;
+        }
+        .ui-menu-item {
+            padding-right: 5px;
+        }
+
+        .ui-helper-hidden-accessible {
+            display: none;
+        }
+
+        .swal-text {
+            text-align: right;
+        }
+
+        .swal-footer {
+            text-align: center;
+        }
+    </style>
+    <script>
+        full_workers_arr = [];
+        workers_arr = [];
+        var areaId = localStorage['Area_Id'];
+        var blocks;
+        var allAssigns;
+        $(document).ready(function () {
+            $('#navBarItems').html(chooseNavBar);
+            var wWidth = $(window).width();
+            if (wWidth > 768) {
+                $("ul.bts-nav li").hover(function () {
+                    $(this).children("ul").slideToggle(400);
+                });
+            }
+            else {
+                $("ul.bts-nav li a").click(function () {
+                    $(this).next("ul").slideToggle(400);
+                });
+            }
+            let employee = JSON.parse(localStorage["Employee"]);
+            str1 = "<h3>שלום " + employee.First_Name + " " + employee.Last_Name + "</br><a href ='Login.html' onclick='LogOut()'><h4>התנתק</h4></a></h3>";
+            $("#phHello").append(str1);
+            let getApi = "../api/Area/GetAreaBlcoks/" + areaId;
+            ajaxCall("GET", getApi, "", getAreaBlcoksSuccess, getAreaBlcoksError);
+        });
+
+        function LogOut() {
+            localStorage.clear();
+        }
+
+        function getAreaBlcoksSuccess(blocksData) {
+            console.log(blocksData)
+            blocks = blocksData;
+            getAssigns();
+        }
+
+        function getAreaBlcoksError(err) {
+            console.log(err)
+        }
+
+        function assignToShifts() {
+            $('#loading').removeAttr('hidden')
+            let postApi = "../api/Day_In_Shift/SmartPost/" + areaId;
+            ajaxCall("POST", postApi, "", postSmartPostSuccess, postSmartPostError);
+        }
+
+        function postSmartPostSuccess() {
+            console.log("שיבוץ בוצע");
+            getAssigns();
+            $('#loading').attr("hidden", true)
+        }
+
+        function postSmartPostError(err) {
+            console.log(err)
+        }
+
+        function getAssigns() {
+            let getApi = "../api/Day_In_Shift/GetDutiesInShift/" + areaId + "/false";
+            ajaxCall("GET", getApi, "", getAssignsSuccess, getAssignsError);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+        });
+
+
+        function getAssignsSuccess(data) {
+            allAssigns = data;
+
+            curentUser = JSON.parse(localStorage['Employee'])
+            var allevent = [];
+
+            for (var param in allAssigns) {
+                for (var i = 0; i < allAssigns[param].length; i++) {
+                    JSON.parse(localStorage['Employee'])
+                    if (curentUser.First_Name + ' ' + curentUser.Last_Name == allAssigns[param][i].First_Name + ' ' + allAssigns[param][i].Last_Name)
+                        allevent.push({ title: allAssigns[param][i].Requirement_Name, start: param, end: param })
+                }
+                //<i class="fas fa- recycle" style="font - size: 20px;z - index: 1000000000;"></i>
+
+            }
+
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                headerToolbar: {
+                    left: '',
+                    center: 'title',
+                    right: ''
+                },
+                events: allevent,
+                selectable: false,
+                showNonCurrentDates: false,
+                dateClick: function (el) {
+                    $('.fc-daygrid-day').css("backgroundColor", "");
+                    el.dayEl.style.backgroundColor = "rgba(221, 207, 46, 0.6)"
+                    $('#ph').html("");
+                    if (allAssigns == undefined || allAssigns[el.dateStr].length == 0)
+                        $('#ph').append("<h1>לא בוצע שיבוץ<h1>");
+                    else {
+                        blocks.forEach(b => {
+                            str = "";
+                            str += "<div class='blocks'><h1>" + b.Block_Name + "</h1>";
+                            allAssigns[el.dateStr].forEach(a => {
+                                if (b.Block_Name == a.Block_Name) {
+                                    str += "<p " + (curentUser.First_Name + ' ' + curentUser.Last_Name == a.First_Name + ' ' + a.Last_Name ? "style = 'color: lawngreen'" : "") + ">";
+                                        str += "<b>" + a.Requirement_Name + "</b>: " + a.First_Name + " " + a.Last_Name + "</p>";
+                                }
+                            });
+                            str += "</div>"
+
+                            $('#ph').append(str);
+
+                        });
+                    }
+                },
+                height: 700
+            });
+            calendar.setOption('locale', 'he');
+            calendar.render();
+            console.log(data);
+
+            $(".fc-sticky").each(function (indx, elem) {
+                $(elem).append("<i onclick='AskForChange(this)' class='fas fa-recycle' style='margin-right:10px;cursor:pointer'></i>");
+            });
+
+        }
+
+        function getAssignsError(err) {
+            console.log(err)
+        }
+        function AskForChange(elem) {
+            let today = moment();
+            let mydate = moment($(elem).closest("td").data("date"));
+            if (mydate.diff(today) < 0)
+                swal('התאריך עבר, לא ניתן לשלוח בקשה לחילוף', '', 'error')
+            else {
+                $('#WorkerNum').val("");
+                var myJob = $(elem).parent().text();
+                requestDate = mydate.format("yyyy-MM-DD")
+                let api = "../api/Employees/GetAllPossibleEmployees";
+                data = {
+                    exdate: requestDate,
+                    myjob: myJob,
+                    area_id: localStorage["Area_Id"]
+                }
+                ajaxCall("GET", api, data, GetAllPossibleEmployeesSuccess, GetAllPossibleEmployeesError);
+            }
+        }
+
+        function GetAllPossibleEmployeesSuccess(data) {
+            full_workers_arr = data;
+            workers_arr = [];
+            data.forEach(c => {
+                worker = c.First_Name + " " + c.Last_Name + " - " + c.Id;
+                workers_arr.push(worker)
+            })
+            $("#myModal").modal();
+            $("#WorkerNum").autocomplete({ source: workers_arr });
+
+            console.log(workers_arr);
+
+        }
+        function GetAllPossibleEmployeesError(err) {
+            alert("in err")
+            console.log(err)
+        }
+
+        function close_window() {
+            $("#myModal").modal("hide");
+            //alert(" בוטל בהצלחה")
+            //location.reload();
+        }
+        function Choose_Worker_To_Change(a) {
+            name = $("#WorkerNum").val();
+            console.log(name)
+            res = "";
+            if (workers_arr.includes(name)) {
+                var res = name.split(" - ");
+                console.log(res)
+                id_off_worker = res[1];
+            }
+            else {
+                swal('שם לא תקין', '', 'error')
+                $("#WorkerNum").val("");
+            }
+            return false;
+        }
+        function SendChangeRequest() {
+            if ($("#WorkerNum").val() == "")
+                swal('יש לבחור עובד שברצונף להחליף איתו את המשמרת', '', 'error')
+            else {
+                swal({
+                    title: "", text: "האם אתה בטוח שברצונך למסור את המשמרת בתאריך " + requestDate + "\nל" + $("#WorkerNum").val(), buttons: { confirm: "כן", cancel: "לא" }
+                })
+                    .then((isConfirm) => {
+                        if (isConfirm) {
+                            let api = "../api/SubstitutionRequest";
+                            var sReq = {
+                                Id_From: curentUser.Id,
+                                Id_To: id_off_worker,
+                                Request_date: requestDate,
+                                Status: 0
+                            }
+                            ajaxCall("POST", api, JSON.stringify(sReq), postSubstitutionRequestSuccess, postSubstitutionRequestError)
+                        }
+                    });
+
+            }
+        }
+
+        function postSubstitutionRequestSuccess() {
+            swal({ title: "בקשה נשלחה בהצלחה", text: "", type: "success", buttons: { confirm: "אישור" } })
+            close_window();
+        }
+
+        function postSubstitutionRequestError(err) {
+            err.responseJSON.Message
+        }
+
+    </script>
+</head>
+<body>
+    <div class="container">
+        <!-- NavBar -->
+
+        <img id="imgKKL" src='../images/KKLLogo.png' />
+        <div id="phHello"></div>
+
+        <div class="body-wrap">
+            <nav class="navbar navbar-inverse">
+                <div class="container1">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarMenu" aria-expanded="false">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <!--<a class="navbar-brand" href="#">Brand</a>-->
+                    </div>
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="navbarMenu">
+                        <ul class="nav navbar-nav navbar-right  bts-nav" id="navBarItems">
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <!--NavBar-->
+        <div hidden id="loading">
+            <img height="100" width="100" src="../images/Spinner-0.8s-200px.gif" />
+            <h4>מספר שניות...</h4>
+        </div>
+        <div id='calendar'></div>
+        <div id="ph"></div>
+    </div>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header" style="padding:35px 50px;">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h2 class="raviv-head">החלפת משמרת</h2>
+                </div>
+                <div class="modal-body" style="padding:40px 50px;">
+                    <div class="form-group">
+                        <label for="WorkerNum"><span class="glyphicon glyphicon-user"></span> בחר עובד:</label>
+                        <input onchange="Choose_Worker_To_Change()" class="form-control" id="WorkerNum">
+                    </div>
+                    <button onclick="SendChangeRequest()" type="button" class="btn btn-success btn-mdl">אישור</button>
+                    <button onclick="close_window()" type="button" class="btn btn-danger btn-mdl">בטל</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</body>
+</html>

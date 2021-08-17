@@ -1,0 +1,85 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="../Scripts/ajaxCallsWithKey.js"></script>
+    <link href="../Scripts/StyleSheetLogin.css" rel="stylesheet" />
+    <script>
+        $(document).ready(function () {
+            $("#logInForm").submit(f1); // bind the submit event to a function called f1
+        });
+
+        function f1() {
+            let id = $("#InputId").val();
+            let password = $("#InputPassword").val();
+            let api = "../api/Employees?id=" + id + "&password=" + password;
+            ajaxCall("GET", api, "", getEmployeeSuccess, getEmployeeError);
+            return false
+        }
+        function getEmployeeSuccess(e) {
+            localStorage["Employee"] = JSON.stringify(e);
+
+            let id = $("#InputId").val();
+            let api = "../api/Employees/getAreaOrRegionAndJob?id=" + id;
+            ajaxCall("GET", api, "", getAreaOrRegionAndJobSuccess, getAreaOrRegionAndJobError);
+        }
+        function getEmployeeError(err) {
+            alert(err.responseJSON.Message)
+        }
+        function getAreaOrRegionAndJobSuccess(e) {
+            if (e.hasOwnProperty('Area_Id'))
+                localStorage['Area_Id'] = JSON.stringify(e.Area_Id);
+            else
+                localStorage['Region_Id'] = JSON.stringify(e.Region_Id);
+            localStorage['Job_Id'] = JSON.stringify(e.Job_Id);
+            window.location.replace("Main.html")
+        }
+        function getAreaOrRegionAndJobError(err) {
+            console.log(err)
+        }
+
+    </script>
+</head>
+<body>
+    <div class="container">
+            <div class="card card-container">
+        <h4>מערכת לשיבוץ תורני קק"ל</h4>
+        <br />
+                <img id="profile-img" class="profile-img-card" src='../images/KKLLogo.png' />
+                <form class="form-signin" id="logInForm" method="post" enctype="multipart/form-data">
+                    <span id="reauth-email" class="reauth-email"></span>
+                    <div class="form-group">
+                        <label for="InputId">תעודת זהות</label>
+                        <input type="text" id="InputId" class="form-control" aria-describedby="emailHelp" placeholder="הכנס תעודת זהות" required >
+                    </div>
+                    <div class="form-group">
+                        <label for="InputPassword">סיסמא</label>
+                        <input type="password" id="InputPassword" class="form-control" placeholder="הכנס סיסמא" required>
+                        </div>
+                        <button type="submit"class="btn btn-lg btn-primary btn-block btn-signin" >התחבר</button>
+                </form>
+     <!--/form--> 
+    <a href="SignUp_Page.html" class="signUp">יצירת משתמש חדש</a>
+    </div>
+     <!--/card-container--> 
+    </div> <!--/container--> 
+    <!--<form class="text-center" id="logInForm" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="InputId">Id</label>
+            <input style="width:15%" type="text" class="form-control" id="InputId" aria-describedby="emailHelp" placeholder="Enter Id">
+        </div>
+        <div class="form-group">
+            <label for="InputPassword">Password</label>
+            <input style="width:15%" type="password" class="form-control" id="InputPassword" placeholder="Password">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>-->
+</body>
+</html>

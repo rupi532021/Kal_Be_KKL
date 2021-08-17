@@ -1,0 +1,401 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="../Scripts/ajaxCallsWithKey.js"></script>
+    <script src="../Scripts/jquery-3.4.1.js"></script>
+    <link href="../Scripts/StyleSheetNavBar.css" rel="stylesheet" />
+    <script src="../Scripts/navBars.js"></script>
+
+    <style type="text/css">
+        h3 {
+            text-align: right
+        }
+
+        .form-control {
+            width: 310px
+        }
+
+        * {
+            direction: rtl
+        }
+
+        #ph {
+            float: left;
+        }
+
+        #addrequirementbtn {
+            padding: 5px;
+            margin: 5px;
+            margin-right: 120px;
+        }
+
+        .choose_requirement {
+            border: 3px double black;
+            background-color: lightgreen;
+            text-align: center;
+            width: 300px;
+            float: right;
+            box-shadow: 0 0 0 1px black;
+            margin-bottom: 10px;
+            margin-left: 75px;
+        }
+
+        #permanent_Requirements {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .swal-text {
+            text-align: right;
+        }
+
+        .swal-footer {
+            text-align: center;
+        }
+    </style>
+
+    <script>
+        $(document).ready(function () {
+            $('#navBarItems').html(chooseNavBar);
+            $("#pForm").submit(addSpecialRequirement) //לחיצה על כפתור שמירה ששולח אותך לשמור על הדרישה המיוחדת
+            getRequirements();                        // הפונקציה מביאה את הדרישות הקיימות שבמערכת
+            create_Area_arr();                        //הפונקציה מביאה את האזורים הקיימים במערכת על מנת שנוכל להביא את הגושים
+
+
+            var wWidth = $(window).width();
+            if (wWidth > 768) {
+                $("ul.bts-nav li").hover(function () {
+                    $(this).children("ul").slideToggle(400);
+                });
+            }
+            else {
+                $("ul.bts-nav li a").click(function () {
+                    $(this).next("ul").slideToggle(400);
+                });
+            }
+            let employee = JSON.parse(localStorage["Employee"]);
+            str1 = "<h3>שלום " + employee.First_Name + " " + employee.Last_Name + "</br><a href ='Login.html' onclick='LogOut()'><h4>התנתק</h4></a></h3>";
+            $("#phHello").append(str1);
+        });
+
+        function LogOut() {
+            localStorage.clear();
+        }
+
+        function delete_special_requirement(Requirement_Id) {
+            shiftDate = $("#dateTB").val();
+            blockId = $("#blockTB").val();
+            deleteSpecialRequirements(blockId, shiftDate, Requirement_Id)
+            $("#" + Requirement_Id).remove();
+        }
+        function deleteSpecialRequirements(blockId, shiftDate, Requirement_Id) {
+            let apiSr = "../api/SpecialRequirements/Delete/" + blockId + "/" + shiftDate + "/" + Requirement_Id + "/";
+            ajaxCall("DELETE", apiSr, "", deleteSpecialRequirementsSuccess, deleteSpecialRequirementsError)
+        }
+        function deleteSpecialRequirementsSuccess(data) {
+            getSpecialRequirementsSuccess(data);
+            swal('דרישה נמחקה', '', 'warning')
+        }
+
+        function deleteSpecialRequirementsError(err) {
+            console.log(err)
+        }
+
+
+        function getBlocks(Area_Id) {                                           //הפונקציה מקבלת תעודת זהות אזור ומביאה את כל הגושים של אותו איזור
+            let api = "../api/Blocks/Get_Blocks_With_Area_Id/" + Area_Id + "/";
+            ajaxCall("GET", api, "", getBlocksSuccess, getBlockstError)
+        }
+
+        function getRequirements() {
+            let api = "../api/ShiftRequirements";
+            ajaxCall("GET", api, "", getRequirementsSuccess, getRequirementstError)
+        }
+
+        function getRequirementsSuccess(requirements) {
+            console.log(requirements)
+            requirements.forEach(r => {
+                $("#requirementTB").append('<option value="' + r.Requirement_Id + '">' + r.Requirement_Name + '</option>')
+            })
+        }
+
+        function getBlocksSuccess(blocks) {
+            console.log(blocks)
+            $("#blockTB").html("");
+            $("#blockTB").append('<option value = "0" > בחר גוש</option >');
+            blocks.forEach(b => {
+                $("#blockTB").append('<option value="' + b.Block_Id + '">' + b.Block_Name + '</option>')
+            })
+        }
+
+        function getRequirementstError(err) {
+            console.log(err)
+        }
+
+        function getBlockstError(err) {
+            console.log(err)
+        }
+
+        function make_all_boxes_are_disable_or_enable(is_Disable) {
+            $("#permanent_Requirements_Title").html("")
+            $("#permanent_Requirements").html("")
+            $("#special_Requirements_Title").html("")
+            $("#special_Requirements").html("")
+            $("#dateTB").val("");
+            $("#requirementTB").val(0);
+            $("#amountTB").val("");
+            $("#commentTB").val("");
+            $("#dateTB").prop('disabled', is_Disable);
+            $("#requirementTB").prop('disabled', is_Disable);
+            $("#amountTB").prop('disabled', is_Disable);
+            $("#commentTB").prop('disabled', is_Disable);
+            $("#submitBTN").prop('disabled', is_Disable);
+        }
+
+        function blockchoose() {
+            if ($("#blockTB").val() == "0")
+                make_all_boxes_are_disable_or_enable(true)
+            else
+                make_all_boxes_are_disable_or_enable(false)
+        }
+
+        function isDateGreaterThanToday(b) {
+            var dS = b.split("-");
+            var d1 = new Date(dS[0], (+dS[1] - 1));
+            var today = new Date();
+            if (d1 > today) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        function Show_Requirements() {
+            shiftDate = $("#dateTB").val();
+
+            console.log(shiftDate)
+            if (isDateGreaterThanToday(shiftDate)) {
+                blockId = $("#blockTB").val();
+                getPermanentRequirements(blockId)
+                getSpecialRequirements(blockId, shiftDate)
+                $("#requirementTB").val(0);
+                $("#amountTB").val("");
+                $("#commentTB").val("");
+            }
+            else {
+                swal('יש לבחור תאריך שחל מהחודש הבא', '', 'info')
+                $("#dateTB").val("");
+                $("#permanent_Requirements_Title").html("")
+                $("#permanent_Requirements").html("")
+                $("#special_Requirements_Title").html("")
+                $("#special_Requirements").html("")
+                $("#requirementTB").val(0);
+                $("#amountTB").val("");
+                $("#commentTB").val("");
+            }
+
+        }
+
+        function getPermanentRequirements(blockId) {
+            let apiPr = "../api/PermanentRequirements/" + blockId;
+            ajaxCall("GET", apiPr, "", getPermanentRequirementsSuccess, getPermanentRequirementstError)
+        }
+
+        function getSpecialRequirements(blockId, shiftDate) {
+            let apiSr = "../api/SpecialRequirements/" + blockId + "/" + shiftDate;
+            ajaxCall("GET", apiSr, "", getSpecialRequirementsSuccess, getSpecialRequirementsError)
+        }
+
+        function getSpecialRequirementsSuccess(data) {
+
+            $("#special_Requirements_Title").html("<h1>דרישות מיוחדות לגוש:</h1>");
+            $("#special_Requirements").html("")
+            data.forEach(sr => {
+                $("#special_Requirements").append("<div id='" + sr.Requirement_Id + "' class='row choose_requirement'><p>שם :" + sr.Requirement_Name + "</br>כמות: " + sr.Quantity + "</br>הערות: " + (sr.Comments == null ? 'אין הערות' : sr.Comments) +
+                    " </br></p><input type='button' value='מחק' title='" + sr.Requirement_Id + "' onclick='delete_special_requirement(this.title)' /></div>")
+            })
+        }
+
+        function getSpecialRequirementsError(err) {
+            console.log(err)
+        }
+
+        function getPermanentRequirementsSuccess(data) {
+            $("#permanent_Requirements_Title").html("<h1>דרישות קבועות לגוש:</h1>");
+            $("#permanent_Requirements").html("");
+            data.forEach(pr => {
+                $("#permanent_Requirements").append("<div class='row choose_requirement'><p>שם :" + pr.Requirement_Name + "</br>כמות: " + pr.Quantity + "</br>הערות: " + (pr.Comments == null ? 'אין הערות' : pr.Comments)
+                    + " </br></p></div>");
+            })
+        }
+
+        function getPermanentRequirementstError(err) {
+            console.log(err)
+        }
+
+        function addSpecialRequirement() {
+            // בדיקה האם התאריך תקין, בדיקה אם קיימת דרישה, ובדיקה שהכמות מאותה דרישה גדולה מ-0
+            //ואז שולח את הדירשה המיוחדת שאנו רוצים להוסיף לשרת ולאחר מכן מרוקן את התיבת טקסט של הכמות, העערות ומחזיר את הדרישה לברירת מחדל
+
+            if ($("#dateTB").val() == "") {
+                swal('יש לבחור תאריך', '', 'info')
+                return false
+            }
+            if ($("#requirementTB").val() == "0") {
+                swal('יש לבחור דרישה', '', 'info')
+                return false
+            }
+            if (parseInt($("#amountTB").val()) <= 0 || $("#amountTB").val() == "") {
+                swal('יש לבחור כמות הגדולה מ - 0', '', 'info')
+                return false
+            }
+
+
+
+            sr = {
+                "Block_Id": $("#blockTB").val(),
+                "Shift_Date": $("#dateTB").val(),
+                "Requirement_Id": $("#requirementTB").val(),
+                "Quantity": $("#amountTB").val(),
+                "Comments": $("#commentTB").val(),
+
+            }
+            console.log(sr)
+            ajaxCall("POST", "../api/SpecialRequirements", JSON.stringify(sr), postSrSuccess, postSrError);
+            $("#requirementTB").val(0);
+            $("#amountTB").val("");
+            $("#commentTB").val("");
+            return false;
+        }
+        function postSrSuccess() {
+            console.log("success")
+            getSpecialRequirements(blockId, shiftDate)//מביא את כל הדרישות החדשות של בלוק הרצוי בתאריך הרצוי
+        }
+
+        function postSrError(err) {
+            console.log(err)
+        }
+
+        function areachoose() {                         //מופעת כאשר בוחרים אזור להצגה
+            //פעולות:
+            //1) בודקת האם נבחר איזור נכון במידה ולא מחייבת אותך לבחור אזור ולא נותנת להמשיך
+            //2)לאחר הבדיקה מביאה את כל הבלוקים הרלוונטים של אותו הגוש
+            Area_Id = $("#areaTB").val();
+            make_all_boxes_are_disable_or_enable(true)
+            if (Area_Id == "0") {
+                $("#blockTB").html("");
+                $("#blockTB").prop('disabled', true);
+                swal('נא לבחור אזור', '', 'info')
+                return false;
+            }
+            $("#blockTB").prop('disabled', false);
+            getBlocks(Area_Id);
+        }
+
+        function create_Area_arr() {
+            let api = "../api/Area";
+            ajaxCall("GET", api, "", getAreaSuccess, getAreaError)
+        }
+        function getAreaSuccess(area_arr) {
+            areas = '<option value="0">בחר אזור</option>';
+            area_arr.forEach(a => {
+                areas += '<option value="' + a.Area_Id + '">' + a.Area_Name + '</option>';
+            })
+            $("#areaTB").append(areas)
+        }
+        function getAreaError(err) {
+            console.log(err)
+        }
+
+
+    </script>
+</head>
+<body>
+    <div class="container">
+        <!-- NavBar -->
+
+        <img id="imgKKL" src='../images/KKLLogo.png' />
+        <div id="phHello"></div>
+
+        <div class="body-wrap">
+            <nav class="navbar navbar-inverse">
+                <div class="container1">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarMenu" aria-expanded="false">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <!--<a class="navbar-brand" href="#">Brand</a>-->
+                    </div>
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="navbarMenu">
+                        <ul class="nav navbar-nav navbar-right  bts-nav" id="navBarItems">
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <!--NavBar-->
+
+
+        <form id="pForm" method="post" enctype="multipart/form-data">
+            <h2>עריכת דרישות משתנות</h2>
+            <div id="ph"> <img src="../images/Requests.png" alt="קק'ל"> </div>
+            <div class="form-group" id="Courses1">
+                <label for="areaTB">בחר אזור</label>
+                <select class="form-control" id="areaTB" data-component="dropdown" onchange="areachoose()">
+                </select>
+                <br />
+                <label for="blockTB">בחר גוש</label>
+                <select class="form-control" id="blockTB" data-component="dropdown" disabled onchange="blockchoose()">
+                    <option value="0">בחר גוש</option>
+                </select>
+                <br />
+                <label for="dateTB">תאריך</label>
+                <input type="date" class="form-control" id="dateTB" disabled onchange="Show_Requirements()">
+
+
+
+                <div id="permanent_Requirements_Title">
+
+                </div>
+                <div id="permanent_Requirements">
+
+                </div>
+
+                <br />
+                <br />
+                <div id="special_Requirements_Title">
+                </div>
+                <label for="requirementTB">בחר דרישה</label>
+                <select class="form-control" id="requirementTB" disabled data-component="dropdown">
+                    <option value="0">בחר דרישה</option>
+                </select>
+                <br />
+                <label for="amountTB">כמות</label>
+                <input type="number" class="form-control" disabled id="amountTB" min="0">
+                <br />
+                <label for="commentTB">הערות</label>
+                <input type="text" class="form-control" disabled id="commentTB">
+                <br />
+                <div id="special_Requirements">
+                </div>
+
+
+                <button type="submit" class="btn btn-primary" disabled id="submitBTN" value="submit">שמירה</button>
+            </div>
+        </form>
+    </div>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</body>
+</html>

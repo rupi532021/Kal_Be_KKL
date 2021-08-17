@@ -1,0 +1,356 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="../MyPlugins/jquery-ui-1.12.1.custom/jquery-ui.min.css" rel="stylesheet" />
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" > </script >-->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="../Scripts/ajaxCallsWithKey.js"></script>
+    <script src="../Scripts/jquery-3.4.1.js"></script>
+    <script src="../MyPlugins/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+    <script src="../MyPlugins/moments/moment.js"></script>
+    <link href="../Scripts/StyleSheetNavBar.css" rel="stylesheet" />
+    <script src="../Scripts/navBars.js"></script>
+
+    <style type="text/css">
+
+        h3 {
+            font-size: 30px;
+            font-weight: 600;
+            text-align: right;
+        }
+
+        h2 {
+            font-size: 30px;
+            font-weight: 600;
+        }
+
+        h1 {
+            font-size: 37px;
+            font-weight: 600;
+        }
+
+        .form-control {
+            width: 310px
+        }
+
+        * {
+            direction: rtl
+        }
+
+        #ph {
+            float: left;
+        }
+
+        #ph1 {
+            /*margin-right: 300px;*/
+            padding: 5px
+        }
+
+        #addcoursebtn {
+            padding: 5px;
+            margin: 5px;
+            margin-right: 120px;
+        }
+
+        .choose_cousre {
+            border: 3px double black;
+            background-color: lightgreen;
+            text-align: center;
+            width: 200px;
+            float: right;
+            box-shadow: 0 0 0 1px black;
+            margin-bottom: 10px;
+            margin-left: 25px;
+        }
+
+        #courses {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        p {
+            font-size: 20px;
+            margin-top: 5px;
+        }
+
+        #imgKKLCenter {
+            height: 50px;
+            width: 30px;
+            float: unset
+        }
+
+        .swal-text {
+            text-align: right;
+        }
+
+        .swal-footer {
+            text-align: center;
+        }
+    </style>
+
+    <script type="text/javascript">
+        id_off_worker = "";
+        workers_arr = [];
+        courses_arr = [];
+        chosen_courses = [];
+        function Add_Course_To_DB() {
+            if (chosen_courses.length == 0)
+                swal('לא נבחרו הכשרות', '', 'error')
+            else {
+
+                api = "../api/Employees/insert_course_of_duty";
+                ajaxCall("POST", api, JSON.stringify(chosen_courses), postSuccess, postError)
+            }
+        }
+        function postSuccess(data) {
+            console.log(data)
+            swal(data, "תודה", "success");
+            setTimeout("", 5000)
+
+
+        }
+        function postError(err) {
+            console.log(err)
+            console.log("error")
+
+        }
+
+        function loadcourses() {
+            let api = "../api/Course";
+            ajaxCall("GET", api, "", getCoursesSuccess, getError)
+        }
+        function getCoursesSuccess(data) {
+            courses_arr = data;
+            console.log(data)
+            str = "";
+            data.forEach(c => {
+                str += '<option value="' + c.Course_Id + '">' + c.Course_Name + '</option>';
+            })
+            $("#Course").append(str)
+        }
+        function getError(err) {
+            console.log(err)
+        }
+
+        function loadworkers() {
+            let api = "../api/Employees/GetAll";
+            ajaxCall("GET", api, "", GetAllEmployeesSuccess, GetAllEmployeesError);
+        }
+        function GetAllEmployeesSuccess(data) {
+            full_workers_arr = data;
+            data.forEach(c => {
+                worker = c.First_Name + " " + c.Last_Name + " - " + c.Id;
+                workers_arr.push(worker)
+            })
+            console.log(workers_arr);
+        }
+        function GetAllEmployeesError(err) {
+            alert("in err")
+            console.log(err)
+        }
+        $(document).ready(function () {
+            $('#navBarItems').html(chooseNavBar);
+            loadworkers();
+            loadcourses();
+            var wWidth = $(window).width();
+            if (wWidth > 768) {
+                $("ul.bts-nav li").hover(function () {
+                    $(this).children("ul").slideToggle(400);
+                });
+            }
+            else {
+                $("ul.bts-nav li a").click(function () {
+                    $(this).next("ul").slideToggle(400);
+                });
+            }
+            let employee = JSON.parse(localStorage["Employee"]);
+            str1 = "<h3>שלום " + employee.First_Name + " " + employee.Last_Name + "</br><a href ='Login.html' onclick='LogOut()'><h4>התנתק</h4></a></h3>";
+            $("#phHello").append(str1);
+            $("#WorkerNum").autocomplete({ source: workers_arr });
+
+        });
+
+        function LogOut() {
+            localStorage.clear();
+        }
+
+        function deletecourse(course_id) {
+            let i = chosen_courses.findIndex(c => c.Course_Id == course_id)
+            cod =
+            {
+                "Id": id_off_worker,
+                "Course_Id": course_id,
+                "Receipt_Course_Date": moment(chosen_courses[i].Receipt_Course_Date).format("YYYY-MM-DD")
+            }
+            console.log("arr before")
+            console.log(chosen_courses)
+            $("#" + course_id).remove()
+            chosen_courses.splice(i, 1);
+            console.log("arr after")
+            console.log(chosen_courses)
+            let api = "../api/Courses_Of_Dutys/Delete_Course_Of_Duty/";
+            ajaxCall("POST", api, JSON.stringify(cod), Delete_Course_Succsess, Delete_Course_Error);
+        }
+
+        function Delete_Course_Succsess(data) {
+            console.log(data)
+        }
+        function Delete_Course_Error(err) {
+            console.log(err)
+        }
+        function addcourse() {
+
+            date_of_start_course1 = $("#DateTB").val()
+            course_id = $("#Course").val()
+            Current_Date = new Date()
+            date_of_start_course = new Date(date_of_start_course1)
+            if (date_of_start_course > Current_Date) {
+                swal('בחרת תאריך גדול יותר מהיום הנוכחי יש להזין תאריך מחדש', '', 'error')
+                return;
+
+            }
+
+            date_of_start_course = $("#DateTB").val()
+            if (course_id != "0" && $("#DateTB").val() != "") {
+                courses_arr.forEach(c => {
+                    if (c.Course_Id == parseInt(course_id)) {
+                        if (chosen_courses.some(c => c.Course_Id == course_id) == false) {
+                            str = "<div class='choose_cousre' id='" + c.Course_Id + "'> <p>שם הקורס:  " + c.Course_Name + "<p>תוקף: " + c.Validity + " חודשים</p></p><p> תאריך ביצוע הקורס: " + date_of_start_course + "</p><input type='button' value='מחק'  onclick='deletecourse(" + c.Course_Id + ")'/></div>";
+                            mycourses = {
+                                "Name": c.Course_Name,
+                                "Course_Id": c.Course_Id,
+                                "Receipt_Course_Date": date_of_start_course,
+                                "Id": id_off_worker
+                            }
+                            chosen_courses.push(mycourses)
+                            $("#courses").append(str)
+
+                        }
+                        else
+                            swal('הקורס כבר נבחר, אם תרצה לשנות תאריך יש למחוק ולהוסיף', '', 'error')
+                    }
+
+                })
+            }
+            else
+                swal('אחד מהפרטים שהוכנסו שגויים', '', 'error')
+        }
+
+        function Show_Worker_Details() {
+            $("#courses").html("");
+            name = $("#WorkerNum").val();
+            res = "";
+            if (workers_arr.includes(name)) {
+                var res = name.split(" - ");
+                console.log(res)
+                $("#Course").prop("disabled", false);
+                $("#DateTB").prop("disabled", false);
+                $("#addcoursebtn").prop("disabled", false);
+                id_off_worker = res[1];
+                Show_Worker_Curses(res[1])
+                chosen_courses = [];
+            }
+            else
+                swal('שם לא תקין', '', 'error')
+            return false;
+        }
+
+        function Show_Worker_Curses(id) {
+            let api = "../api/Courses_Of_Dutys/GetAllCoursesOfDuty/" + id;
+            ajaxCall("GET", api, "", Show_Worker_Curses_Succsess, Show_Worker_Curses_Error);
+        }
+        function Show_Worker_Curses_Succsess(data) {
+            data.forEach(c => {
+                name_of_course = "";
+                str = "<div class='choose_cousre' id='" + c.Course_Id + "'>";
+                for (var i = 0; i < courses_arr.length; i++) {
+                    if (courses_arr[i].Course_Id == c.Course_Id) {
+                        str += "<p> שם הקורס: " + courses_arr[i].Course_Name + "</p>"
+                        str += "<p>תוקף: " + courses_arr[i].Validity + " חודשים</p>"
+                        name_of_course = courses_arr[i].Course_Name;
+                    }
+                }
+                str += "<p> תאריך ביצוע הקורס: " + moment(c.Receipt_Course_Date).format("YYYY-MM-DD") + "</p>";
+                str += "<input type = 'button' value = 'מחק'  onclick = 'deletecourse(" + c.Course_Id + ")'/></div>";
+                $("#courses").append(str)
+
+                mycourses = {
+                    "Name": name_of_course,
+                    "Course_Id": c.Course_Id,
+                    "Receipt_Course_Date": moment(c.Receipt_Course_Date).format("YYYY-MM-DD"),
+                    "Id": c.Id
+                }
+                chosen_courses.push(mycourses)
+
+            });
+
+        }
+        function Show_Worker_Curses_Error(err) {
+            console.log(err)
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+
+        <!-- NavBar -->
+
+        <img id="imgKKL" src='../images/KKLLogo.png' />
+        <div id="phHello"></div>
+
+        <div class="body-wrap">
+            <nav class="navbar navbar-inverse">
+                <div class="container1">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarMenu" aria-expanded="false">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <!--<a class="navbar-brand" href="#">Brand</a>-->
+                    </div>
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="navbarMenu">
+                        <ul class="nav navbar-nav navbar-right  bts-nav" id="navBarItems">
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <!--NavBar-->
+
+        <form id="pForm" enctype="multipart/form-data">
+            <h1>הוספת הכשרה</h1>
+            <div id="ph"> <img src="../images/KKL120.jpg" alt="קק'ל"> </div>
+            <h2 id="head"></h2>
+            <div class="form-group" id="Courses1">
+                <label for="WorkerNumRB">בחר עובד</label>
+                <input class="form-control" id="WorkerNum" onchange="Show_Worker_Details()">
+                <label for="CoursesRB">בחר קורס</label>
+                <select class="form-control" id="Course" data-component="dropdown" disabled>
+                    <option value="0">בחר קורס</option>
+                </select>
+                <label for="DateLB">תאריך ביצוע הקורס</label>
+                <input type="date" class="form-control" id="DateTB" disabled>
+
+                <input type="button" id="addcoursebtn" class="btn btn-primary" value="הוסף קורס" onclick="addcourse()" disabled />
+            </div>
+
+
+
+        </form>
+        <div id="courses"></div>
+
+    </div>
+    <div id="ph1"> <input type="submit" class="btn btn-primary" value="שמור קורסים" onclick="Add_Course_To_DB()" /></div>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</body>
+</html>

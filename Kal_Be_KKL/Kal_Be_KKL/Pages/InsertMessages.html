@@ -1,0 +1,187 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!--<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">-->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="../Scripts/navBars.js"></script>
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="../MyPlugins/moments/moment.js"></script>
+    <link href="../Scripts/StyleSheetNavBar.css" rel="stylesheet" />
+    <script src="../Scripts/ajaxCallsWithKey.js"></script>
+    <script src="../Scripts/jquery-3.4.1.js"></script>
+    <script src="../Scripts/navBars.js"></script>
+
+    <style>
+        h2 {
+            font-size: 30px;
+            font-weight: 600;
+        }
+
+        * {
+            direction: rtl;
+        }
+        input#SendDateTB.form-control{
+            padding: 0px;
+        }
+        #ContentTB {
+            height: 80px;
+        }
+        .form-control[disabled], fieldset[disabled] .form-control {
+            cursor: not-allowed;
+            text-align:right;
+            padding-right:0px;
+        }
+        .form-control {
+            display: block;
+            width: 35%; 
+            height: 34px;
+            padding: 6px 12px;
+            font-size: 16px;
+            line-height: 1.42857143;
+            color: #555;
+            background-color: #fff;
+            background-image: none;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+            -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        }
+        .btn {
+            margin-top: 10px;
+            margin-right: 20%;
+            margin-bottom: 13px;
+            padding: 10px 20px;
+            font-size: 25px;
+        }
+        img#messages{
+            float:left;
+            margin-left:180px;
+        }
+
+        @media only screen and (max-width: 768px) {
+            img#messages {
+                float:none;
+                margin-left: 80px;
+            }
+            .form-control{
+                width:310px;
+                margin-right:10px;
+            }
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            $('#navBarItems').html(chooseNavBar);
+            var wWidth = $(window).width();
+            if (wWidth > 768) {
+                $("ul.bts-nav li").hover(function () {
+                    $(this).children("ul").slideToggle(400);
+                });
+            }
+            else {
+                $("ul.bts-nav li a").click(function () {
+                    $(this).next("ul").slideToggle(400);
+                });
+            }
+            let employee = JSON.parse(localStorage["Employee"]);
+            str1 = "<h3>שלום " + employee.First_Name + " " + employee.Last_Name + "</br><a href ='Login.html' onclick='LogOut()'><h4>התנתק</h4></a></h3>";
+            $("#phHello").append(str1);
+            $("#pForm").submit(saveMessage);
+            $("#SendDateTB").val(moment().format('YYYY-MM-DD'));
+        });
+
+        function LogOut() {
+            localStorage.clear();
+        }
+
+        function saveMessage() {
+            let api = "../api/messages";
+            var msg = {
+                Creator_Id: JSON.parse(localStorage["Employee"]).Id,
+                Creation_Date: $("#SendDateTB").val(),
+                Title: $("#TitleTB").val(),
+                Content: $("#ContentTB").val()
+            }
+            ajaxCall("POST", api, JSON.stringify(msg), postMessageSuccess, postMessageError)
+            return false;
+        }
+
+        function postMessageSuccess() {
+            $("#TitleTB").val('')
+            $("#ContentTB").val('')
+            alert('הודעה נוספה בהצלחה');
+        }
+
+        function postMessageError(err) {
+            err.responseJSON.Message
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <!-- NavBar -->
+
+        <img id="imgKKL" src='../images/KKLLogo.png' />
+        <div id="phHello"></div>
+
+        <div class="body-wrap">
+            <nav class="navbar navbar-inverse">
+                <div class="container1">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarMenu" aria-expanded="false">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <!--<a class="navbar-brand" href="#">Brand</a>-->
+                    </div>
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="navbarMenu">
+                        <ul class="nav navbar-nav navbar-right  bts-nav" id="navBarItems">
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <!--NavBar-->
+        <form id="pForm" method="post" enctype="multipart/form-data">
+            <h2>הכנסת הודעות</h2><br>
+            <div>
+                <img id="messages" style="width:170px; height:170px" src="../images/Insertmessage.png" alt="קק'ל">
+            </div>
+            <div class="form-group">
+                <label for="SendDateTB"><span class="red-star">★ </span>תאריך שליחה</label>
+                <input type="date" class="form-control" id="SendDateTB" required disabled>
+            </div>
+            <div class="form-group">
+                <label for="TitleTB"><span class="red-star">★ </span>כותרת ההודעה</label>
+                <input type="text" class="form-control" id="TitleTB" placeholder="כותרת ההודעה"
+                       pattern="^.{1,50}$"
+                       oninvalid="this.setCustomValidity('אין להכניס יותר מ50 תווים, ואין להשאיר ריק')"
+                       oninput="this.setCustomValidity('')" required>
+            </div>
+            <div class="form-group">
+                <label for="ContentTB"><span class="red-star">★ </span>תוכן ההודעה</label>
+                <textarea type="text" class="form-control" id="ContentTB" placeholder="תוכן ההודעה"
+                          pattern="^.{1,255}$"
+                          oninvalid="this.setCustomValidity('אין להכניס יותר מ255 תווים, ואין להשאיר ריק')"
+                          oninput="this.setCustomValidity('')" required>
+
+</textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">שמירה</button>
+        </form>
+    </div>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</body>
+</html>
